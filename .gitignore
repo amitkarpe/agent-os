@@ -1,0 +1,4 @@
+# Local validation and editor artifacts
+*.swp
+*.tmp
+.DS_Store
