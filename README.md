@@ -16,6 +16,10 @@ evidence that may need retesting.
 Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
 to load only the concepts relevant to the current task.
 
+For controller-worker execution, use the
+[Fast Goal and Deep Goal framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md):
+Fast is the default, and Deep is reserved for genuinely risky or complex work.
+
 ## Universal Onboarding Prompt
 
 ```text

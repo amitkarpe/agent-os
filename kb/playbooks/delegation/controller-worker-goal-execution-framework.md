@@ -1,7 +1,7 @@
 ---
 type: Pattern
 title: Controller-Worker Goal Execution Framework
-description: Delegate one complete outcome under explicit approval, gates, evidence, and stop conditions.
+description: Use Fast Goal by default and extend it only when risk requires a Deep Goal.
 status: reviewed
 scope: controller-worker execution
 confidence: high
@@ -19,7 +19,7 @@ tags: [controller, worker, goals, planning, gates]
 | Workstream or Lane | An optional long-running area of responsibility. |
 | Goal | The complete outcome delegated once. |
 | Plan | The ordered method created or refined by the worker. |
-| Phase | One major block of the plan; use no more than four by default. |
+| Phase | An optional major block used when a Deep Goal needs more structure. |
 | Task | One bounded deliverable inside a phase. |
 | Step | One action inside a task. |
 | Command or Run | One deterministic execution of a script, job, or other repeatable operation. |
@@ -36,54 +36,78 @@ acceptance criteria, and final acceptance. The worker owns execution truth,
 creates or refines the plan, performs the approved work, validates it, and
 returns evidence.
 
-Delegate one complete Goal rather than a stream of separate phase prompts.
-This gives the worker enough context to sequence work while keeping authority
-bounded by the original approval envelope.
+Delegate one complete Goal rather than a stream of separate prompts. This gives
+the worker enough context to sequence work while keeping authority bounded by
+the original approval envelope.
 
-## Execution Contract
+## Choose the Mode
 
-1. State the complete Goal, approval envelope, acceptance criteria, and no-go
-   gates before execution starts.
-2. The worker creates or refines one Plan with no more than four Phases by
-   default. Each Phase contains bounded Tasks and deterministic Gates.
-3. When a Gate passes, the worker continues automatically to the next Task or
-   Phase inside the approval envelope. Record Milestones without treating them
-   as new approval stops.
-4. The worker stops only for a written no-go condition, unexpected scope or
-   risk, unavailable required authority, irrecoverable validation failure, or
-   final completion.
-5. On completion, the worker returns one concise Result with acceptance
-   evidence, changed state, validation, remaining risk, and the next safe
-   action.
+Use **Fast Goal** for most work. Use **Deep Goal** only when risk or complexity
+needs more structure. The controller chooses the smallest mode that safely
+defines the work.
 
-Failed Gates are not always irrecoverable. The worker may diagnose and correct
-them when the correction remains inside the approval envelope and safety rules.
-Any expansion of scope or authority returns to the controller.
-
-## Generic Execution Prompt
+When either mode is reasonable, offer:
 
 ```text
-Execute this complete Goal continuously.
-
-Outcome: <complete outcome>
-Scope: <owned systems and files>
-Approval envelope: <approved actions and mutations>
-Acceptance: <observable success criteria>
-No-go gates: <conditions that require a stop>
-
-Create or refine one Plan with no more than four Phases by default. Put bounded
-Tasks and deterministic Gates inside each Phase. Continue automatically when a
-Gate passes and work remains inside the approval envelope. Stop only at a
-written no-go gate, unexpected scope or risk, unavailable required authority,
-irrecoverable validation failure, or final completion. Return one concise
-Result with evidence and remaining risk.
+Mode: Fast (recommended) or Deep
 ```
 
-## Planning-Only Prompt
+If the risk clearly requires Deep Goal, select it directly and explain why in
+one line. Do not ask a mode question when the answer is obvious.
+
+## Fast Goal
+
+Fast Goal is the default. Keep it short and simple. Do not force phases into
+it.
 
 ```text
-Prepare one Plan for this complete Goal with no more than four Phases by
-default. Define Tasks, deterministic Gates, the approval envelope, acceptance
-criteria, no-go gates, evidence, and remaining risks. Do not execute or mutate
-anything until the complete Goal is approved.
+Create and execute one complete Fast Goal.
+
+Outcome: <required final state>
+Scope: <allowed files, systems, or resources>
+Approved: <allowed actions and mutations>
+Success: <observable proof of completion>
+Stop: <hard blockers, safety guards, ambiguity, or authority changes>
+
+Continue automatically inside this approval envelope.
+Milestones are not approval stops.
+Use: inspect -> act -> validate -> continue.
+Return one concise final Result.
+```
+
+The worker creates or refines the Plan needed to reach the outcome. It may
+diagnose and correct failed validation when the correction remains inside
+Scope and Approved actions. It stops at a written Stop condition, unexpected
+scope or risk, unavailable required authority, irrecoverable validation
+failure, or final completion.
+
+## Deep Goal
+
+Deep Goal extends Fast Goal with only the fields needed for the risk:
+
+- up to four Phases;
+- deterministic Gates;
+- evidence paths;
+- rollback or cleanup;
+- environment, account, or resource identity; and
+- stronger no-go conditions.
+
+Use Deep Goal for:
+
+- production or destructive mutation;
+- infrastructure, database, network, IAM, or state migration;
+- multiple repositories or systems;
+- recovery or partial-failure risk; or
+- unattended long-running execution.
+
+Do not copy a large template when only one or two extensions are needed. Both
+modes authorize automatic continuation inside the written approval envelope,
+and Milestones remain progress rather than approval stops.
+
+## Planning Only
+
+```text
+Prepare one complete Fast Goal or Deep Goal for controller review. Choose the
+smallest mode that safely defines the work. Do not execute or mutate anything
+until the complete Goal is approved.
 ```
