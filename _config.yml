@@ -1,0 +1,10 @@
+title: Agent OS
+description: Portable operating knowledge for people and software agents.
+lang: en
+markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

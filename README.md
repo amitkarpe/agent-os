@@ -13,6 +13,9 @@ Start with the [knowledge index](kb/index.md). Treat policies and principles as
 stable guidance, playbooks as repeatable procedures, and observations as dated
 evidence that may need retesting.
 
+Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
+to load only the concepts relevant to the current task.
+
 Validate a checkout with:
 
 ```bash
