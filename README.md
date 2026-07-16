@@ -25,6 +25,10 @@ Run the validator's focused pass/fail checks with:
 scripts/validate.sh --self-test
 ```
 
+GitHub Actions validates pushes and pull requests. After the workflow is pushed,
+the repository owner must select **GitHub Actions** as the Pages source if it is
+not already enabled.
+
 ## License
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
