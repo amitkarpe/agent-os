@@ -16,6 +16,29 @@ evidence that may need retesting.
 Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
 to load only the concepts relevant to the current task.
 
+## Universal Onboarding Prompt
+
+```text
+Learn from Agent OS before continuing.
+
+Agent OS source: <AGENT_OS_ROOT, configured workspace, or public Agent OS URL>
+Active project: <active-project-root or repository context>
+Task: <task>
+
+Learn: Locate the configured clone through AGENT_OS_ROOT or workspace discovery.
+If it is unavailable, use the public Agent OS knowledge base. Read Agent OS
+AGENTS.md, README.md, and kb/index.md first.
+
+Apply: Choose the matching task route and load only one to three relevant
+concepts. Briefly state what applies, what does not apply, and any conflict. The active
+project's instructions, SPEC, approvals, and safety policy remain authoritative.
+Apply the useful guidance to planning and execution.
+
+Contribute: At closeout, name the Agent OS concepts used and suggest reusable
+learning as a sanitized candidate. Do not publish private runtime truth or
+modify Agent OS unless explicitly asked.
+```
+
 Validate a checkout with:
 
 ```bash

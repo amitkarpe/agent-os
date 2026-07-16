@@ -15,43 +15,39 @@ tags: [knowledge, context, agents, portability]
 Agent OS is reusable guidance, not automatic authority. Use it to improve a
 task without flooding context or replacing the active project's rules.
 
-## Minimal Context Flow
+## Learn
 
 1. Locate a local clone through configured workspace context or an already
    configured `AGENT_OS_ROOT`. If neither is available, use the public Agent OS
    URL and start at [`kb/index.md`](../../index.md).
-2. Read the Agent OS [`AGENTS.md`](../../../AGENTS.md) and
-   [`kb/index.md`](../../index.md) first.
-3. Select the route in **Start by task** that matches the current work.
-4. Load only one to three relevant concepts. Do not preload the whole
-   repository.
-5. Treat the active project's instructions, `SPEC`, approvals, and
-   safety policy as authoritative over generic Agent OS guidance.
-6. Report conflicts instead of silently overriding local policy.
-7. At closeout, state which Agent OS concepts were used.
-8. Submit reusable learning as a sanitized candidate for curator review. Do
-   not publish private runtime truth directly.
+2. Read the Agent OS [`AGENTS.md`](../../../AGENTS.md),
+   [`README.md`](../../../README.md), and [`kb/index.md`](../../index.md).
+3. Treat the repository as reusable guidance and inspiration. Do not preload
+   the whole knowledge base.
+
+## Apply
+
+1. Select the matching route in **Start by task** and load only one to three
+   relevant concepts.
+2. Briefly state what applies, what does not apply, and any conflict with the
+   active project.
+3. Treat the active project's instructions, `SPEC`, approvals, and safety
+   policy as authoritative over generic Agent OS guidance.
+4. Apply only the useful guidance to planning and execution. Report conflicts
+   instead of silently overriding local policy.
 
 For controller-worker delegation, include the
 [Controller-Worker Goal Execution Framework](../delegation/controller-worker-goal-execution-framework.md)
 in the task-scoped set.
 
-## Generic Copy-Ready Prompt
+## Contribute
 
-```text
-Use Agent OS guidance for this task.
+1. At closeout, name the Agent OS concepts used.
+2. Suggest reusable learning as a sanitized candidate for curator review under
+   the [Knowledge Lifecycle and Publication](../../policies/knowledge-lifecycle-and-publication.md)
+   policy.
+3. Do not publish private runtime truth or modify Agent OS unless explicitly
+   asked.
 
-Agent OS source: <AGENT_OS_ROOT or public Agent OS URL>
-Active project: <active-project-root or repository context>
-Task: <task>
-
-Read the active project's instructions and SPEC first. Then read Agent OS AGENTS.md and
-kb/index.md, choose the matching task route, and load only one to three relevant
-concepts. Active project specifications, approvals, and safety policy override
-generic guidance. Report any conflict. If this task delegates controller-worker
-execution, include:
-<agent-os-root>/kb/playbooks/delegation/controller-worker-goal-execution-framework.md
-
-At closeout, name the Agent OS concepts used. Submit reusable learning only as
-a sanitized candidate; do not add private runtime truth directly.
-```
+Use the concise [universal onboarding prompt](../../../README.md#universal-onboarding-prompt)
+when a reusable instruction is needed.

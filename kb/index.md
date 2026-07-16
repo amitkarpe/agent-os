@@ -6,7 +6,7 @@ okf_version: "0.1"
 
 ## Start by task
 
-- **Use Agent OS for a focused task:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Locate the KB, load one to three matching concepts, and preserve active-project authority.
+- **Learn, apply, and contribute safely:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from the KB, apply one to three matching concepts, and suggest sanitized candidates without overriding project authority.
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
@@ -34,7 +34,7 @@ okf_version: "0.1"
 
 ## Knowledge Use Playbooks
 
-- [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Use the smallest relevant knowledge set without overriding project authority.
+- [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from Agent OS, apply the smallest relevant knowledge set, and contribute sanitized candidates.
 
 ## Provider and Integration Playbooks
 
