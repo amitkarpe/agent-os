@@ -7,7 +7,7 @@ okf_version: "0.1"
 ## Start by task
 
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
-- **Delegate work or supervise completion:** [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
+- **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
 - **Prepare public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
 
@@ -26,6 +26,7 @@ okf_version: "0.1"
 
 ## Delegation Playbooks
 
+- [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md) - Delegate one complete goal under explicit approval, gates, evidence, and stop conditions.
 - [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md) - Balanced delegation with one writer and explicit evidence.
 - [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md) - Durable results followed by one bounded notification.
 - [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md) - Fail-closed, event-driven wake behavior.
