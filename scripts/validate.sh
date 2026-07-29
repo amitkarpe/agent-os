@@ -29,7 +29,9 @@ strip_quotes() {
 validate_yaml_block() {
   local file="$1"
   local require_type="$2"
-  local end line key value type_value='' status_value=''
+  local end line key value
+  local type_value='' status_value='' confidence_value=''
+  local review_after_value='' last_verified_value=''
   local line_number=0
   declare -A seen=()
 
@@ -74,13 +76,38 @@ validate_yaml_block() {
 
     [[ "$key" == 'type' ]] && type_value="$(strip_quotes "$value")"
     [[ "$key" == 'status' ]] && status_value="$(strip_quotes "$value")"
+    [[ "$key" == 'confidence' ]] && confidence_value="$(strip_quotes "$value")"
+    [[ "$key" == 'review_after' ]] && review_after_value="$(strip_quotes "$value")"
+    [[ "$key" == 'last_verified' ]] && last_verified_value="$(strip_quotes "$value")"
   done < <(sed -n "2,$((end - 1))p" "$file")
 
   if [[ "$require_type" == 'yes' && -z "${type_value//[[:space:]]/}" ]]; then
     error "$file: missing or empty required 'type'"
   fi
 
-  if [[ -n "$status_value" && ! "$status_value" =~ ^(candidate|reviewed|verified|deprecated)$ ]]; then
+  if [[ "$require_type" == 'yes' ]]; then
+    if [[ -z "$status_value" ]]; then
+      error "$file: missing required 'status'"
+    elif [[ ! "$status_value" =~ ^(candidate|reviewed|verified|deprecated)$ ]]; then
+      error "$file: unsupported lifecycle status '$status_value'"
+    fi
+
+    if [[ -z "$confidence_value" ]]; then
+      error "$file: missing required 'confidence'"
+    elif [[ ! "$confidence_value" =~ ^(low|medium|high)$ ]]; then
+      error "$file: unsupported confidence '$confidence_value'"
+    fi
+
+    if [[ ! "$review_after_value" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+      error "$file: missing or invalid required 'review_after'"
+    fi
+
+    if [[ "$status_value" == 'verified' &&
+      ! "$last_verified_value" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+      error "$file: verified concept requires a valid 'last_verified'"
+    fi
+  elif [[ -n "$status_value" &&
+    ! "$status_value" =~ ^(candidate|reviewed|verified|deprecated)$ ]]; then
     error "$file: unsupported lifecycle status '$status_value'"
   fi
 }
@@ -215,12 +242,12 @@ self_test() {
   trap 'if [[ -n "${temp:-}" ]]; then rm -rf -- "$temp"; fi' RETURN
   pass="$temp/pass"
 
-  write_fixture "$pass" $'---\ntype: Practice\ntitle: Valid fixture\nstatus: reviewed\nreview_after: 2999-01-01\n---\n\n# Valid fixture'
+  write_fixture "$pass" $'---\ntype: Practice\ntitle: Valid fixture\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid fixture'
   "$SELF" "$pass" >/dev/null
   printf 'SELF-TEST PASS: valid repository accepted\n'
 
   case_dir="$temp/warning"
-  write_fixture "$case_dir" $'---\ntype: Practice\ntitle: Warning fixture\nstatus: verified\nreview_after: 2000-01-01\n---\n\n# Warning fixture'
+  write_fixture "$case_dir" $'---\ntype: Practice\ntitle: Warning fixture\nstatus: verified\nconfidence: high\nlast_verified: 2000-01-01\nreview_after: 2000-01-01\n---\n\n# Warning fixture'
   "$SELF" "$case_dir" >/dev/null 2>&1
   printf 'SELF-TEST PASS: warnings remain non-fatal\n'
 
@@ -233,25 +260,37 @@ self_test() {
   expect_failure missing-type "$case_dir"
 
   case_dir="$temp/broken-link"
-  write_fixture "$case_dir" $'---\ntype: Practice\n---\n\n# Broken\n\n[Missing](missing.md)'
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Broken\n\n[Missing](missing.md)'
   expect_failure broken-link "$case_dir"
+
+  case_dir="$temp/missing-status"
+  write_fixture "$case_dir" $'---\ntype: Practice\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Missing status'
+  expect_failure missing-status "$case_dir"
+
+  case_dir="$temp/missing-review-after"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\n---\n\n# Missing review date'
+  expect_failure missing-review-after "$case_dir"
+
+  case_dir="$temp/verified-without-last-verified"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: verified\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Missing verification date'
+  expect_failure verified-without-last-verified "$case_dir"
 
   case_dir="$temp/secret"
   secret_value='AKIA'
   secret_value+='ABCDEFGHIJKLMNOP'
-  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' '---' '' '# Secret' '' "$secret_value")"
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Secret' '' "$secret_value")"
   expect_failure credential-pattern "$case_dir"
 
   case_dir="$temp/private-path"
   private_path='/home'
   private_path+='/dev/example'
-  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' '---' '' '# Path' '' "$private_path")"
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Path' '' "$private_path")"
   expect_failure private-path "$case_dir"
 
   case_dir="$temp/private-ip"
   private_ip='192.168'
   private_ip+='.10.20'
-  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' '---' '' '# Address' '' "$private_ip")"
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Address' '' "$private_ip")"
   expect_failure private-ip "$case_dir"
 
   printf 'SELF-TEST PASS: all validator checks behaved as expected\n'

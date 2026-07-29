@@ -6,6 +6,7 @@ status: reviewed
 scope: agentic software and operations work
 confidence: high
 timestamp: 2026-07-15T00:00:00+08:00
+review_after: 2027-01-15
 tags: [operations, automation, evidence]
 ---
 
