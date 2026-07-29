@@ -26,15 +26,33 @@ Use four lifecycle states:
 
 One curator owns promotion. Before moving a candidate into Git:
 
-1. Rewrite the learning for general reuse rather than copying its source.
-2. Remove credentials, private identifiers, local paths, raw evidence, customer
+1. Search the index and existing concepts. Extend or cross-link the one
+   canonical home instead of publishing duplicate policy.
+2. Rewrite the learning for general reuse rather than copying its source.
+3. Remove credentials, private identifiers, local paths, raw evidence, customer
    details, and current authentication state.
-3. Distinguish stable guidance from dated observation.
-4. Cite official or primary public sources for technical claims.
-5. Validate metadata, links, and secret patterns deterministically.
-6. Review the complete local branch as material that may remain public
+4. Distinguish reusable guidance from dated observations.
+5. Record scope, confidence, lifecycle status, and a review date.
+6. Cite official or primary public sources for externally verifiable technical
+   claims.
+7. Link the concept from the index using a relative repository link.
+8. Validate metadata, links, and secret patterns deterministically.
+9. Review the complete local branch as material that may remain public
    permanently.
-7. Promote only after an explicit human public-safety decision.
+10. Promote only after an explicit human public-safety decision.
+
+Reject raw chats, unsupported universal claims, duplicated policy, credentials,
+private infrastructure, and host-specific runtime truth.
+
+## Use and Maintenance
+
+Project instructions, specifications, approvals, and safety rules override
+general Agent OS guidance. Select only the one to three concepts needed for
+the current task, then read their canonical source directly.
+
+Review each concept by its `review_after` date. Recheck evidence, citations,
+scope, confidence, links, and whether another concept has become canonical.
+Keep dated observations separate from reusable guidance.
 
 ## Format
 
@@ -44,8 +62,9 @@ the OKF version using the specification's root-index exception.
 
 ## Retirement
 
-Do not silently erase superseded learning. Mark it `deprecated`, explain the
-replacement or reason, and remove it only when repository policy permits.
+Do not silently erase superseded learning. Mark it `deprecated`, link its
+replacement or explain the reason, and remove it only when repository policy
+permits.
 
 ## Citations
 
