@@ -9,7 +9,7 @@ okf_version: "0.1"
 - **Learn, apply, and contribute safely:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from the KB, apply one to three matching concepts, and suggest sanitized candidates without overriding project authority.
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
-- **Discover repository files and source:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) and [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md).
+- **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
 - **Prepare public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
 
@@ -41,6 +41,8 @@ okf_version: "0.1"
 
 - [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) - Separate tracked inventory, working-tree discovery, content search, and direct source verification.
 - [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md) - Compact recipes and failure modes for common repository tools.
+- [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
+- [Run Playwright Core with Windows Node and Chrome from WSL](playbooks/tools/agent-run-playwright-core-wsl.md) - Launch installed Windows Chrome for interactive E2E, with CDP attachment as a fallback.
 
 ## Provider and Integration Playbooks
 
