@@ -42,7 +42,7 @@ okf_version: "0.1"
 - [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) - Separate tracked inventory, working-tree discovery, content search, and direct source verification.
 - [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md) - Compact recipes and failure modes for common repository tools.
 - [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
-- [Run Playwright Core Through Windows Chrome from WSL](playbooks/tools/agent-run-playwright-core-wsl.md) - Attach to an existing Windows browser from WSL without downloading another browser.
+- [Run Playwright Core with Windows Node and Chrome from WSL](playbooks/tools/agent-run-playwright-core-wsl.md) - Launch installed Windows Chrome for interactive E2E, with CDP attachment as a fallback.
 
 ## Provider and Integration Playbooks
 

@@ -1,16 +1,16 @@
 ---
 type: Playbook
-title: Run Playwright Core Through Windows Chrome from WSL
-description: Use an existing Windows Chrome and Node.js installation to run deterministic local browser evidence from a WSL-owned repository.
-status: candidate
-scope: local web application browser evidence in WSL with Windows Chrome
+title: Run Playwright Core with Windows Node and Chrome from WSL
+description: Run deterministic browser E2E evidence from a WSL-owned repository by launching installed Windows Chrome with Playwright Core, with CDP attachment as a fallback.
+status: reviewed
+scope: local web application browser E2E evidence from WSL using Windows Node and Chrome
 confidence: high
 timestamp: 2026-08-27T00:00:00+08:00
 review_after: 2026-11-27
 tags: [browser, e2e, playwright, playwright-core, wsl, screenshots]
 ---
 
-# Run Playwright Core Through Windows Chrome from WSL
+# Run Playwright Core with Windows Node and Chrome from WSL
 
 This playbook records the small POC pattern used when the application lives in
 WSL, Chrome and Node.js live on Windows, and the repository must capture
@@ -18,19 +18,41 @@ repeatable browser evidence. Use it with [Agent-Run Browser E2E and Screenshot
 Evidence](agent-run-browser-e2e-screenshot-evidence.md); that playbook remains
 the source for test layers, stop conditions, and evidence rules.
 
+## Default decision
+
+Use Playwright Core for interactive browser E2E when the UI exposes the action
+being proved. The preferred route is:
+
+1. Stage a repo-owned `.mjs` test and an exact Playwright Core version in a
+   unique Windows temporary directory.
+2. Run the test with Windows Node.
+3. Let Playwright launch the installed Windows Chrome executable directly.
+4. Click the real UI, assert both the network response and rendered DOM, capture
+   screenshots, and close the browser in `finally` cleanup.
+
+Use CDP attachment only when Bash must own Chrome startup or the test must
+attach to an already-running isolated browser. Direct Chrome CLI screenshots
+are a rendering-only fallback, not interactive E2E proof.
+
 ## Why this route
 
-`playwright-core` supplies the automation API without downloading or managing
-its own browser. The runner attaches to the already-installed Windows Chrome
-over the local Chrome DevTools Protocol (CDP). This keeps a small POC fast and
-avoids a second browser installation.
+`playwright-core` supplies the automation API without downloading a bundled
+browser. It can launch the already-installed Windows Chrome executable while
+owning its lifecycle. This keeps a small POC fast and avoids a second browser
+installation.
 
-Install it in the owning JavaScript project, then audit the dependency:
+For a stable repo-owned runner, pin an exact development dependency and audit
+it:
 
 ```bash
-npm install --save-dev playwright-core
+npm install --save-dev --save-exact playwright-core@<approved-version>
 npm audit --audit-level=high
 ```
+
+A unique Windows temporary install is acceptable for one bounded discovery or
+smoke test. The trusted repeatable result should move the exact version and the
+test script into the owning repository. Do not silently install a global
+package or use an implicit `latest` version.
 
 Do not put credentials, cloud identifiers, raw logs, or private screenshots in
 the knowledge base or public evidence.
@@ -41,29 +63,130 @@ The repo-owned Bash runner must:
 
 1. Start the local application on loopback and poll a health endpoint.
 2. Refuse a busy port instead of killing an unknown process.
-3. Create a unique Windows temporary Chrome profile.
-4. Launch Chrome with `--headless=new`, CDP on the loopback host, and
-   `--remote-debugging-port=0`.
-5. Read the selected port from `DevToolsActivePort` in that profile.
-6. Convert WSL paths with `wslpath -w` before passing them to Windows Node.
-7. Run the repo-owned `.mjs` script with Windows Node and an explicit
-   `PLAYWRIGHT_CORE` module path.
-8. Capture machine-checkable JSON and screenshots in a run-specific directory.
-9. Stop only the Chrome process whose command line contains this exact profile,
-   stop the app process created by the run, remove that profile, and verify the
-   app port and CDP endpoint are gone.
+3. Create unique run and Windows temporary directories.
+4. Convert WSL paths with `wslpath -w` before passing them to Windows tools.
+5. Run the repo-owned `.mjs` script with Windows Node and explicit arguments.
+6. Launch installed Chrome through Playwright with a private context and fixed
+   viewport.
+7. Perform real UI actions and assert the corresponding API response and DOM.
+8. Capture console errors, page errors, failed requests, and unexpected HTTP
+   error responses.
+9. Write machine-checkable JSON and screenshots to a run-specific directory.
+10. Close the Playwright browser, stop only the app process created by the run,
+    remove temporary dependencies, and prove that allocated ports are free.
 
 The runner must not use `pkill`, `taskkill /IM chrome.exe`, a shared browser
 profile, a public bind address, or a cloud mutation.
 
-## Minimal launcher pattern
+## Preferred tested route: direct launch
+
+Pass values as explicit arguments across the WSL-to-Windows boundary. Do not
+depend on inline WSL environment assignments reaching a Windows executable.
+The repo-owned JavaScript can follow this pattern:
+
+```javascript
+import assert from 'node:assert/strict';
+import { chromium } from 'playwright-core';
+
+const [, , appUrl, chromePath, evidenceDir] = process.argv;
+assert(appUrl && chromePath && evidenceDir, 'missing required argument');
+
+const problems = [];
+let browser;
+
+try {
+  browser = await chromium.launch({
+    executablePath: chromePath,
+    headless: true,
+  });
+  const context = await browser.newContext({
+    viewport: { width: 1920, height: 1080 },
+  });
+  const page = await context.newPage();
+
+  page.on('console', message => {
+    if (message.type() === 'error') problems.push(`console: ${message.text()}`);
+  });
+  page.on('pageerror', error => problems.push(`page: ${error.message}`));
+  page.on('requestfailed', request => {
+    problems.push(`request: ${request.method()} ${request.url()}`);
+  });
+  page.on('response', response => {
+    if (response.status() >= 400) {
+      problems.push(`http: ${response.status()} ${response.url()}`);
+    }
+  });
+
+  await page.goto(appUrl, { waitUntil: 'networkidle' });
+  const apiResult = page.waitForResponse(response =>
+    response.url().includes('/api/') && response.request().method() === 'POST'
+  );
+  await page.getByRole('button', { name: '<action label>' }).click();
+
+  const response = await apiResult;
+  assert(response.ok(), `API returned ${response.status()}`);
+  const payload = await response.json();
+  assert.equal(payload['<stable field>'], '<expected value>');
+  await page.getByText('<expected visible result>', { exact: true }).waitFor();
+
+  await page.screenshot({
+    path: `${evidenceDir}/result.png`,
+    fullPage: true,
+  });
+  assert.deepEqual(problems, [], `browser problems: ${problems.join('; ')}`);
+} finally {
+  await browser?.close();
+}
+```
+
+Replace the placeholders with stable selectors and fields owned by the app.
+Do not use a timeout as the primary assertion. Wait for a meaningful response
+or visible state instead.
+
+When Windows Node needs a temporary dependency, use a staged PowerShell script
+or equivalent deterministic wrapper. Give it explicit paths and an exact
+version, and remove its unique temporary directory during cleanup. Do not ask
+Bash to parse `npm.cmd` or PowerShell syntax.
+
+A discovery-only staging wrapper can use this shape:
+
+```powershell
+param(
+  [Parameter(Mandatory = $true)][string]$WorkDir,
+  [Parameter(Mandatory = $true)][string]$Runner,
+  [Parameter(Mandatory = $true)][string]$NpmPath,
+  [Parameter(Mandatory = $true)][string]$NodePath,
+  [Parameter(Mandatory = $true)][string]$Version,
+  [Parameter(Mandatory = $true)][string]$AppUrl,
+  [Parameter(Mandatory = $true)][string]$ChromePath,
+  [Parameter(Mandatory = $true)][string]$EvidenceDir
+)
+
+$ErrorActionPreference = 'Stop'
+New-Item -ItemType Directory -Force -Path $WorkDir | Out-Null
+& $NpmPath install --prefix $WorkDir --ignore-scripts --no-audit --no-fund "playwright-core@$Version"
+if ($LASTEXITCODE -ne 0) { throw 'Playwright Core install failed' }
+
+$stagedRunner = Join-Path $WorkDir 'browser-e2e.mjs'
+Copy-Item -LiteralPath $Runner -Destination $stagedRunner
+& $NodePath $stagedRunner $AppUrl $ChromePath $EvidenceDir
+if ($LASTEXITCODE -ne 0) { throw 'Browser E2E failed' }
+```
+
+The calling Bash runner should create `WorkDir`, convert every path with
+`wslpath -w`, invoke the staged PowerShell file with explicit named arguments,
+and remove only that exact unique directory in its cleanup trap. A repository
+that runs this regularly should use its checked-in package manifest and lock
+file instead of installing a temporary package on every run.
+
+## Optional CDP attachment route
 
 Use placeholders owned by the runner rather than hard-coded user directories:
 
 ```bash
 chrome_wsl=${CHROME_WSL:?set the Windows Chrome executable}
 windows_node=${WINDOWS_NODE:?set the Windows Node executable}
-profile_wsl=$(mktemp -d "$windows_temp_wsl/seccop-e2e.XXXXXX")
+profile_wsl=$(mktemp -d "$windows_temp_wsl/browser-e2e.XXXXXX")
 profile_windows=$(wslpath -w "$profile_wsl")
 
 "$chrome_wsl" \
@@ -80,14 +203,13 @@ cdp_url="http://localhost:$debug_port"
 runner_windows=$(wslpath -w "$repo_dir/scripts/browser-e2e.mjs")
 core_windows=$(wslpath -w "$playwright_core")
 
-APP_URL="$app_url" CDP_URL="$cdp_url" PLAYWRIGHT_CORE="$core_windows" \
-  "$windows_node" "$runner_windows"
+"$windows_node" "$runner_windows" "$app_url" "$cdp_url" "$core_windows"
 ```
 
 The real runner must use bounded polling for `DevToolsActivePort`; the snippet
 shows the boundary, not an excuse to wait forever.
 
-## Minimal attachment pattern
+### Minimal attachment pattern
 
 The Windows Node script imports the explicit module path and attaches to the
 existing browser:
@@ -95,9 +217,9 @@ existing browser:
 ```javascript
 import { pathToFileURL } from 'node:url';
 
-const modulePath = process.env.PLAYWRIGHT_CORE;
+const [, , appUrl, cdpUrl, modulePath] = process.argv;
 const { chromium } = await import(pathToFileURL(modulePath).href);
-const browser = await chromium.connectOverCDP(process.env.CDP_URL);
+const browser = await chromium.connectOverCDP(cdpUrl);
 const context = browser.contexts()[0] ?? await browser.newContext();
 const page = context.pages()[0] ?? await context.newPage();
 await page.setViewportSize({ width: 1920, height: 1080 });
@@ -106,17 +228,33 @@ await page.setViewportSize({ width: 1920, height: 1080 });
 Drive the real UI, assert the API result, and then take the screenshot. A
 screenshot alone is not proof of policy, tool execution, or cleanup.
 
-## Evidence checks used for a local POC
+## Evidence checks for a local POC
 
-- Health JSON confirms the expected local/synthetic mode.
-- The positive path asserts the expected ready state and visible finding cards.
-- The approval path asserts `mutation_performed === false` for a mock action.
-- The negative path asserts a stable block reason and
-  `executed_calls.length === 0`.
-- Every request is recorded; external request count must remain zero.
-- Browser console and page errors must remain zero.
+- Health JSON confirms the expected local mode before the browser starts.
+- The browser performs the real user action when the UI exposes it.
+- The matching API response asserts stable machine-readable fields.
+- The rendered DOM asserts the visible decision and reason.
+- Positive and negative paths are both covered when policy is part of the POC.
+- Every request is observed; external request count must remain zero unless an
+  exact allowlist is part of the test contract.
+- Browser console errors, page errors, failed requests, and unexpected HTTP
+  error responses must remain zero or be reported as explicit warnings or
+  failures.
 - Screenshots are written both to the restricted run directory and to the
   operator's review mirror only when that mirror is explicitly requested.
+
+## Observed smoke-test lesson
+
+This direct-launch pattern was smoke-tested with Windows Node, installed
+Windows Chrome, and a temporary exact Playwright Core package. Real UI clicks,
+API assertions, DOM assertions, full-page screenshots, browser closure, and
+port cleanup completed successfully. The error collector also surfaced a
+missing favicon response. That did not invalidate the feature assertions, but
+the run was correctly labeled as passing with a browser warning rather than a
+fully clean pass.
+
+Do not hide browser hygiene warnings. Fix the application asset or record the
+warning explicitly in the result.
 
 ## Failure handling
 
@@ -125,6 +263,17 @@ CDP endpoint, the module cannot be imported, an assertion fails, an external
 request appears, or cleanup cannot be proven. Do not retry by killing unrelated
 processes or by widening network access. Fix the runner or application and
 start a new unique run.
+
+## Acceptance checklist
+
+- [ ] The repo owns the test script and pins the Playwright Core version.
+- [ ] The app binds to loopback and readiness is bounded.
+- [ ] Playwright performs real UI actions when available.
+- [ ] Both API payload and rendered DOM are asserted.
+- [ ] Screenshots use a fixed viewport and run-specific filenames.
+- [ ] Console, page, request, HTTP, and external-network observations are saved.
+- [ ] Warnings are visible in the result rather than silently ignored.
+- [ ] Browser, temporary package, app process, and ports are clean after exit.
 
 ## References
 
