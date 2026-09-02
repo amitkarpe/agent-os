@@ -49,6 +49,7 @@ okf_version: "0.1"
 
 - [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) - Select a bounded research route without exposing authentication material.
 - [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md) - Source, timestamp, telemetry, and cost gates for research output.
+- [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
 
 ## Model Observations
 
