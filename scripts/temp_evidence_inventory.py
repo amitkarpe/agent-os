@@ -26,6 +26,9 @@ MEDIA_SUFFIXES = {
     ".mp4", ".mov", ".avi", ".mkv", ".gif", ".webm", ".zip", ".tar", ".gz",
     ".tgz", ".7z", ".iso",
 }
+RESULT_TOKEN_RE = re.compile(
+    r"`([^`]+)`|\[[^\]]+\]\(([^)\s]+)\)|(?<![A-Za-z0-9_./-])([A-Za-z0-9_./-]{2,})"
+)
 ATTEMPT_RE = re.compile(r"^attempt-(\d+)$", re.IGNORECASE)
 GOAL_ID_RE = re.compile(r"(?im)^\s*(?:goal[_ -]?id|run[_ -]?id)\s*[:=]\s*([A-Za-z0-9][A-Za-z0-9._:/-]{0,120})")
 STATUS_RE = re.compile(r"(?im)^\s*status\s*[:=]\s*([A-Za-z][A-Za-z0-9_-]{0,40})")
@@ -130,7 +133,33 @@ def context(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names_
     return info, active, held, is_superseded
 
 
-def classify(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names_by_dir: dict[Path, set[str]], superseded_attempts_set: set[Path]) -> tuple[str, str, dict[str, str]]:
+def result_references(root: Path, result_files: list[Path]) -> set[Path]:
+    """Resolve explicit file references in RESULT.md without following links."""
+    references: set[Path] = set()
+    for result in result_files:
+        try:
+            text = result.read_text(encoding="utf-8", errors="replace")[:TEXT_LIMIT]
+        except OSError:
+            continue
+        for match in RESULT_TOKEN_RE.finditer(text):
+            token = next((value for value in match.groups() if value), "")
+            token = token.strip().strip("`'\".,;:)]}>")
+            token = token.split("#", 1)[0].split("?", 1)[0]
+            if not token or token.startswith(("http://", "https://", "mailto:")):
+                continue
+            candidates = [Path(token)] if token.startswith("/") else [result.parent / token, root / token]
+            for candidate in candidates:
+                try:
+                    candidate.relative_to(root)
+                except ValueError:
+                    continue
+                if candidate.is_symlink() or not candidate.is_file():
+                    continue
+                references.add(candidate)
+    return references
+
+
+def classify(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names_by_dir: dict[Path, set[str]], superseded_attempts_set: set[Path], result_references_set: set[Path]) -> tuple[str, str, dict[str, str]]:
     info, active, held, superseded = context(path, root, metadata, names_by_dir, superseded_attempts_set)
     name = path.name
     if path.is_symlink():
@@ -141,6 +170,10 @@ def classify(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names
         return "KEEP", "active_run", info
     if name in KEEP_NAMES:
         return "KEEP", "canonical_or_goal_metadata", info
+    if path in result_references_set:
+        return "KEEP", "selected_result_evidence", info
+    if path.is_file() and "pointers" in path.relative_to(root).parts:
+        return "KEEP", "source_pointer", info
     if superseded:
         return "ARCHIVE_CANDIDATE", "superseded_retry_output", info
     if path.is_dir() and ".git" in names_by_dir.get(path, set()):
@@ -152,12 +185,12 @@ def classify(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names
     return "REVIEW", "unknown_or_requires_owner_review", info
 
 
-def entry_record(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names_by_dir: dict[Path, set[str]], superseded: set[Path]) -> dict[str, object]:
+def entry_record(path: Path, root: Path, metadata: dict[Path, dict[str, str]], names_by_dir: dict[Path, set[str]], superseded: set[Path], result_references_set: set[Path]) -> dict[str, object]:
     try:
         st = path.lstat()
     except OSError as exc:
         raise RuntimeError(f"cannot stat {path}: {exc}") from exc
-    classification, reason, info = classify(path, root, metadata, names_by_dir, superseded)
+    classification, reason, info = classify(path, root, metadata, names_by_dir, superseded, result_references_set)
     kind = "symlink" if stat.S_ISLNK(st.st_mode) else "directory" if stat.S_ISDIR(st.st_mode) else "file"
     return {
         "path": path.relative_to(root).as_posix(),
@@ -179,7 +212,9 @@ def build_report(root: Path) -> tuple[dict[str, object], str]:
         raise ValueError(f"evidence root is not a directory: {root}")
     entries, metadata, names_by_dir = walk(root)
     superseded = superseded_attempts(list(metadata), metadata)
-    records = [entry_record(path, root, metadata, names_by_dir, superseded) for path in entries]
+    result_files = [path for path in entries if path.name == "RESULT.md" and path.is_file() and not path.is_symlink()]
+    result_references_set = result_references(root, result_files)
+    records = [entry_record(path, root, metadata, names_by_dir, superseded, result_references_set) for path in entries]
     counts = {name: {"entries": 0, "bytes": 0} for name in CLASSIFICATIONS}
     for record in records:
         bucket = counts[record["classification"]]

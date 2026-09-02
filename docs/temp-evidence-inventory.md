@@ -18,14 +18,17 @@ metadata when it is present. It never emits arbitrary file contents.
 
 Classifications are:
 
-- `KEEP`: active runs, explicit holds, canonical result and goal metadata.
+- `KEEP`: active runs, explicit holds, canonical result and goal metadata,
+  source pointers, or files explicitly referenced by `RESULT.md`.
 - `ARCHIVE_CANDIDATE`: output under a superseded retry.
 - `DELETE_CANDIDATE`: recreatable dependencies/caches, copied repositories,
   or unreferenced media/archive files. This is a suggestion only.
 - `REVIEW`: unknown, incomplete, private, or symlink evidence.
 
-Active and held evidence always wins over candidate classifications. Symlinks
-are listed but never followed. Unknown evidence defaults to `REVIEW`.
+Active and held evidence always wins over candidate classifications. Selected
+proof referenced by `RESULT.md` is also protected, including archive/media
+files. Symlinks are listed but never followed. Unknown evidence defaults to
+`REVIEW`.
 
 ## Storage rule
 
