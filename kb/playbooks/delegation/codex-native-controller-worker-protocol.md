@@ -1,7 +1,7 @@
 ---
 type: Playbook
 title: Codex Native Controller-Worker Protocol
-description: Use durable goals and results with native Codex queue transport and the Agent Command Center as an observability surface.
+description: Use durable goals and results with native Codex queue transport and optional Codex observability surfaces.
 status: reviewed
 scope: Codex CLI controller-worker sessions
 confidence: medium
@@ -37,6 +37,7 @@ examples unchanged.
 | Durable goal and result | Scope, authority, evidence, and terminal truth | Message delivery |
 | `codex queue` | Native message transport to a Codex session | Execution, success, or approval |
 | Agent Command Center | Search, open, start, rename, stop, and observe managed tasks | Message acceptance, authority, or completion |
+| Optional `codex_tui` tools | Inspect an exposed thread for diagnosis | A supported tool contract, delivery, authority, or completion |
 
 Keep these layers separate. A healthy worker display does not prove that a
 goal completed. A queue receipt does not prove that a worker executed the
@@ -176,6 +177,28 @@ It is intentionally not the transport or authority layer. Do not scrape its
 screen as a completion API, and do not infer that `Ready` means a queued goal
 was ignored or that `Working` means the correct goal was accepted.
 
+## Optional `codex_tui` thread inspection
+
+Some Codex hosts expose a built-in `codex_tui` tool surface, which may include
+`read_thread` or similarly named thread-inspection methods. When it is exposed,
+use it for bounded diagnosis: confirm which thread is being viewed, inspect
+recent conversation or tool output, and investigate a suspected queue or UI
+delivery problem without attaching a terminal pane.
+
+It is host-provided, version-sensitive, and may be absent from another Codex
+session or from `codex mcp list`. Do not install, configure, or automate
+against it as a required MCP dependency. Check the live tool list before use.
+
+`codex_tui` does not replace the protocol layers:
+
+- use `codex queue` for controller-worker message delivery;
+- use durable goals and `RESULT.md` for scope and terminal reporting; and
+- use controller evidence review and fresh state verification for acceptance.
+
+Do not send mutations through an inspection tool unless a separately documented
+method and the normal goal authority explicitly permit it. Never treat a
+visible transcript, tool status, or partial output as completion proof.
+
 ## Steering, queuing, and native delivery
 
 Codex also supports interactive steering and queuing while a run is active.
@@ -228,6 +251,8 @@ ambiguous or possibly executed state until it is reconciled.
 - [ ] Queue messages contain provenance and one exact artifact path.
 - [ ] A valid receipt ends delivery; no tmux or key fallback follows it.
 - [ ] The Agent Command Center is used for visibility, not proof.
+- [ ] When exposed, `codex_tui` is used only for bounded inspection and
+      diagnosis, never as required transport or completion proof.
 - [ ] Completion requires controller acceptance, not a receipt or status dot.
 - [ ] Supervisor/SS-style delivery is fallback only.
 - [ ] No workflow depends on `F12`.
