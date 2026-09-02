@@ -84,15 +84,23 @@ Before sending a message:
 3. Record the requested outcome, scope, approved mutations, success evidence,
    and stop conditions.
 4. Confirm the worker identity, role, and intended workspace.
-5. Keep the queue message short and point to the durable goal.
-6. State provenance with `FROM`, `Requested by`, and `Delegated by`.
+5. Resolve the active controller UUID or verified unique session name and put
+   it in both the durable goal and queue message as `Reply-To`.
+6. Keep the queue message short and point to the durable goal.
+7. State provenance with `FROM`, `Requested by`, and `Delegated by`.
 
 Example:
 
 ```bash
-MSG='FROM controller: Execute the approved goal at <goal-path>. Return one terminal result at the goal-defined path. Queue admission is not execution or completion.'
+MSG='FROM controller. Reply-To: <controller-uuid>. Execute the approved goal at <goal-path>. Return one terminal result at the goal-defined path, then notify Reply-To. Queue admission is not execution or completion.'
 codex queue --thread <worker-uuid> --message "${MSG}"
 ```
+
+The sender is not an implicit return route. A valid delivery receipt does not
+expose the controller identity to the worker. Treat a missing `Reply-To` as a
+dispatch defect: the worker still writes its durable result and done marker,
+records that notification could not be sent, and stops without guessing a
+controller target.
 
 Quote `"${MSG}"`. An unquoted or empty shell variable can turn a correct
 delivery into a missing-argument failure.
@@ -116,7 +124,8 @@ The worker completes the durable artifact before notifying the controller:
 1. Finish the approved work or reach a truthful terminal stop.
 2. Write and validate one durable terminal result.
 3. Reconcile current state when the task changed external or persistent state.
-4. Send one short native queue message containing the result path.
+4. Send one short native queue message containing the result path to the exact
+   `Reply-To` recorded by the controller.
 5. Stop; do not repeatedly notify, poll, or paste the full result.
 
 Example:
@@ -137,6 +146,15 @@ the goal. For stateful or risky work, acceptance normally requires both:
 
 - the durable result; and
 - fresh current-state verification.
+
+For a POC or MVP, acceptance also requires a KISS diff gate: compare against
+the recorded base commit, inspect `git diff --stat`, check for overlap with
+existing implementation paths, and evaluate the goal's target, normal variance,
+and hard-stop envelope. A justified same-path variance may be accepted. A
+technically passing result with an unnecessary new runner, dependency,
+framework, service, cloud resource/authority, parallel path, optional polish,
+or more than twice the target is unaccepted until reduced or explicitly
+approved by Amit.
 
 Use truthful terminal states such as `SUCCESS`, `HEALTHY/ARMED/NO_ACTION`,
 `PARTIAL`, `BLOCKED`, `FAILED`, or `UNKNOWN_PENDING`. A chat message, queue
@@ -206,6 +224,7 @@ ambiguous or possibly executed state until it is reconciled.
       reviewed.
 - [ ] Each worker has one intended role and workspace.
 - [ ] Goals and results are durable files.
+- [ ] Every dispatched goal and queue message contains an exact `Reply-To`.
 - [ ] Queue messages contain provenance and one exact artifact path.
 - [ ] A valid receipt ends delivery; no tmux or key fallback follows it.
 - [ ] The Agent Command Center is used for visibility, not proof.
