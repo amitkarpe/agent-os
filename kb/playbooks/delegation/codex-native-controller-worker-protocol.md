@@ -192,6 +192,38 @@ It is intentionally not the transport or authority layer. Do not scrape its
 screen as a completion API, and do not infer that `Ready` means a queued goal
 was ignored or that `Working` means the correct goal was accepted.
 
+The dashboard scope can be limited to tasks managed by its local shared
+app-server. An empty dashboard does not prove that no standalone TUI, legacy,
+remote, or tmux-backed sessions exist. Use the owner registry and tmux only to
+locate those sessions; use the dashboard for its managed-task lifecycle.
+
+## Model and reasoning control
+
+Model and reasoning effort are session settings, not worker-role names and not
+queue-message properties. Starting a controller as Terra high does not force
+an independently launched worker to use Terra high. Likewise, a native child
+or TUI can run Luna low when its session was started with that setting.
+
+For a new or deliberately resumed TUI session, set both explicitly:
+
+```bash
+codex --no-alt-screen -m gpt-5.6-luna \
+  -c 'model_reasoning_effort="low"'
+
+codex resume <thread-id> -m gpt-5.6-terra \
+  -c 'model_reasoning_effort="medium"'
+```
+
+For a parent-created subagent, specify the model and effort in the parent
+spawn request when an override is justified; otherwise it uses the parent or
+configured child default. A `codex queue` message transports work only. Text
+such as "use Luna low" does not itself change the receiving thread's model.
+
+The Agent Command Center may expose session configuration for tasks it owns.
+Before dispatching costly work, verify the model and effort displayed by that
+task. Do not assume a dashboard can change settings for a separately launched
+or legacy session.
+
 ## Optional `codex_tui` thread inspection
 
 Some Codex hosts expose a built-in `codex_tui` tool surface, which may include
@@ -307,6 +339,10 @@ and databases need explicit cost/state review and Amit approval before deletion.
 - [ ] Queue messages contain provenance and one exact artifact path.
 - [ ] A valid receipt ends delivery; no tmux or key fallback follows it.
 - [ ] The Agent Command Center is used for visibility, not proof.
+- [ ] Dashboard scope was checked; an empty dashboard was not mistaken for an
+      operating-system-wide worker inventory.
+- [ ] Each cost-sensitive worker has an explicit session model and reasoning
+      effort, rather than an instruction asking it to change model by message.
 - [ ] When exposed, `codex_tui` is used only for bounded inspection and
       diagnosis, never as required transport or completion proof.
 - [ ] Completion requires controller acceptance, not a receipt or status dot.
@@ -321,6 +357,10 @@ and databases need explicit cost/state review and Amit approval before deletion.
 
 - [OpenAI Codex CLI](https://learn.chatgpt.com/docs/codex/cli)
 - [OpenAI prompting: steering and queuing](https://learn.chatgpt.com/docs/prompting#steering-and-queuing)
+- [Codex 0.149.0 release](https://github.com/openai/codex/releases/tag/rust-v0.149.0)
+- [Codex 0.150.0 release](https://github.com/openai/codex/releases/tag/rust-v0.150.0)
+- [Codex 0.151.0 release](https://github.com/openai/codex/releases/tag/rust-v0.151.0)
+- [Codex 0.152.0 release](https://github.com/openai/codex/releases/tag/rust-v0.152.0)
 - [Controller-Worker Goal Execution Framework](controller-worker-goal-execution-framework.md)
 - [Completion Notification without Polling](completion-notification-without-polling.md)
 - [Named Agent Session Reuse](../codex/named-session-reuse.md)
