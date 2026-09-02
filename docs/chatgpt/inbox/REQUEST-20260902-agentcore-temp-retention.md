@@ -1,12 +1,12 @@
 ---
 type: ChatGPT review request
-title: AgentCore temporary evidence retention and layout
-status: request-only
+title: Cross-repository temporary evidence retention and layout
+status: accepted-implementation-lane
 date: 2026-09-02
 safety: public-safe summary; no implementation or deletion authorized
 ---
 
-# Request: improve temporary evidence retention
+# Request: improve cross-repository temporary evidence retention
 
 Please review this request using the public protocol:
 
@@ -14,16 +14,15 @@ Please review this request using the public protocol:
 
 ## Context
 
-The local AgentCore temporary area is used for Codex/AI experiments,
-read-only AWS checks, and POC evidence. A snapshot on 2026-09-02 contains:
+The shared temporary area is used across repositories for Codex/AI experiments,
+read-only checks, long-running operations, and POC evidence. A snapshot on
+2026-09-02 contains:
 
-- 15,694 directories
-- 101,025 files
-- approximately 2.85 GiB
-- 63 top-level project/run directories
-- 66 `node_modules` trees
-- 3 nested `.git` directories
-- 86 large media/archive files
+- 24,472 directories
+- 154,341 files
+- approximately 6.5 GiB
+- 68 `node_modules` trees
+- 15 nested `.git` directories
 
 The largest groups are repeated Issue/POC folders containing copied project
 trees, dependencies, nested Git data, media, and retry outputs. The directory
@@ -34,7 +33,7 @@ is evidence storage, not a source repository.
 The local Codex rules require:
 
 - KISS: one problem, one happy path, one command, one proof, one result.
-- One bounded goal per worker lane with a durable `RESULT.md`.
+- One bounded goal/run per worker lane with a durable `RESULT.md`.
 - Evidence under a temporary area; source code remains in its owning repository.
 - Separate worktrees for genuinely parallel missions.
 - Preserve current success proof, active-debug evidence, and audit evidence.
@@ -50,6 +49,19 @@ directory. That protects evidence from being overwritten, but it also permits
 full repository copies, dependency trees, and large files to accumulate. The
 result is slower search, more filesystem work, and a higher risk of reading
 irrelevant or private material.
+
+## Accepted implementation lane
+
+ChatGPT's bounded recommendation is now recorded as:
+
+- Issue #4: <https://github.com/amitkarpe/agent-os/issues/4>
+- Draft PR #5: <https://github.com/amitkarpe/agent-os/pull/5>
+
+Codex is the sole implementation owner for PR #5. PR #5 is the only
+implementation lane for this problem. Do not create another PR, branch,
+worker implementation, cleanup tool, or alternate architecture. The lane is
+read-only dry-run classification only; destructive cleanup remains out of
+scope and requires a separate approved goal.
 
 ## Questions
 
@@ -71,11 +83,15 @@ irrelevant or private material.
 Give a recommendation only. Do not delete, move, archive, or rewrite local
 files. Do not change Codex configuration, repository rules, AWS resources, or
 cloud credentials. Do not infer that a file is safe from its name alone.
-Preserve audit evidence until an owner approves its retention decision.
+Preserve audit evidence until an owner approves its retention decision. The
+accepted implementation must remain repository-generic; it must not encode
+AgentCore-only assumptions.
 
 ## Requested response
 
-Create one new standalone GitHub Issue containing:
+For any further ChatGPT review, use the existing Issue #4 and Draft PR #5;
+do not create a duplicate Issue or PR. Review the actual PR diff and comment
+only on whether it satisfies the existing acceptance contract:
 
 - a recommended KISS directory layout;
 - a keep/archive/delete classification;
@@ -84,7 +100,8 @@ Create one new standalone GitHub Issue containing:
 - a no-copy dependency/media policy;
 - a dry-run cleanup acceptance checklist;
 - risks and rejected alternatives; and
-- one bounded implementation Issue plus one Draft PR plan.
+- deterministic dry-run behavior with zero filesystem mutation.
 
-Do not implement the recommendation. Treat the measurements above as a
-sanitized local snapshot, not as permission to clean anything.
+Do not perform cleanup or configuration changes. Treat the measurements above
+as a sanitized local snapshot, and treat PR #5 as the only implementation
+authority for this milestone.
