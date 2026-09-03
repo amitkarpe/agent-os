@@ -30,6 +30,13 @@ worker-to-worker, and worker-to-controller use. The exact non-interactive
 sensitive. Check the installed version and command help before adopting the
 examples unchanged.
 
+### CLI and app-server compatibility
+
+When the installed CLI is newer than an active local app-server (for example,
+CLI `0.153.0` with app-server `0.152.1`), do not restart the older daemon just
+to obtain newer dashboard features. Wait for a planned idle maintenance window,
+then verify the CLI and app-server versions again before changing the daemon.
+
 ## Three separate responsibilities
 
 | Layer | Purpose | It does not prove |
