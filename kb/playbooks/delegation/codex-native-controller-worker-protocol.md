@@ -5,8 +5,8 @@ description: Use durable goals and results with native Codex queue transport and
 status: reviewed
 scope: Codex CLI controller-worker sessions
 confidence: medium
-timestamp: 2026-08-31T00:00:00+08:00
-last_verified: 2026-08-31
+timestamp: 2026-09-03T00:00:00+08:00
+last_verified: 2026-09-03
 review_after: 2026-10-31
 tags: [codex, controller, worker, queue, agents, delegation, completion]
 ---
@@ -197,6 +197,10 @@ app-server. An empty dashboard does not prove that no standalone TUI, legacy,
 remote, or tmux-backed sessions exist. Use the owner registry and tmux only to
 locate those sessions; use the dashboard for its managed-task lifecycle.
 
+In CLI 0.153.0, the dashboard can also show recent sessions. This improves
+human discovery, but a recent-session list is still not an operating-system-
+wide worker inventory or completion authority.
+
 ## Model and reasoning control
 
 Model and reasoning effort are session settings, not worker-role names and not
@@ -223,6 +227,10 @@ The Agent Command Center may expose session configuration for tasks it owns.
 Before dispatching costly work, verify the model and effort displayed by that
 task. Do not assume a dashboard can change settings for a separately launched
 or legacy session.
+
+CLI 0.153.0 adds nullable `model` and `reasoningEffort` fields to app-server
+thread metadata. Treat those fields as useful observation when the current UI
+or client exposes them, not as proof that every dashboard view displays them.
 
 ## Optional `codex_tui` thread inspection
 
@@ -361,6 +369,7 @@ and databases need explicit cost/state review and Amit approval before deletion.
 - [Codex 0.150.0 release](https://github.com/openai/codex/releases/tag/rust-v0.150.0)
 - [Codex 0.151.0 release](https://github.com/openai/codex/releases/tag/rust-v0.151.0)
 - [Codex 0.152.0 release](https://github.com/openai/codex/releases/tag/rust-v0.152.0)
+- [Codex 0.153.0 release](https://github.com/openai/codex/releases/tag/rust-v0.153.0)
 - [Controller-Worker Goal Execution Framework](controller-worker-goal-execution-framework.md)
 - [Completion Notification without Polling](completion-notification-without-polling.md)
 - [Named Agent Session Reuse](../codex/named-session-reuse.md)
