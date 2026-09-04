@@ -15,10 +15,11 @@ tags: [codex, controller, worker, queue, agents, delegation, completion]
 
 ## Decision
 
-Use native `codex queue` as the normal transport between persistent Codex
-controller and worker sessions. Use the Agent Command Center for human
-visibility and lifecycle operations. Keep a supervisor or screen-key delivery
-system only as a fallback when native queue delivery is genuinely unavailable.
+Use native `codex queue` as the normal best-effort transport between verified
+persistent Codex TUI controller and worker sessions. Use the Agent Command
+Center for human visibility and lifecycle operations. Keep durable results and
+done markers authoritative when a controller runs through an API or other
+surface that cannot receive native queue messages.
 
 Do not build normal automation around custom composer keys such as `F12`.
 Interactive keys can change by version or local configuration, while native
@@ -119,16 +120,18 @@ MSG='FROM controller. Reply-To: <controller-uuid>. Execute the approved goal at 
 codex queue --thread <worker-uuid> --message "${MSG}"
 ```
 
-The sender is not an implicit return route. A valid delivery receipt does not
-expose the controller identity to the worker. Treat a missing `Reply-To` as a
-dispatch defect: the worker still writes its durable result and done marker,
-records that notification could not be sent, and stops without guessing a
-controller target.
+The sender is not an implicit return route. A valid queue receipt does not
+expose the controller identity to the worker, prove that the target displayed
+the message, or prove that an API-controller chat can receive it. Treat a
+missing or unverified `Reply-To` as a dispatch defect: the worker still writes
+its durable result and done marker, records `notification_not_attempted`, and
+stops without guessing a controller target.
 
 Quote `"${MSG}"`. An unquoted or empty shell variable can turn a correct
 delivery into a missing-argument failure.
 
-When the command returns a valid queue receipt, delivery is finished. Do not:
+When the command returns a valid queue receipt, the worker-side queue attempt
+is finished. Report `notification_queued`, not `controller notified`. Do not:
 
 - paste the same message into tmux;
 - press `Enter`, `Tab`, or `F12` as a second delivery method;
@@ -149,7 +152,9 @@ The worker completes the durable artifact before notifying the controller:
 3. Reconcile current state when the task changed external or persistent state.
 4. Send one short native queue message containing the result path to the exact
    `Reply-To` recorded by the controller.
-5. Stop; do not repeatedly notify, poll, or paste the full result.
+5. Record `notification_queued` only after a valid queue receipt. Do not claim
+   that the controller received it without a separate acknowledgement.
+6. Stop; do not repeatedly notify, poll, or paste the full result.
 
 Example:
 
