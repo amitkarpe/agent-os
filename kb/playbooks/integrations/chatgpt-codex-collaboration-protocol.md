@@ -221,8 +221,11 @@ state alone is never terminal proof.
 - Preserve unrelated dirty work and stop before conflicting edits.
 - Stop when an existing Issue/PR already owns the request, no standalone
   response Issue exists, the response expands scope, or required checks fail.
-- Keep fallback supervisor or tmux delivery only for a clear native-queue
-  failure. One recovery attempt is enough; F12 is not normal transport.
+- For verified persistent Codex workers, queue failure/no valid receipt is a
+  blocked transport state: repair queue/session identity before redispatch.
+  Do not use supervisor, tmux, composer, terminal, key, or file-mention
+  delivery as fallback transport. Non-queue-capable session types are deferred
+  to a separately approved communication design.
 
 ## Minimal checklist
 

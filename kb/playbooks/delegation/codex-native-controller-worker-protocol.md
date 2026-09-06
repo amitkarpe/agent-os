@@ -15,11 +15,17 @@ tags: [codex, controller, worker, queue, agents, delegation, completion]
 
 ## Decision
 
-Use native `codex queue` as the normal best-effort transport between verified
-persistent Codex TUI controller and worker sessions. Use the Agent Command
-Center for human visibility and lifecycle operations. Keep durable results and
-done markers authoritative when a controller runs through an API or other
-surface that cannot receive native queue messages.
+Use native `codex queue` as the only controller-to-worker and worker-to-worker
+message transport between verified persistent Codex sessions. Use the Agent
+Command Center for human visibility and lifecycle operations. Keep durable
+goals, results, and done markers authoritative for scope and terminal truth.
+
+When native queue is unavailable, fails, is uncertain, or produces no valid
+receipt, record a truthful blocked transport state and repair queue transport
+or verified session identity before redispatch. Do not substitute tmux,
+composer, supervisor, terminal, key, or file-mention delivery. Controllers or
+session types that cannot receive native queue are outside this protocol and
+need their own explicitly approved communication design.
 
 Do not build normal automation around custom composer keys such as `F12`.
 Interactive keys can change by version or local configuration, while native
@@ -290,20 +296,20 @@ For controller-worker automation, prefer native queue transport. Do not depend
 on a custom function key. Treat interactive key behavior as local and
 version-sensitive.
 
-## Fallback only
+## Queue failure: stop and repair
 
-Keep an existing supervisor, durable notification queue, or terminal delivery
-adapter only for recovery when native queue:
+For verified persistent Codex sessions, native queue has no transport fallback.
+When it returns a clear failure, an uncertain result, or no valid receipt:
 
-- returns a clear failure;
-- returns an uncertain result with no usable receipt; or
-- is unavailable for the target session type.
+1. record `BLOCKED_TRANSPORT` with the goal identity and safe error summary;
+2. repair the local queue/app-server path or verify the session UUID; and
+3. redispatch exactly once only after the repaired transport returns a valid
+   receipt.
 
-One explicit recovery attempt is enough. Do not invoke the fallback after a
-valid native queue receipt. Do not restore `F12` as the normal submit key.
-
-A fallback transports a pointer; it does not become the source of truth. The
-durable goal/result remains authoritative.
+Do not use a supervisor, durable notification queue, terminal adapter, tmux,
+composer, key automation, `Enter`, `Tab`, F12, or a file mention as recovery
+delivery. These tools may observe or manage a session but cannot replace the
+queue transport.
 
 ## Supersede and stop
 
@@ -357,7 +363,8 @@ and databases need explicit cost/state review and Amit approval before deletion.
 - [ ] Goals and results are durable files.
 - [ ] Every dispatched goal and queue message contains an exact `Reply-To`.
 - [ ] Queue messages contain provenance and one exact artifact path.
-- [ ] A valid receipt ends delivery; no tmux or key fallback follows it.
+- [ ] Queue failure produces `BLOCKED_TRANSPORT` and repair; no tmux, composer,
+      supervisor, terminal, or key-delivery fallback is used.
 - [ ] The Agent Command Center is used for visibility, not proof.
 - [ ] Dashboard scope was checked; an empty dashboard was not mistaken for an
       operating-system-wide worker inventory.
@@ -369,7 +376,8 @@ and databases need explicit cost/state review and Amit approval before deletion.
 - [ ] Controller acceptance records the goal ID, result path, base and final
       commits, diff/KISS decision, validation or fresh-state result, retained
       resources, final decision, and next owner.
-- [ ] Supervisor/SS-style delivery is fallback only.
+- [ ] Supervisor/SS-style tooling is observation-only and never transports a
+      persistent-worker goal or result notification.
 - [ ] No workflow depends on `F12`.
 - [ ] Project authority and safety rules override this portable playbook.
 
