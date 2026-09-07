@@ -20,9 +20,10 @@ message transport between verified persistent Codex sessions. Use the Agent
 Command Center for human visibility and lifecycle operations. Keep durable
 goals, results, and done markers authoritative for scope and terminal truth.
 
-When native queue is unavailable, fails, is uncertain, or produces no valid
-receipt, record a truthful blocked transport state and repair queue transport
-or verified session identity before redispatch. Do not substitute tmux,
+When no valid receipt is available after an unavailable, failed, or uncertain
+queue attempt, record `BLOCKED_TRANSPORT` and follow
+[Queue failure: stop and repair](#queue-failure-stop-and-repair) before any
+redispatch. Do not substitute tmux,
 composer, supervisor, terminal, key, or file-mention delivery. Controllers or
 session types that cannot receive native queue are outside this protocol and
 need their own explicitly approved communication design.
@@ -49,13 +50,14 @@ then verify the CLI and app-server versions again before changing the daemon.
 | Layer | Purpose | It does not prove |
 | --- | --- | --- |
 | Durable goal and result | Scope, authority, evidence, and terminal truth | Message delivery |
-| `codex queue` | Native message transport to a Codex session | Execution, success, or approval |
+| `codex queue` | Transport admission to a named Codex thread | Recipient acknowledgement, execution, completion, or acceptance |
 | Agent Command Center | Search, open, start, rename, stop, and observe managed tasks | Message acceptance, authority, or completion |
 | Optional `codex_tui` tools | Inspect an exposed thread for diagnosis | A supported tool contract, delivery, authority, or completion |
 
 Keep these layers separate. A healthy worker display does not prove that a
-goal completed. A queue receipt does not prove that a worker executed the
-goal. A result file does not prove that its final state was accepted.
+goal completed. A valid queue receipt proves transport admission only, not
+recipient acknowledgement, execution, completion, or controller acceptance.
+A result file does not prove that its final state was accepted.
 
 ## Goal lifecycle
 
@@ -65,7 +67,8 @@ Use a compact lifecycle for each durable goal:
 | --- | --- |
 | `DRAFT` | Goal exists but has not been dispatched. |
 | `DISPATCHED` | Controller sent the goal to the named worker. |
-| `RECEIPT` | Transport accepted the message; this is not execution. |
+| `RECEIPT` | Transport admission only; not recipient acknowledgement or work acceptance. |
+| `BLOCKED_TRANSPORT` | Send failed or admission is uncertain; reconcile and repair before any permitted redispatch. |
 | `RUNNING` | Worker activity was observed; this is not proof of the intended work. |
 | `RESULT_WRITTEN` | Worker recorded a terminal result for review. |
 | `CONTROLLER_ACCEPTED`, `CONTROLLER_REJECTED`, or `SUPERSEDED` | Controller recorded the final decision. |
@@ -136,10 +139,11 @@ stops without guessing a controller target.
 Quote `"${MSG}"`. An unquoted or empty shell variable can turn a correct
 delivery into a missing-argument failure.
 
-When the command returns a valid queue receipt, the worker-side queue attempt
-is finished. Report `notification_queued`, not `controller notified`. Do not:
+A valid receipt ends that send attempt, whether the sender is a controller or
+a worker. Record `notification_queued`, not `recipient acknowledged` or
+`controller notified`. Do not:
 
-- paste the same message into tmux;
+- send another copy through queue, tmux, composer, supervisor, or file mention;
 - press `Enter`, `Tab`, or `F12` as a second delivery method;
 - inspect the worker composer to see whether the text appeared;
 - resend because the worker still looks `Ready`; or
@@ -188,7 +192,7 @@ and hard-stop envelope. A justified same-path variance may be accepted. A
 technically passing result with an unnecessary new runner, dependency,
 framework, service, cloud resource/authority, parallel path, optional polish,
 or more than twice the target is unaccepted until reduced or explicitly
-approved by Amit.
+approved by the repository owner.
 
 Use truthful terminal states such as `SUCCESS`, `HEALTHY/ARMED/NO_ACTION`,
 `PARTIAL`, `BLOCKED`, `FAILED`, or `UNKNOWN_PENDING`. A chat message, queue
@@ -292,24 +296,31 @@ for the next turn in supported CLI versions. That composer behavior is useful
 for a human operator, but it is separate from UUID-addressed `codex queue`
 transport between persistent sessions.
 
-For controller-worker automation, prefer native queue transport. Do not depend
-on a custom function key. Treat interactive key behavior as local and
-version-sensitive.
+For automated messages between verified persistent Codex sessions, use native
+queue only, including worker-to-worker messages and result notifications.
+Human interactive keys are separate and never an automated fallback.
 
 ## Queue failure: stop and repair
 
 For verified persistent Codex sessions, native queue has no transport fallback.
-When it returns a clear failure, an uncertain result, or no valid receipt:
+Without a valid receipt, if queue is unavailable, fails, or leaves admission uncertain:
 
-1. record `BLOCKED_TRANSPORT` with the goal identity and safe error summary;
-2. repair the local queue/app-server path or verify the session UUID; and
-3. redispatch exactly once only after the repaired transport returns a valid
-   receipt.
+1. Record `BLOCKED_TRANSPORT`, the goal ID/revision, target, and safe error summary.
+2. Reconcile possible admission or execution of the original message. No receipt
+   does not prove that nothing ran. If already admitted or executed, do not
+   resend; if still unknown, remain blocked for controller review.
+3. Repair the transport or verify/correct session identity within the approved
+   scope. Only when the original send is confirmed not admitted or executed,
+   and the goal remains authorized, allow at most one queue redispatch.
+4. A valid receipt ends that send attempt: record `notification_queued` and stop
+   sending. If redispatch fails or remains uncertain, keep `BLOCKED_TRANSPORT`;
+   do not start another retry cycle automatically.
 
-Do not use a supervisor, durable notification queue, terminal adapter, tmux,
-composer, key automation, `Enter`, `Tab`, F12, or a file mention as recovery
-delivery. These tools may observe or manage a session but cannot replace the
-queue transport.
+Never obtain a valid receipt and then redispatch. Do not send another copy
+through tmux, composer, supervisor, terminal adapters, `Enter`, `Tab`, `F12`,
+or file mentions. Session lifecycle and observation are not delivery recovery.
+The same rule applies to worker-to-worker messages and completion notifications;
+preserve a completed result even when its notification remains blocked.
 
 ## Supersede and stop
 
@@ -348,11 +359,11 @@ lifecycle declaration in the durable goal:
 | Lifecycle | `retain`, `reset`, or `delete` |
 | TTL | Review date, never automatic deletion authority |
 | Cost class | `no-cost`, `low-cost`, or `approval-required` |
-| Destructive approval | Exact Amit approval for delete, terminate, deregister, or purge |
+| Destructive approval | Exact owner approval for delete, terminate, deregister, or purge |
 
 Default reusable POC resources to `retain`. A tag such as `cleanup=keep` is
 intent evidence, not deletion authority. EC2, EBS, EIP, NAT, load balancers,
-and databases need explicit cost/state review and Amit approval before deletion.
+and databases need explicit cost/state review and owner approval before deletion.
 
 ## Minimum adoption checklist
 
@@ -363,6 +374,8 @@ and databases need explicit cost/state review and Amit approval before deletion.
 - [ ] Goals and results are durable files.
 - [ ] Every dispatched goal and queue message contains an exact `Reply-To`.
 - [ ] Queue messages contain provenance and one exact artifact path.
+- [ ] A valid receipt is transport admission only and ends that send attempt.
+- [ ] An uncertain first attempt is reconciled before at most one redispatch.
 - [ ] Queue failure produces `BLOCKED_TRANSPORT` and repair; no tmux, composer,
       supervisor, terminal, or key-delivery fallback is used.
 - [ ] The Agent Command Center is used for visibility, not proof.
