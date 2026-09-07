@@ -13,22 +13,20 @@ tags: [chatgpt, codex, github, review, delegation, milestones]
 
 # ChatGPT and Codex Collaboration Protocol
 
-Use this playbook when ChatGPT is the external reviewer and Codex is the
-repository controller. It combines the public ChatGPT exchange protocol with
-the native Codex queue protocol and the milestone sizing rule from `/tmp/pp1`.
-The current repository instructions always define the actual scope.
-
-Public protocol source: <https://gist.github.com/amitkarpe/c8d29ad89cafe3ba178fcae29de3c238>
+Use this reusable playbook for GitHub collaboration between ChatGPT and a Codex
+repository controller. The owning repository's instructions, authority protocol,
+approved scope, and safety gates take precedence over this public guidance.
+Use an accessible repository-owned protocol or this committed playbook; no Gist
+or local scratch file is required.
 
 ## Decision flow
 
 Keep the roles and gates in this order:
 
 ```text
-define scope -> inspect repository truth -> implement one milestone
--> validate -> review the actual diff -> merge or accept
--> package immutable truth -> ask ChatGPT for exactly one next milestone
--> record the response -> decide and implement -> repeat
+define scope and mode -> inspect repository truth -> reuse or create Issue
+-> review or implement approved milestone -> validate -> review complete PR diff
+-> correct in same PR -> ready for review -> merge only when authorized
 ```
 
 ChatGPT gives a recommendation. A recommendation is not authorization, cloud
@@ -38,15 +36,27 @@ proof, or a substitute for repository checks and human approval.
 
 | Role | Responsibility |
 | --- | --- |
-| Amit | Defines scope and authorizes publication, implementation, cloud, and destructive actions. |
+| User / repository owner | Defines scope and authorizes publication, implementation, cloud, and destructive actions. |
 | Codex controller | Reads repository truth, prepares sanitized packets, validates responses, and coordinates authorized work. |
 | Codex worker | Executes one approved goal in its owning repository and writes the durable result. |
-| ChatGPT reviewer | Reviews committed public-safe truth and proposes one bounded next milestone. |
+| ChatGPT reviewer / editor | Reviews committed truth; updates the owning Issue and PR within the selected authority mode. |
 | GitHub Issue/PR | Durable public work record; it does not replace local evidence or acceptance. |
 
-Do not claim that ChatGPT created an Issue, PR, commit, or comment unless the
-GitHub audit record confirms it. If ChatGPT cannot create the response Issue,
-Amit creates one from the exact response before Codex continues.
+Do not claim an Issue, PR, commit, comment, or merge without GitHub confirmation.
+If a required action is unavailable, report the exact access blocker; do not
+create a competing implementation lane.
+
+## Authority modes
+
+- `REVIEW`: analyze and create or update the owning Issue; no implementation.
+- `EDIT`: create or update the Issue and PR; leave the PR unmerged.
+- `COMPLETE`: finish eligible bounded GitHub work, merge, and close its Issue
+  only when explicitly authorized by the owning repository's contract.
+
+`go` continues the selected mode, never silently upgrades it. Explicit no-merge,
+no-mutation, and scope limits remain binding. Governing-authority changes need
+owner/controller review, not self-merge. GitHub access is not permission for
+cloud, deployment, cleanup, credential, or source-publication changes.
 
 ## GitHub-only ChatGPT exchange
 
@@ -55,26 +65,19 @@ Markdown packet or GitHub Issue/PR URL. Do not use browser automation,
 clipboard automation, an authenticated browser profile, or direct GUI
 submission for this workflow.
 
-Every completed ChatGPT review must be recorded in **one new standalone GitHub
-Issue** in the owning repository. An existing Issue or PR comment is not the
-final response record. Give ChatGPT both:
+Reuse the Issue and PR that already own the milestone. Create one Issue only
+when no existing record owns the objective or the user explicitly requests a
+standalone architecture response. Keep decisions in that Issue and corrections,
+review findings, and validation in the same PR.
 
-1. the public protocol Gist URL above; and
-2. an immutable `blob/<commit-sha>/...` URL for the repository packet.
+For architecture or cross-repository review, provide an accessible governing
+protocol and one self-contained packet at an immutable `blob/<commit-sha>/...`
+URL. Use moving `blob/main` links for orientation, not evidence identity.
 
-Use a moving `blob/main` URL only for orientation, never as the evidence
-identity.
-
-Suggested exchange layout:
-
-```text
-docs/chatgpt/inbox/REQUEST-YYYYMMDD-HHMM-topic.md
-docs/chatgpt/outbox/REVIEW-YYYYMMDD-HHMM-topic.md
-docs/chatgpt/README.md
-```
-
-`inbox/` is the sanitized request, `outbox/` is an accepted response copy,
-and the repository README may add local rules.
+For a correction in the same PR, provide its URL, exact head commit, requested
+delta, and acceptance condition. Do not require a new Issue, packet, outbox
+copy, handoff, or planning file. Existing exchange files may remain historical
+references; their layout is not a mandatory workflow.
 
 ## Current-repository gate
 
@@ -98,7 +101,7 @@ identity, authority, default branch, or publication safety is ambiguous.
 Include only the context needed for one review question:
 
 - objective and exact question;
-- public protocol URL;
+- accessible repository-owned protocol or this committed public playbook;
 - repository name and immutable source links;
 - latest accepted milestone and relevant open records;
 - current verified behavior and validation;
@@ -113,23 +116,19 @@ with aliases or sanitized evidence.
 
 ## Next-step selection gate
 
-After a milestone is implemented, validated, and merged or accepted, ask
-ChatGPT to select exactly one bounded next objective. Use wording equivalent
-to:
+Finish all approved slices of the current milestone before proposing another.
+Ask for a new decision only when scope, authority, safety, or a genuine blocker
+requires it; do not request a fresh architecture review for every correction.
 
-> Review the current repository truth and existing open Issues. Choose exactly
-> one small, bounded objective. Return one Issue and one implementation PR
-> plan. Do not implement anything.
-
-The response Issue should contain a recommendation, rejected alternatives,
-one Issue scope, one PR scope, non-goals, risks, acceptance criteria,
-validation/evidence, and deferred work. Codex compares it with current truth
-and does not silently substitute another feature.
+When a new objective is needed, inspect current repository truth and open work,
+then record one cohesive recommendation in the owning Issue: scope, non-goals,
+risks, acceptance criteria, validation, and deferred work. Codex checks it against
+current truth rather than silently substituting another feature.
 
 ## Milestone-sized Issue and PR rule
 
-A Draft PR represents one cohesive implementation milestone, not one tiny
-task. Group roughly two to five tightly related slices when they share the
+A PR represents one cohesive implementation milestone, not one tiny task.
+Group roughly two to five tightly related slices when they share the
 same architecture, security boundary, user workflow, deployment/lifecycle,
 and acceptance goal.
 
@@ -137,7 +136,7 @@ Keep directly related tests, documentation corrections, configuration changes,
 and implementation fixes in the existing PR. Do not create a new Issue/PR
 only because one test, correction, or acceptance case was discovered.
 
-Create a new Issue plus Draft PR only when the work materially changes:
+Create a separate Issue/PR only when the work materially changes:
 
 1. architecture or required technology;
 2. security or authorization model;
@@ -150,42 +149,42 @@ Create a new Issue plus Draft PR only when the work materially changes:
 Preferred lifecycle:
 
 ```text
-Issue -> milestone Draft PR -> implement related slices -> validate
--> review the actual diff -> fix same-PR findings -> pass -> merge
+Issue -> implement related slices -> validate -> review complete target-branch diff
+-> fix same-PR findings -> ready PR -> merge only when authorized
 ```
 
-This avoids both micro-PR coordination overhead and oversized mixed changes.
+Use draft only while work is incomplete or unsafe to review; complete work gets
+one ready, non-draft PR. Keep small corrections in that PR and finish the approved
+batch rather than creating per-line handoffs. This avoids both micro-PR overhead
+and oversized mixed changes.
 
 ## Native Codex controller-worker delivery
 
-Use durable goal/result files for authority and evidence. Use `codex queue`
-only for transport. Use the Agent Command Center for visibility and lifecycle,
-not as proof of execution or completion.
+Use the [Codex Native Controller-Worker Protocol](../delegation/codex-native-controller-worker-protocol.md)
+for the dispatch contract. Native `codex queue` is the only message transport
+between verified persistent Codex sessions, including controller-to-worker,
+worker-to-worker, and result notifications to the controller. Durable goals,
+exact target UUIDs, approved scope, and an explicit `Reply-To` remain required.
 
-Before sending a worker message:
+A valid queue receipt proves transport admission only, not recipient
+acknowledgement, execution, completion, or acceptance. Record
+`notification_queued`; that send attempt is finished. Never send another copy
+through queue, tmux, composer, supervisor, `Enter`, `Tab`, `F12`, or file mention,
+or resend because a worker still looks `Ready`.
 
-1. confirm the installed CLI exposes `codex queue` and review current help;
-2. write the complete goal with allowed mutations, gates, and result path;
-3. verify worker UUID, role, repository, and workspace;
-4. put the controller UUID in the goal and message as `Reply-To`; and
-5. send one short, quoted message containing provenance and the goal path.
+Without a valid receipt after a failed, unavailable, or uncertain send, record
+`BLOCKED_TRANSPORT`. Follow the canonical
+[stop-and-repair rule](../delegation/codex-native-controller-worker-protocol.md#queue-failure-stop-and-repair):
+reconcile possible original admission/execution, repair transport or session
+identity within scope, and permit at most one redispatch only when safe and
+still authorized. Unresolved uncertainty or a failed redispatch stays blocked.
+A valid receipt ends the attempt; it is never a prerequisite for another send.
 
-Example:
-
-```bash
-MSG='FROM controller. Reply-To: <controller-uuid>. Execute <goal-path>. Write the terminal result there, then notify Reply-To. Queue admission is not execution or completion.'
-codex queue --thread <worker-uuid> --message "${MSG}"
-```
-
-A valid queue receipt proves delivery only. Do not paste the same message into
-tmux, press a second function key, inspect the composer, or resend because a
-worker still looks `Ready`. The sender is not an implicit return route.
-
-The worker must finish the approved goal, write and validate one durable
-`RESULT.md`, reconcile changed state, and send one short message to the exact
-`Reply-To`. A `.done` marker may point to the result. The controller accepts
-only after checking the required evidence and, for stateful work, fresh
-current-state proof.
+The worker writes and validates its durable `RESULT.md` before sending the
+result pointer to the exact `Reply-To`. A `.done` marker may point to the result;
+it does not establish controller acceptance. The controller checks the required
+evidence and, for stateful work, fresh current-state proof. A blocked notification
+does not invalidate or authorize deletion of the completed result.
 
 ## Persistent workers and subagents
 
@@ -219,23 +218,21 @@ state alone is never terminal proof.
 - Do not perform cloud, infrastructure, package, or external-service mutation
   merely because ChatGPT recommended it.
 - Preserve unrelated dirty work and stop before conflicting edits.
-- Stop when an existing Issue/PR already owns the request, no standalone
-  response Issue exists, the response expands scope, or required checks fail.
-- For verified persistent Codex workers, queue failure/no valid receipt is a
-  blocked transport state: repair queue/session identity before redispatch.
-  Do not use supervisor, tmux, composer, terminal, key, or file-mention
-  delivery as fallback transport. Non-queue-capable session types are deferred
-  to a separately approved communication design.
+- Reuse an existing Issue/PR for its approved scope. Stop for conflicting
+  ownership, missing authority, scope expansion, or failed required checks.
+- Tmux and Agent Command Center are lifecycle/observation surfaces, not automated
+  delivery or completion proof. Non-queue-capable session types require their
+  own approved communication design, never a persistent-Codex fallback.
 
 ## Minimal checklist
 
 - [ ] Repository identity, branch, dirty state, and authority verified.
-- [ ] One sanitized packet asks one bounded question.
-- [ ] Immutable packet URL and public protocol URL supplied.
-- [ ] ChatGPT response recorded in a new standalone Issue.
-- [ ] Existing Issues/PRs checked before new records are proposed.
+- [ ] Explicit scope and REVIEW/EDIT/COMPLETE mode remain binding.
+- [ ] Accessible protocol and immutable packet or exact PR head supplied.
+- [ ] Existing Issue/PR reused; no duplicate correction packet or handoff.
 - [ ] One cohesive milestone is implemented in one PR.
 - [ ] Worker goal contains `Reply-To`, gates, evidence, and no-go boundaries.
+- [ ] Receipt means admission only; failed/uncertain sends follow stop-and-repair.
 - [ ] Result is written before notification and independently accepted.
 - [ ] Unrelated changes remain preserved and unstaged.
 
