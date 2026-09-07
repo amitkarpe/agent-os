@@ -389,8 +389,8 @@ and databases need explicit cost/state review and owner approval before deletion
 - [ ] Controller acceptance records the goal ID, result path, base and final
       commits, diff/KISS decision, validation or fresh-state result, retained
       resources, final decision, and next owner.
-- [ ] Supervisor/SS-style tooling is observation-only and never transports a
-      persistent-worker goal or result notification.
+- [ ] Auxiliary observation tooling never transports a persistent-worker goal
+      or result notification.
 - [ ] No workflow depends on `F12`.
 - [ ] Project authority and safety rules override this portable playbook.
 
