@@ -45,6 +45,20 @@ CLI `0.153.0` with app-server `0.152.1`), do not restart the older daemon just
 to obtain newer dashboard features. Wait for a planned idle maintenance window,
 then verify the CLI and app-server versions again before changing the daemon.
 
+### Daemon-backed queue routing
+
+When a host has a verified canonical remote app-server endpoint, use
+`--remote <verified-canonical-remote-endpoint>` for every persistent-worker
+`codex queue` send on that host, including controller-to-worker,
+worker-to-worker, and completion notifications. The host profile selects and
+verifies that endpoint; this portable playbook deliberately does not hard-code
+one.
+
+Consistent remote routing avoids an accidental embedded-server path when the
+host daemon owns the target sessions. It is not a delivery guarantee: endpoint,
+thread, or admission failures still require `BLOCKED_TRANSPORT` and the normal
+stop-and-repair procedure.
+
 ## Three separate responsibilities
 
 | Layer | Purpose | It does not prove |
@@ -126,7 +140,8 @@ Example:
 
 ```bash
 MSG='FROM controller. Reply-To: <controller-uuid>. Execute the approved goal at <goal-path>. Return one terminal result at the goal-defined path, then notify Reply-To. Queue admission is not execution or completion.'
-codex queue --thread <worker-uuid> --message "${MSG}"
+codex --remote <verified-canonical-remote-endpoint> queue \
+  --thread <worker-uuid> --message "${MSG}"
 ```
 
 The sender is not an implicit return route. A valid queue receipt does not
@@ -170,7 +185,8 @@ Example:
 
 ```bash
 MSG='FROM worker: Terminal result ready for controller review: <result-path>. Queue admission is not acceptance or completion.'
-codex queue --thread <controller-uuid> --message "${MSG}"
+codex --remote <verified-canonical-remote-endpoint> queue \
+  --thread <controller-uuid> --message "${MSG}"
 ```
 
 Routine messages do not need a visible SHA-256 value. Keep hashes as quiet
@@ -370,6 +386,8 @@ and databases need explicit cost/state review and owner approval before deletion
 - [ ] Persistent sessions have unique recorded UUIDs and names.
 - [ ] The installed CLI exposes `codex queue`, and its current help was
       reviewed.
+- [ ] On a daemon-backed host, the verified host-selected endpoint is passed
+      through `--remote` on every persistent-worker queue send.
 - [ ] Each worker has one intended role and workspace.
 - [ ] Goals and results are durable files.
 - [ ] Every dispatched goal and queue message contains an exact `Reply-To`.
