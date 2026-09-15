@@ -11,6 +11,7 @@ okf_version: "0.1"
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
 - **Manage temporary agent evidence:** [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md).
 - **Use ChatGPT Projects, files, and Skills safely:** [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md).
+- **Choose event-triggered vs scheduled ChatGPT automation:** [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md).
 - **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
 - **Start or retrofit an agent-managed repository:** [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md).
 - **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).
@@ -58,6 +59,7 @@ okf_version: "0.1"
 - [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md) - Source, timestamp, telemetry, and cost gates for research output.
 - [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
 - [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md) - Keep Project instructions, Project files, Library, attachments, runtime copies, and Skills conceptually separate.
+- [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md) - Use webhook-driven Work tasks for supported external events and schedules for time-driven work.
 
 ## Model Observations
 
