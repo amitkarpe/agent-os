@@ -44,6 +44,26 @@ One curator owns promotion. Before moving a candidate into Git:
 Reject raw chats, unsupported universal claims, duplicated policy, credentials,
 private infrastructure, and host-specific runtime truth.
 
+## Reusable-Learning Closeout
+
+After meaningful project work, surface a reusable-learning candidate only when a
+non-obvious lesson is likely to help other repositories or future work.
+
+Keep closeout small:
+
+1. State the lesson in sanitized, general terms.
+2. Classify it as `policy`, `playbook`, or dated `observation`.
+3. Check whether Agent OS already has the canonical concept; extend or cross-link
+   it instead of creating a competing home.
+4. Leave project-specific details in the owning project.
+5. Promote into Agent OS only through the normal public-safety gate.
+
+Do not create a candidate merely to document routine work, obvious facts, or
+one-off project state. Normal reusable guidance belongs in Agent OS; only a
+universal repository default should also be distilled into `repo-starter`.
+Machine-, host-, or tool-specific operating facts belong in the relevant local
+runtime configuration instead.
+
 ## Use and Maintenance
 
 Project instructions, specifications, approvals, and safety rules override
