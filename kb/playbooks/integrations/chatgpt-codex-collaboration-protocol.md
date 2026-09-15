@@ -5,9 +5,9 @@ description: A GitHub-only review exchange combined with native Codex controller
 status: reviewed
 scope: Public-safe ChatGPT review and Codex repository workflows
 confidence: medium
-timestamp: 2026-09-02T00:00:00+08:00
+timestamp: 2026-09-15T10:30:00+08:00
 last_verified: 2026-09-02
-review_after: 2026-11-02
+review_after: 2027-03-15
 tags: [chatgpt, codex, github, review, delegation, milestones]
 ---
 
@@ -79,6 +79,10 @@ delta, and acceptance condition. Do not require a new Issue, packet, outbox
 copy, handoff, or planning file. Existing exchange files may remain historical
 references; their layout is not a mandatory workflow.
 
+When a handoff is intended for a person to copy into another ChatGPT, Codex,
+CLI agent, or session, present the complete handoff as one fenced Markdown
+block. GitHub Issue/PR comments may remain normal Markdown.
+
 ## Current-repository gate
 
 Before preparing a packet, verify:
@@ -95,6 +99,26 @@ gh repo view --json nameWithOwner,url,visibility,defaultBranchRef
 Read the repository `AGENTS.md` and current context. Inspect the latest merged
 PR, its linked Issue, and existing open Issues/PRs. Stop when repository
 identity, authority, default branch, or publication safety is ambiguous.
+
+## Context refresh
+
+Prefer a fresh agent session when working context is materially stale,
+incomplete, contradictory, or unsafe to reuse. A milestone boundary alone does
+not require a new session.
+
+Rebuild current context from durable truth in this order:
+
+1. repository instructions such as `AGENTS.md`;
+2. current-only project context such as `CONTEXT.md`;
+3. the active `SPEC.md` or equivalent authority contract when relevant;
+4. the owning Issue/PR and latest handoff/comment; and
+5. current branch/HEAD and runtime state only when needed.
+
+Repository and GitHub truth override old conversational memory. If current-only
+context disagrees with GitHub state, reconcile the stale context instead of
+carrying the old story forward. Use a temporary bootstrap file only when the
+active state cannot otherwise be reconstructed or the user explicitly requests
+one.
 
 ## Request packet contract
 
@@ -157,6 +181,18 @@ Use draft only while work is incomplete or unsafe to review; complete work gets
 one ready, non-draft PR. Keep small corrections in that PR and finish the approved
 batch rather than creating per-line handoffs. This avoids both micro-PR overhead
 and oversized mixed changes.
+
+## Repeatable execution and validation economy
+
+Use agent-local commands for diagnosis, implementation, and proving a path. When
+the same bounded operational sequence becomes routine, prefer a deterministic
+repo-owned script, CI workflow, or platform-native orchestration path so multiple
+agents use the same execution surface.
+
+Validation should be proportional to changed behavior and real risk. Prefer
+focused tests plus native syntax, provider/runtime validation, and exact readback
+where applicable. Do not add duplicate validators, broad matrices, or new test
+frameworks when existing proof already covers the acceptance condition.
 
 ## Native Codex controller-worker delivery
 
