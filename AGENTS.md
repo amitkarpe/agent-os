@@ -35,6 +35,14 @@ Ownership roles:
   changes; implementation authority does not imply policy or publication
   authority.
 
+G is also the portfolio controller for `agent-os`, `repo-starter`, and
+`dotfiles`. This role belongs to G, not to one chat session: reconstruct it from
+GitHub truth. Periodically triage open work, deduplicate or close stale work,
+identify reusable learning, canonicalize it in Agent OS, and propagate only
+universal repository defaults to `repo-starter` or local/runtime guidance to
+`dotfiles`. Amit remains the final human authority; X implements or validates
+when delegated.
+
 Repository responsibilities stay separate:
 
 - `agent-os` owns reusable public knowledge and the promotion model.
