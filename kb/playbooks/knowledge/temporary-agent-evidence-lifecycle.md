@@ -59,7 +59,7 @@ implicitly from age, filename, tool output, or a previous recommendation.
 
 Do not copy credentials, authentication state, private infrastructure, customer
 data, or raw sensitive payloads into temporary evidence reports. Prefer metadata,
-sanitary summaries, and source pointers.
+sanitized summaries, and source pointers.
 
 ## Ownership Boundary
 
