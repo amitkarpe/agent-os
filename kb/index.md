@@ -11,8 +11,9 @@ okf_version: "0.1"
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
 - **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
 - **Start or retrofit an agent-managed repository:** [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md).
+- **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
-- **Prepare public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
+- **Prepare or promote public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
 
 ## Principles
 
@@ -20,7 +21,8 @@ okf_version: "0.1"
 
 ## Policies
 
-- [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement.
+- [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement, including minimal reusable-learning closeout.
+- [Connector Safety Gate](policies/connector-safety-gate.md) - Fail closed on repeated connector safety blocks without widening scope, target, permissions, or safeguards.
 
 ## Codex Playbooks
 
@@ -41,7 +43,7 @@ okf_version: "0.1"
 
 ## Repository Discovery and Tools
 
-- [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md) - Create or retrofit a repository with five small root truth files.
+- [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md) - Create or retrofit a repository with the current role-specific root truth files while keeping `CONTEXT.md` current-only.
 - [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) - Separate tracked inventory, working-tree discovery, content search, and direct source verification.
 - [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md) - Compact recipes and failure modes for common repository tools.
 - [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
