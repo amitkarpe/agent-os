@@ -5,9 +5,9 @@ description: Distinguish ChatGPT Project instructions, Project files, Library fi
 status: reviewed
 scope: ChatGPT Projects, files, Library, and Skills
 confidence: medium
-timestamp: 2026-09-16T02:02:00+08:00
-last_verified: 2026-09-16
-review_after: 2026-12-16
+timestamp: 2026-09-17T01:58:00+08:00
+last_verified: 2026-09-17
+review_after: 2026-12-17
 tags: [chatgpt, projects, files, library, skills, context]
 ---
 
@@ -38,12 +38,19 @@ states that they share identity or lifecycle semantics.
 1. Keep one clearly named canonical instruction source when a Project also uses
    instruction files as reference material. Remove stale duplicates through the
    product surface that owns them.
-2. Do not infer overwrite, replacement, or object identity from display-name
+2. Remove source files that belong to another repository/project or that carry a
+   conflicting operating model. An unrelated `AGENTS.md`, bootstrap file, or
+   project instruction file can silently contaminate future answers even when it
+   was added only as a temporary reference.
+3. When two Project source files contain the same instruction text, keep the
+   clearly named/current one and remove the duplicate rather than relying on
+   filename order or upload date to imply precedence.
+4. Do not infer overwrite, replacement, or object identity from display-name
    equality alone.
-3. When freshness matters, explicitly request the current instruction/source file
+5. When freshness matters, explicitly request the current instruction/source file
    rather than assuming every Project file has already been read in the current
    chat.
-4. Keep volatile repository state in repository truth, not in reusable Project
+6. Keep volatile repository state in repository truth, not in reusable Project
    instructions:
 
    ```text
@@ -60,11 +67,32 @@ states that they share identity or lifecycle semantics.
      -> active task, evidence, and durable history
    ```
 
-5. Prefer **Project instructions** for behavior that should apply throughout one
+7. Prefer **Project instructions** for behavior that should apply throughout one
    Project. Prefer a **Skill** when the behavior is a reusable workflow that
    benefits from explicit packaging and reuse across chats or surfaces.
-6. Keep repository-specific authority in the repository even when Project
+8. Keep repository-specific authority in the repository even when Project
    instructions or Skills provide higher-level workflow guidance.
+9. Do not turn Project source files into mandatory rereads for every agent
+   handoff. When repository/objective context is already usable, continue from
+   the owning PR/comment. Reload broader context only when it changed, became
+   stale/ambiguous, or a new authority/safety domain requires it. See
+   [Context Loading Economy for Agent Handoffs](context-loading-economy.md).
+
+## Recommended Project Source Hygiene
+
+Keep the Project Sources list small enough that every source has an obvious job.
+A useful review asks of each source:
+
+- Is this file about this Project?
+- Is it current?
+- Is it unique, or a duplicate of another source?
+- Is it stable reference material rather than volatile task state?
+- Would loading it together with the other sources create conflicting operating
+  instructions?
+
+Prefer one canonical Project-instructions source plus a small number of durable
+reference files. Active Issue/PR state should normally remain in GitHub instead
+of being copied into Project Sources.
 
 ## Empirical Observations, Not Product Guarantees
 
@@ -96,6 +124,19 @@ Before relying on a Project/file behavior:
 - verify same-name behavior instead of assuming overwrite;
 - distinguish documented behavior from local observation;
 - keep product-specific claims dated because ChatGPT behavior can change.
+
+For source-list hygiene, also verify:
+
+- no duplicate instruction files remain;
+- no unrelated repository/project instruction file remains;
+- one clearly named current source owns Project-wide behavior;
+- active task state is not being maintained redundantly in both Project Sources
+  and GitHub.
+
+## Related playbooks
+
+- [Context Loading Economy for Agent Handoffs](context-loading-economy.md)
+- [ChatGPT and Codex Collaboration Protocol](chatgpt-codex-collaboration-protocol.md)
 
 ## Citations
 
