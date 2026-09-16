@@ -18,6 +18,18 @@ agents. Markdown is canonical, and the `kb/` tree follows Open Knowledge Format
   status.
 - Run `scripts/validate.sh` before committing.
 
+## Context Loading
+
+Use the owning Issue/PR plus its latest relevant authorized delta and current
+HEAD for normal continuation. Treat broad repository read orders as
+bootstrap/recovery guidance, not a per-handoff checklist.
+
+Reload wider context only when the session lacks usable repository context, a
+governing file materially changed, identity/objective is ambiguous, current
+context is stale/incomplete/contradictory/unsafe, or a new authority/safety
+domain requires it. Canonical detail lives in the indexed **Context Loading
+Economy** playbook; do not duplicate that policy across repositories.
+
 ## Ownership
 
 Agent OS is the canonical home for sanitized, reusable, cross-project operating
