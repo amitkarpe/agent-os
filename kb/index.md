@@ -9,6 +9,7 @@ okf_version: "0.1"
 - **Learn, apply, and contribute safely:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from the KB, apply one to three matching concepts, and suggest sanitized candidates without overriding project authority.
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
+- **Continue an existing PR without redundant context reloads:** [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md).
 - **Manage temporary agent evidence:** [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md).
 - **Use ChatGPT Projects, files, and Skills safely:** [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md).
 - **Choose event-triggered vs scheduled ChatGPT automation:** [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md).
@@ -58,6 +59,7 @@ okf_version: "0.1"
 - [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) - Select a bounded research route without exposing authentication material.
 - [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md) - Source, timestamp, telemetry, and cost gates for research output.
 - [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
+- [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md) - Treat PRs/comments as continuation pointers and reload broader context only on explicit recovery triggers.
 - [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md) - Keep Project instructions, Project files, Library, attachments, runtime copies, and Skills conceptually separate.
 - [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md) - Use webhook-driven Work tasks for supported external events and schedules for time-driven work.
 
