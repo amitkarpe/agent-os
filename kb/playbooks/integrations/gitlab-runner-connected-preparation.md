@@ -43,6 +43,15 @@ Mirror acceptance must be based on real refs and SHA equality, not a UI status a
 
 Historical Runner success is architectural evidence, not current capacity. Before CI work record Runner availability, status, executor, architecture, and tags.
 
+Runner discovery itself is a safety gate:
+
+1. paginate every project/group Runner listing available to the caller;
+2. read candidate Runner details rather than trusting only the list row;
+3. treat an admin-only global Runner API returning 403 as a visibility limitation, not proof that no project-visible Runner can execute;
+4. require one actually scheduled job before declaring a Runner tag usable.
+
+A first API page can contain only stale historical entries while later pages contain current pools. Do not make an availability decision from page 1 alone.
+
 A stale, paused, offline Runner, or one backed by deleted compute, is a platform-availability problem. If repository automation has no runner-administration authority, classify it as:
 
     RESULT=BLOCKED
@@ -71,6 +80,21 @@ A generic health result is:
 
 Stop at the first meaningful blocker.
 
+### Evidence-based sizing
+
+Choose Runner size from measured workload behavior rather than names alone.
+
+A useful default progression is:
+
+    small -> intake, lint, short discovery
+    medium -> normal connected preparation
+    large -> image-heavy or artifact-heavy preparation
+    xlarge -> only after a measured capacity failure justifies it
+
+Record CPU, memory, scratch disk, queue/start delay, run time, and representative image/artifact behavior before standardizing a size.
+
+Prefer the architecture required by the target workload. For x86_64 container and workflow targets, validate amd64 first; use Arm only when specifically required or beneficial.
+
 ## 4. Keep CI orchestration thin
 
 CI configuration should call repository-owned scripts. Do not duplicate discovery, build, migration, validation, or release logic inside a large .gitlab-ci.yml.
@@ -84,6 +108,17 @@ Hosted or autoscaled runners often begin with a minimal job image. If tools are 
 Do not assume Docker-in-Docker is available. Unprivileged runners may reject privileged Docker builders. Use an approved rootless/unprivileged builder or a prebuilt preparation image.
 
 Keep the preparation image separate from application/runtime images.
+
+Treat preparation identity as a compact immutable set:
+
+    source revision
+    preparation image digest
+    exact required tool versions
+    compact result/evidence
+
+For bootstrap installers that read environment variables, ensure the variable reaches the shell that performs installation and assert the resulting version. A successful download of an unpinned latest version is not an equivalent proof.
+
+For Python CLIs on externally-managed system Python installations, prefer an isolated virtual environment over modifying the system interpreter.
 
 ## 6. Prefer short-lived workload identity
 
@@ -100,6 +135,8 @@ First prove:
 
 Do not grant storage, registry, deployment, or administration rights as part of the identity proof.
 
+Run identity-only proof from an already trusted project/ref. Do not widen workload-identity trust merely to make a temporary test branch succeed.
+
 ## 7. Add data-plane access incrementally
 
 After identity succeeds, add only the smallest required scope: one storage prefix, one registry namespace, read-only metadata, or one disposable smoke object/image.
@@ -111,6 +148,12 @@ Keep evidence truthful. If an out-of-scope deny test was not run, record NOT_RUN
 Connected preparation may fetch source, inspect dependencies, resolve plugins/images, and stage approved assets. Offline/private runtime must consume only staged internal artifacts.
 
 Do not infer offline-runtime proof merely because connected preparation succeeded.
+
+When AWS-local validation or promotion belongs inside the cloud trust boundary, use a clean handoff:
+
+    GitLab Runner -> immutable prepared handoff / control call -> CodeBuild -> private AWS path
+
+Do not try to run a GitLab Runner inside CodeBuild. Treat the two execution planes as complementary: Runner for connected preparation/control, CodeBuild for AWS-account-local validation or promotion.
 
 ## 9. Mirror-compatible repository policy
 
@@ -124,7 +167,8 @@ Keep secret-detection controls enabled unless an owning security policy says oth
 
 - Wrong mirror direction: verify Pull for source -> GitLab use cases.
 - Green mirror status but no refs: inspect branches/commits and compare SHAs.
-- Runner stale/offline: classify as external platform/admin recovery.
+- Runner stale/offline: paginate first, inspect candidate detail, then classify as external platform/admin recovery only after scheduling cannot find a usable pool.
+- Global Runner API returns 403: treat it as an authorization/visibility limit, not a Runner-availability result.
 - Tools absent: use a preparation image; keep CI YAML thin.
 - Privileged Docker unavailable: use approved unprivileged/rootless build.
 - OIDC failure: verify issuer, audience, subject/project/ref constraints, and trust before changing permissions.
@@ -139,6 +183,8 @@ Keep secret-detection controls enabled unless an owning security policy says oth
     MIRROR_RESULT=
     RUNNER_AVAILABLE=
     RUNNER_STATUS=
+    RUNNER_DISCOVERY_PAGINATED=PASS|BLOCKED
+    RUNNER_SCHEDULE_PROOF=PASS|BLOCKED|NOT_RUN
     RUNNER_EXECUTOR=
     RUNNER_ARCHITECTURE=
     RUNNER_TAGS=
