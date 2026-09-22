@@ -15,7 +15,7 @@ okf_version: "0.1"
 - **Choose event-triggered vs scheduled ChatGPT automation:** [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md).
 - **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
 - **Start or retrofit an agent-managed repository:** [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md).
-- **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).
+- **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).\n- **Control AWS durably from GitHub:** [GitHub OIDC and AWS-Owned Control](playbooks/integrations/github-oidc-aws-control.md) - Separate runner, OIDC identity, short controller, and AWS-owned long execution.
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
 - **Prepare or promote public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
 
@@ -61,7 +61,7 @@ okf_version: "0.1"
 - [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
 - [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md) - Treat PRs/comments as continuation pointers and reload broader context only on explicit recovery triggers.
 - [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md) - Keep Project instructions, Project files, Library, attachments, runtime copies, and Skills conceptually separate.
-- [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md) - Use webhook-driven Work tasks for supported external events and schedules for time-driven work.
+- [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md) - Use webhook-driven Work tasks for supported external events and schedules for time-driven work.\n- [GitHub OIDC and AWS-Owned Control](playbooks/integrations/github-oidc-aws-control.md) - Keep repository access, runner substrate, OIDC identity, and AWS-owned execution separate; persist execution IDs for restart-safe control.
 
 ## Model Observations
 
