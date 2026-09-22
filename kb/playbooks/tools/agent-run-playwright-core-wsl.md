@@ -183,7 +183,7 @@ file instead of installing a temporary package on every run.
 
 A WSL Codex or Bash session **can still own the full browser workflow** when
 Chrome runs on Windows. Do not equate a failed Linux-side probe of
-`127.0.0.1:<cdp-port>` with "Playwright from WSL is impossible."
+`localhost:<cdp-port>` with "Playwright from WSL is impossible."
 
 The tested cross-boundary pattern is:
 
