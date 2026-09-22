@@ -5,8 +5,8 @@ description: Run deterministic browser E2E evidence from a WSL-owned repository 
 status: reviewed
 scope: local web application browser E2E evidence from WSL using Windows Node and Chrome
 confidence: high
-timestamp: 2026-08-27T00:00:00+08:00
-review_after: 2026-11-27
+timestamp: 2026-09-22T00:00:00+08:00
+review_after: 2026-12-22
 tags: [browser, e2e, playwright, playwright-core, wsl, screenshots]
 ---
 
@@ -179,6 +179,82 @@ and remove only that exact unique directory in its cleanup trap. A repository
 that runs this regularly should use its checked-in package manifest and lock
 file instead of installing a temporary package on every run.
 
+## Critical WSL/Windows boundary
+
+A WSL Codex or Bash session **can still own the full browser workflow** when
+Chrome runs on Windows. Do not equate a failed Linux-side probe of
+`127.0.0.1:<cdp-port>` with "Playwright from WSL is impossible."
+
+The tested cross-boundary pattern is:
+
+```text
+WSL Codex/Bash
+  -> launch Windows chrome.exe
+  -> read DevToolsActivePort through the shared Windows filesystem
+  -> launch Windows node.exe from WSL
+  -> playwright-core connects to Windows localhost CDP
+  -> drive/assert/capture
+```
+
+The important distinction is **who owns the TCP connection**. A Linux
+`curl`/Node process may not reach the Windows browser's loopback endpoint in a
+given WSL/network configuration, while `node.exe` launched from that same WSL
+shell can connect because it runs as a Windows process. WSL remains the
+orchestrator; moving the whole Codex session to Windows is not automatically
+required.
+
+### Do not misdiagnose a refused localhost probe
+
+If `http://127.0.0.1:<port>/json/version` is refused from Linux:
+
+1. Confirm whether the probe ran as a Linux process or a Windows process.
+2. Do not probe arbitrary Windows interfaces or widen the CDP bind address.
+3. Prefer a unique debugging profile and `--remote-debugging-port=0`; read the
+   actual port from that profile's `DevToolsActivePort` file instead of assuming
+   port 9222.
+4. Convert the runner/module/evidence paths with `wslpath -w`.
+5. Invoke **Windows Node.js** from WSL and let that process call
+   `chromium.connectOverCDP("http://localhost:<port>")`.
+6. Declare a real access gate only if the Windows executable route is itself
+   unavailable or the Windows-side attach fails.
+
+This prevents a common false blocker: "Linux localhost cannot see Chrome, so
+Codex/Playwright must run natively on Windows."
+
+## Authenticated browser sessions
+
+For a flow that needs an already authenticated web session, keep the same
+boundary instead of exporting browser state:
+
+1. Launch a **dedicated debugging Chrome profile** from WSL using Windows
+   `chrome.exe`, localhost CDP, and a unique user-data directory.
+2. Let the human authenticate normally in that dedicated Chrome window.
+3. Keep that exact Chrome/profile alive for the bounded E2E run.
+4. From the WSL-owned workflow, invoke Windows `node.exe` and attach
+   Playwright Core to the profile's localhost CDP endpoint.
+5. Drive only the approved UI path and retain sanitized evidence.
+6. Remove only the run-specific profile when it is explicitly disposable.
+
+Do not copy cookies, tokens, passwords, browser databases, or a normal shared
+Chrome profile into WSL. Do not try to retrofit automation onto an unrelated
+Chrome process that was not launched with the intended debugging boundary.
+
+## Tested reference implementation
+
+The SecCop public learning repository exercised this pattern successfully with
+one repo-owned Bash runner and one Playwright Core script:
+
+- WSL starts the local application;
+- WSL launches Windows Chrome with a unique Windows temporary profile;
+- the runner reads `DevToolsActivePort` from that profile;
+- WSL invokes Windows Node.js;
+- Windows Node attaches over localhost CDP and drives the UI;
+- screenshots, console/network evidence, and exact cleanup are verified.
+
+Use that implementation as a concrete example of the boundary, not as a file to
+copy blindly. Keep each owning repository's selectors, auth rules, and safety
+contract local to that repository.
+
 ## Optional CDP attachment route
 
 Use placeholders owned by the runner rather than hard-coded user directories:
@@ -285,3 +361,7 @@ start a new unique run.
 
 - Playwright library documentation: https://playwright.dev/docs/library
 - Chrome DevTools Protocol: https://chromedevtools.github.io/devtools-protocol/
+- SecCop Issue #27 (WSL/Windows Chrome CDP requirement): https://github.com/mytestlab123/agentic-ai-cybersecurity-lab/issues/27
+- SecCop PR #28 (validated browser evidence): https://github.com/mytestlab123/agentic-ai-cybersecurity-lab/pull/28
+- SecCop WSL browser runner: https://github.com/mytestlab123/agentic-ai-cybersecurity-lab/blob/main/scripts/browser-e2e.sh
+- SecCop Playwright Core runner: https://github.com/mytestlab123/agentic-ai-cybersecurity-lab/blob/main/scripts/browser-e2e.mjs
