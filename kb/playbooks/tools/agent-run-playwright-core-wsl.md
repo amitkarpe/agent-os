@@ -205,7 +205,7 @@ required.
 
 ### Do not misdiagnose a refused localhost probe
 
-If `http://127.0.0.1:<port>/json/version` is refused from Linux:
+If `http://localhost:<port>/json/version` is refused from Linux:
 
 1. Confirm whether the probe ran as a Linux process or a Windows process.
 2. Do not probe arbitrary Windows interfaces or widen the CDP bind address.
