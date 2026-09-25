@@ -83,6 +83,28 @@ When a handoff is intended for a person to copy into another ChatGPT, Codex,
 CLI agent, or session, present the complete handoff as one fenced Markdown
 block. GitHub Issue/PR comments may remain normal Markdown.
 
+## Bridge-first G -> F/X transport
+
+Prefer direct secure bridge transport from G to F/X when it is available and
+healthy. Amit should not act as the normal message bus between agents.
+
+When direct bridge dispatch succeeds:
+
+- send the owning Issue/PR/mission pointer and bounded objective directly;
+- report a compact dispatch receipt to Amit: repository, Issue/PR, mission ID,
+  current state, and a real blocker only when one exists;
+- do not also emit a copy/paste handoff block;
+- do not append generic "For the next...", "Check this...", or "Review that..."
+  action menus after a successful dispatch.
+
+Use a user-facing copy/paste handoff only when direct transport is unavailable,
+degraded, blocked, or intentionally not used. In that fallback case, provide
+exactly one self-contained fenced Markdown block beginning with
+`HANDOFF: CODEX`. Keep it short, point to the durable owning Issue/PR instead of
+duplicating its full mission contract, include the objective, required work,
+important boundaries, and the `HANDOFF: CHATGPT` return contract, and do not
+split the manual handoff across prose plus extra suggestion sections.
+
 ## Current-repository gate
 
 Before preparing a packet, verify:
