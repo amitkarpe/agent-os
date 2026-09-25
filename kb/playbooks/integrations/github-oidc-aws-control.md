@@ -1,6 +1,14 @@
 ---
-okf_version: "0.1"
+type: Playbook
+title: GitHub OIDC and AWS-Owned Control
+description: Use GitHub OIDC for bounded AWS control while keeping long execution in AWS-owned services and preserving explicit identity, scope, and readback gates.
 status: reviewed
+scope: GitHub Actions, OIDC, and AWS control automation
+confidence: high
+timestamp: 2026-09-22T16:18:35+08:00
+last_verified: 2026-09-22
+review_after: 2026-12-22
+tags: [github, oidc, aws, automation, codebuild, ssm]
 ---
 
 # GitHub OIDC and AWS-Owned Control
