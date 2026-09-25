@@ -8,6 +8,7 @@ okf_version: "0.1"
 
 - **Learn, apply, and contribute safely:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from the KB, apply one to three matching concepts, and suggest sanitized candidates without overriding project authority.
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
+- **Curate local skill exposure:** [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md).
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
 - **Continue an existing PR without redundant context reloads:** [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md).
 - **Manage temporary agent evidence:** [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md).
@@ -32,6 +33,7 @@ okf_version: "0.1"
 
 - [Persistent Codex Goals](playbooks/codex/persistent-goals.md) - How runtime goals support long tasks without replacing repository truth.
 - [Named Session Reuse](playbooks/codex/named-session-reuse.md) - Conservative recovery of known sessions by durable identity.
+- [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md) - Keep reusable source while enabling only a small, reversible task-fit catalog.
 
 ## Delegation Playbooks
 
