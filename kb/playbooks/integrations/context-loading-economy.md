@@ -1,7 +1,7 @@
 ---
 type: Playbook
 title: Context Loading Economy for Agent Handoffs
-description: Keep PR/comment handoffs fast by treating repository context files as bootstrap and recovery inputs instead of mandatory rereads for every task.
+description: Reuse valid context without losing authority, enduring intent or execution-host knowledge.
 status: reviewed
 scope: GitHub-centered ChatGPT, Codex, and repository-worker handoffs
 confidence: high
@@ -13,127 +13,95 @@ tags: [chatgpt, codex, github, context, handoff, delegation, efficiency]
 
 # Context Loading Economy for Agent Handoffs
 
-Use the smallest durable pointer that is sufficient to continue safely.
-
-**PR is the execution packet. The latest relevant comment is the delta. Context
-files are bootstrap/recovery inputs, not boilerplate for every handoff.**
-
-This guidance does not weaken repository instructions, authority, safety gates,
-or stale-state checks. It only avoids repeatedly reloading context that the
-worker already has and can safely reuse.
+Use the smallest durable pointer sufficient to continue safely. The owning
+Issue/PR records current work; the latest relevant authorized comment is the
+delta. **Optional rereading is not optional authority.** Task history does not
+replace enduring requirements, host constraints or observed runtime evidence.
 
 ## Normal continuation
 
-When repository identity and objective are already known:
-
-- **New PR/task:** give the worker the PR number or URL.
-- **Existing PR with a new instruction:** give the PR plus the exact relevant
-  comment/handoff URL when useful.
-- **Known objective:** a short continuation such as `go`, `g`, `.`, `Y`, or
-  equivalent means fetch current PR HEAD/latest durable handoff and continue.
-- Do not restate task details that are already durable in the owning Issue/PR
-  merely to move them between ChatGPT, Codex, or another worker.
-
-Example:
+When repository identity, objective and governing context remain usable:
 
 ```text
-Work on PR #27.
+owning Issue/PR -> relevant authorized delta -> current HEAD/diff
+-> changed governing context and required runtime evidence -> continue
 ```
 
-Existing PR with a new delta:
-
-```text
-Continue PR #27 from:
-https://github.com/OWNER/REPO/pull/27#issuecomment-...
-```
-
-The receiving worker fetches current PR state, latest relevant comments, and
-current HEAD before acting.
+Give the existing pointer and exact comment URL only when useful. Do not copy
+the full plan, completed history or file-reading checklist. `go` stays within
+the selected scope and mode; a newer or agent-authored comment is not approval
+merely because it is the latest comment.
 
 ## Full context reload triggers
 
-Explicitly reload `AGENTS.md`, `CONTEXT.md`, `CHATGPT.md`, `SPEC.md`, or
-equivalent governing files only when at least one of these is true:
+Reload affected context when the session lacks it, a governing file materially
+changes, repo/goal/host identity is ambiguous, evidence contradicts cached
+state, or a new authority/security/production/destructive boundary is entered.
+A PR number or milestone change alone does not require a full reload.
 
-1. the worker/session lacks usable repository context;
-2. a governing instruction/context file materially changed;
-3. repository or objective identity is ambiguous;
-4. current context is stale, incomplete, contradictory, or unsafe to reuse;
-5. the task enters a new authority, security, production, deployment, or other
-   trust domain that requires an additional governing contract.
-
-A new PR number, milestone boundary, or routine continuation alone is **not** a
-context-reload trigger.
+Use existing fingerprints/references when available, not a new caching system.
+If freshness cannot be established, reload the relevant contract before action.
 
 ## Bootstrap / recovery order
 
-Repositories may define a read order for cold start or recovery. Label it
-explicitly as **Bootstrap / Recovery Order** rather than a generic **Read
-Order** when there is a risk that agents will treat it as a per-task checklist.
+Follow repository-specific cold-start requirements. Generally establish:
 
-Typical recovery order:
+1. repository/worktree identity, HEAD and local `AGENTS.md`;
+2. owning Issue/PR and relevant authorized decision/handoff;
+3. applicable operating contract, desired-state configuration and host/project
+   environment context;
+4. unique restart state and live facts required for the action.
 
-1. repository instructions such as `AGENTS.md`;
-2. current-only state such as `CONTEXT.md`;
-3. authority contract such as `SPEC.md` when relevant;
-4. owning Issue/PR and latest relevant handoff/comment;
-5. current branch/HEAD/runtime truth as needed.
-
-This is a recovery sequence, not a required preamble for every delegation.
+A locally required `SPEC.md` cannot be skipped because a generic starter makes
+that filename optional. Missing authority blocks the controlled action.
 
 ## Handoff economy
 
-Prefer:
-
-```text
-PR -> latest relevant comment -> current HEAD -> execute
-```
-
-Avoid:
-
-```text
-re-read every context file -> repeat the PR body -> repeat acceptance -> execute
-```
-
-unless a reload trigger above applies.
-
-The durable GitHub record should contain objective, scope, acceptance, and
-important no-go gates. A handoff normally points to that record rather than
-copying it.
+The existing record must preserve outcome, allowed scope, acceptance, stop
+gates and relevant research/evidence. Same-PR corrections need head, delta and
+proof, not another packet. The [collaboration playbook](chatgpt-codex-collaboration-protocol.md)
+owns transport and human-copy handoff rules.
 
 ## Project and local context
 
-Project instructions, repository instructions, local agent cores, and reusable
-playbooks serve different scopes. Do not preload every layer on every task.
-Load the narrowest context needed for the current objective and add broader
-layers only when the task requires them.
+The [core-file model](chatgpt-codex-collaboration-protocol.md#core-files-and-durable-truth)
+separates reusable Agent OS policy, repository contracts/configuration,
+GitHub current-work records and host-specific knowledge.
 
-For ChatGPT Projects, keep one canonical instruction source and remove stale or
-unrelated duplicate source files through the product surface that owns them.
-Repository-specific state still belongs in repository truth.
+Preserve the existing dotfiles/local host profiles and active-host selection.
+Project `ENV.md`, when needed, records workload dependencies and approved
+execution targets, not another copy of the entire machine inventory. Resolve
+the execution host, not just the browser host. If that host forbids a required
+tool installation, select an authorized compatible target or report the
+blocker. Remote compute does not authorize moving corporate data elsewhere.
+
+Credentials/authentication state stay out of these documents. Private facts
+stay in appropriately private/local sources, never public Agent OS. Manage
+ChatGPT Project source membership through its owning product surface and
+preserve unique information before removing duplicates.
 
 ## Safety invariants
 
-Context economy never authorizes skipping a required safety or authority check.
-Always stop or reload when:
-
-- repository identity is uncertain;
-- the latest PR/comment conflicts with cached context;
-- a production/security/credential/destructive boundary is entered;
-- current HEAD differs from a recorded handoff and the difference matters;
-- required evidence or authorization cannot be reconstructed safely.
+Stop or reload on uncertain identity, conflicting evidence/authority, material
+HEAD changes or entry into a new trust boundary. Preserve explicit no-go gates
+and enforced controls. A worker observation, recommendation or receipt is not
+approval. Reconstruct missing authority; never guess.
 
 ## Adoption pattern
 
-Use this promotion path:
+Before removal or renaming, map unique content to its surviving home and audit
+scripts, prompts, links and runtime consumers. `CONTEXT.md` and `CHATGPT.md`
+remain where they contain unique recovery state or adapter rules.
+
+Prove normal warm continuation and an authority/host-sensitive case on one
+non-critical pilot; a paper policy review is not a live pilot result. Keep
+rollback, then simplify downstream repositories gradually when next touched.
+Do not mass-delete files or disturb live delivery for smaller file counts.
 
 ```text
-project learning -> sanitize/deduplicate -> Agent OS canonical guidance
--> repo-starter only if universally useful -> project repos when next touched
+project learning -> sanitize/deduplicate -> Agent OS
+-> starter where universal -> existing repos when next touched
 ```
-
-Project repositories should keep only the smallest local form. Avoid copying
-this entire playbook into every `AGENTS.md` or `CHATGPT.md`.
 
 ## Related playbooks
 
