@@ -58,8 +58,10 @@ execution. Direct workers and Factory coordination follow the same principles.
 Compare the result with intent and required acceptance evidence: exact artifact
 and runtime identity, relevant checks, cleanup state and remaining risk.
 A green build or accepted message is not necessarily operational completion.
-Use the existing testing-economy policy and exceptions; zero new tests by
-default is not zero validation. Stop once sufficient required proof passes.
+Use the existing
+[testing-economy policy](../../AGENTS.md#portfolio-economy-defaults)
+and exceptions; zero new tests by default is not zero validation. Stop once
+sufficient required proof passes.
 
 ## Communicate Economically
 
