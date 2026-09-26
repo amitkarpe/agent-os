@@ -112,6 +112,27 @@ head, delta and acceptance condition, not a new Issue, packet or outbox copy.
 A self-contained Issue can be the plan; a distinct objective or explicit
 standalone request may need a new record.
 
+## Feedback identity and review template
+
+Begin review, feedback and decision comments with a visible inline-code identity
+header: actor (G, X or the actual agent), tool, represented repository and role.
+Replies use the responder's own identity, never the sender's. Do not guess old
+comment authors, models or session IDs. Identity is attribution, not approval;
+use a public-safe alias when a repository name must remain private.
+
+```markdown
+`<Identity : ACTOR | TOOL | Repo: OWNER/REPO | Role: ROLE>`
+Target: OWNER/REPO#NUMBER @ FULL_HEAD_SHA (SHA when reviewing a PR)
+Verdict: ACCEPT | REVISE | NO-GO
+Findings: <material issue, evidence and smallest correction; or none>
+Next: <one action and responsible role>
+```
+
+Keep any required `HANDOFF: CODEX` or `HANDOFF: CHATGPT` first line, then place
+identity immediately below it. Distinguish author/self-review from independent
+review honestly. This is a human-readable comment template, not a new identity
+registry or a change to machine transport schemas.
+
 <a id="bridge-first-g---fx-transport"></a>
 
 ## Direct G -> X transport
