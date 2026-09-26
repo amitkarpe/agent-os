@@ -88,6 +88,16 @@ block. GitHub Issue/PR comments may remain normal Markdown.
 Prefer direct secure bridge transport from G to F/X when it is available and
 healthy. Amit should not act as the normal message bus between agents.
 
+Bridge transport does not define worker execution authority. Bridge2 owns
+routing, identity, mission state, and transport safety; the owning Issue or Goal
+owns scope and execution authority. X/Codex owns execution truth within that
+approved scope and may use its own approved tools, including AWS CLI, AWS MCP,
+SSM/operator shell, Git/GitHub/GitLab CLI, and local tooling, when the owning
+Issue or Goal permits them. Do not infer worker authority from Bridge2 metadata
+alone. Avoid ambiguous transport labels such as `aws=false` when they could be
+read as “X may not use AWS”; such metadata must describe transport/controller
+capability only.
+
 When direct bridge dispatch succeeds:
 
 - send the owning Issue/PR/mission pointer and bounded objective directly;
