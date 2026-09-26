@@ -23,8 +23,12 @@ required.
 
 ```text
 owner intent -> G discovery/research -> bounded Issue plan -> applicable approval
--> X implementation -> exact evidence -> G acceptance
+-> implementation (G or X) -> exact evidence -> G acceptance
 ```
+
+G may directly complete authorized, bounded GitHub-only work when delegation
+adds no value; G -> matching X is the normal path for delegated single-repo work,
+not a mandatory hop.
 
 Continue inside the approved goal; milestones are not automatic approval stops.
 A recommendation, agent-authored plan or tool receipt is not authorization.
@@ -147,10 +151,10 @@ registry or a change to machine transport schemas.
 
 ## Direct G -> X transport
 
-One repository normally routes G directly to its matching X. Factory is an
-explicit coordination choice, including when the owner requests it for one
-repo. Multiple references or independent tasks do not automatically require
-Factory; select it for genuinely coordinated multi-repository execution.
+For delegated single-repository work, G normally routes directly to its matching
+X. Factory is an explicit coordination choice, including when the owner requests
+it for one repo. Multiple references or independent tasks do not automatically
+require Factory; select it for genuinely coordinated multi-repository execution.
 
 Prefer the healthy approved bridge path; Amit should not be the normal message
 bus. Send the owning pointer and bounded objective, then report repository,
@@ -216,10 +220,11 @@ be ready. CI or a merged PR does not prove a rollout or whole roadmap complete.
 ## Repeatable execution and validation economy
 
 Use existing repo-owned scripts, CI or platform-native procedures for repeated
-operations. Reference the portfolio testing-economy policy and its existing
-exceptions rather than copying it. Zero new tests by default is not zero
-validation: use the smallest sufficient existing/native/runtime proof. Stop
-when required proof passes; do not add duplicate validators or a test framework.
+operations. Reference the
+[portfolio testing-economy policy](../../../AGENTS.md#portfolio-economy-defaults)
+and its existing exceptions rather than copying it. Zero new tests by default is
+not zero validation: use the smallest sufficient existing/native/runtime proof.
+Stop when required proof passes; do not add duplicate validators or a test framework.
 
 ## Native Codex controller-worker delivery
 
