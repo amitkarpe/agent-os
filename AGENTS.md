@@ -28,7 +28,8 @@ Reload wider context only when the session lacks usable repository context, a
 governing file materially changed, identity/objective is ambiguous, current
 context is stale/incomplete/contradictory/unsafe, or a new authority/safety
 domain requires it. Canonical detail lives in the indexed **Context Loading
-Economy** playbook; do not duplicate that policy across repositories.
+Policy** (`kb/policies/context-loading-policy.md`) - load on change, not on
+every turn; do not duplicate that policy across repositories.
 
 ## Ownership
 

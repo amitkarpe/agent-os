@@ -13,6 +13,11 @@ tags: [chatgpt, codex, github, context, handoff, delegation, efficiency]
 
 # Context Loading Economy for Agent Handoffs
 
+The canonical cold-start versus warm-continuation rule lives in the
+[Context Loading Policy](../../policies/context-loading-policy.md)
+(**load on change, not on every turn**). This playbook is the handoff-focused
+procedure for applying that rule.
+
 Use the smallest durable pointer sufficient to continue safely. The owning
 Issue/PR records current work; the latest relevant authorized comment is the
 delta. **Optional rereading is not optional authority.** Task history does not
@@ -105,6 +110,7 @@ project learning -> sanitize/deduplicate -> Agent OS
 
 ## Related playbooks
 
+- [Context Loading Policy](../../policies/context-loading-policy.md) - canonical event-driven cold-start and warm-continuation rule this playbook implements.
 - [ChatGPT and Codex Collaboration Protocol](chatgpt-codex-collaboration-protocol.md)
 - [ChatGPT Project Context and File Surfaces](chatgpt-project-context-and-files.md)
 - [Knowledge Lifecycle and Publication](../../policies/knowledge-lifecycle-and-publication.md)
