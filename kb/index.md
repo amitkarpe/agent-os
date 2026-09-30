@@ -33,6 +33,7 @@ okf_version: "0.1"
 
 - [Persistent Codex Goals](playbooks/codex/persistent-goals.md) - How runtime goals support long tasks without replacing repository truth.
 - [Named Session Reuse](playbooks/codex/named-session-reuse.md) - Conservative recovery of known sessions by durable identity.
+- [Repository-First Local Agent Control](playbooks/delegation/repository-first-local-agent-control.md) - Discover and attach to local workers by repository identity, with a durable task-runner fallback.
 - [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md) - Keep reusable source while enabling only a small, reversible task-fit catalog.
 
 ## Delegation Playbooks
