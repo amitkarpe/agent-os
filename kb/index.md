@@ -10,6 +10,7 @@ okf_version: "0.1"
 - **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
 - **Curate local skill exposure:** [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md).
 - **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
+- **Load context on change, not every turn (cold-start vs warm continuation):** [Context Loading Policy](policies/context-loading-policy.md).
 - **Continue an existing PR without redundant context reloads:** [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md).
 - **Manage temporary agent evidence:** [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md).
 - **Use ChatGPT Projects, files, and Skills safely:** [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md).
@@ -28,6 +29,7 @@ okf_version: "0.1"
 
 - [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement, including minimal reusable-learning closeout.
 - [Connector Safety Gate](policies/connector-safety-gate.md) - Fail closed on repeated connector safety blocks without widening scope, target, permissions, or safeguards.
+- [Context Loading Policy](policies/context-loading-policy.md) - Load context on change, not on every turn: event-driven cold-start and warm-continuation reads with explicit reload triggers.
 
 ## Codex Playbooks
 
