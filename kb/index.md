@@ -17,6 +17,7 @@ okf_version: "0.1"
 - **Choose event-triggered vs scheduled ChatGPT automation:** [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md).
 - **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
 - **Start or retrofit an agent-managed repository:** [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md).
+- **Choose development/runtime patterns:** [Development and Runtime Pattern Selection](playbooks/repositories/development-runtime-pattern-selection.md) - Select containers, CI runners, identity, validation, browser E2E, runtime evidence, cost, and cleanup proportionally.
 - **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).\n- **Control AWS durably from GitHub:** [GitHub OIDC and AWS-Owned Control](playbooks/integrations/github-oidc-aws-control.md) - Separate runner, OIDC identity, short controller, and AWS-owned long execution.
 - **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
 - **Prepare or promote public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
@@ -54,6 +55,7 @@ okf_version: "0.1"
 ## Repository Discovery and Tools
 
 - [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md) - Create or retrofit a repository with the current role-specific root truth files while keeping `CONTEXT.md` current-only.
+- [Development and Runtime Pattern Selection](playbooks/repositories/development-runtime-pattern-selection.md) - Choose reproducibility, containers, runner substrate, OIDC/secrets, validation layers, browser E2E, runtime evidence, cost, and cleanup without forcing one stack onto every repository.
 - [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) - Separate tracked inventory, working-tree discovery, content search, and direct source verification.
 - [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md) - Compact recipes and failure modes for common repository tools.
 - [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
