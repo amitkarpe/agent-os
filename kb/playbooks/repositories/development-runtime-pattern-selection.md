@@ -12,76 +12,64 @@ tags: [development, runtime, containers, ci, oidc, testing, playwright, reproduc
 
 # Development and Runtime Pattern Selection
 
-Use this page as a **selector**, not as a replacement for the detailed Agent OS
-playbooks.
+Use this page as a **selector**, not a detailed implementation guide.
 
-Existing [Portfolio Economy Defaults](../../../AGENTS.md#portfolio-economy-defaults)
-remain the starting point. Use a different runner or validation shape only when
-project trust, connectivity, tooling, architecture, cost, or acceptance evidence
-justifies the exception.
+The existing [Portfolio Economy Defaults](../../../AGENTS.md#portfolio-economy-defaults)
+remain the starting point. Deviate only when project trust, connectivity, tooling,
+architecture, cost, or acceptance evidence justifies it.
 
 ## 1. Reproducibility
 
-**Use when:** another host, runner, or future agent must reproduce the working
-path.
+**Use when:** another host, runner, or future agent must reproduce the working path.
 
-Keep build/start/health/check commands, compatible tool versions, lockfiles,
-configuration shape, and cleanup/recovery instructions in versioned source.
-
-A host inventory is discovery, not proof. When portability matters, add one
-clean-consumer or fresh-install proof that does not depend on the original
+Keep repo-owned build/start/health/check commands, compatible tool versions,
+lockfiles, configuration shape, and cleanup/recovery instructions. When
+portability matters, prove one fresh or clean-consumer path without the original
 developer cache.
+
+A host inventory is discovery, not reproducibility proof.
 
 ## 2. Containers
 
-**Use when:** containerization removes real dependency, runtime, or CI-tool drift.
+**Use when:** a container, Compose service, or preparation image removes real
+dependency/runtime/CI-tool drift.
 
-Good fits include dependency-heavy local services, disposable integration
-environments, preparation images, and portable build/test toolchains.
-
-**Skip or limit when:** the behavior depends on the real host OS, kernel, mount
-policy, systemd, SSM/host patching, privileged networking, or a restricted
-environment.
+**Skip or limit when:** the behavior depends on the real host OS, kernel, mounts,
+systemd, SSM/host patching, privileged networking, or a restricted environment.
 
 Pin important inputs, keep secrets out of image layers, and prove the consumer
-path rather than only proving that the image builds.
+path rather than only the image build.
 
 ## 3. CI runner
 
-Start with the existing Agent OS runner defaults, then select the execution
-substrate by trust, connectivity, required tools/architecture, workload shape,
-current availability, and measured or bounded cost.
+Start from the Agent OS runner defaults. Choose another substrate only when trust,
+network access, required tools/architecture, workload shape, availability, or
+measured/bounded cost requires it.
 
-Keep CI thin: workflows should call repository-owned commands.
+Keep CI thin and call repository-owned commands.
 
-For detailed AWS/GitHub control use
-[GitHub OIDC and AWS-Owned Control](../integrations/github-oidc-aws-control.md).
-For internal connected preparation use
-[GitLab Runner Connected Preparation](../integrations/gitlab-runner-connected-preparation.md).
+Detailed guidance:
+- [GitHub OIDC and AWS-Owned Control](../integrations/github-oidc-aws-control.md)
+- [GitLab Runner Connected Preparation](../integrations/gitlab-runner-connected-preparation.md)
 
 ## 4. OIDC and secrets
 
-Prefer short-lived workload identity where the platform supports it.
+Prefer short-lived workload identity where supported.
 
-Keep repository/workflow permission, runner identity, cloud workload identity,
-application secrets, and human authentication separate.
+Keep workflow permission, runner identity, cloud identity, application secrets,
+and human authentication separate. Version configuration **shape** in Git; supply
+secret values through approved runtime/CI/local secret mechanisms.
 
-Version configuration **shape** in Git; supply secret values through the approved
-runtime/CI/local secret mechanism. Authentication success is not mutation
-authority.
-
-Detailed trust and execution sequencing belongs in the linked OIDC/runner
-playbooks, not here.
+Authentication success is not mutation authority. Detailed trust sequencing stays
+in the linked OIDC/runner playbooks.
 
 ## 5. Validation layers
 
-The Agent OS testing-economy rule still applies: **zero new tests by default is
-not zero validation**.
+**Zero new tests by default is not zero validation.**
 
 Choose the smallest proof that reaches the real failure boundary:
-
 - static/lint/schema checks for structure;
-- focused tests for isolated logic, contracts, deny paths, or regressions;
+- focused tests for logic, contracts, deny paths, or regressions;
 - integration proof for component interaction;
 - one end-to-end golden path when the user/runtime journey is the claim;
 - provider/runtime readback when external state matters.
@@ -92,19 +80,18 @@ Do not optimize for test count.
 
 **Use when:** the accepted behavior is an interactive browser journey.
 
-Prove real user action, backend/API or persisted state, rendered DOM, browser
-errors, and cleanup. A screenshot alone is not enough.
+Prove user action + API/persisted state + rendered DOM + browser errors + cleanup.
+A screenshot alone is not enough.
 
-Reuse
-[Agent-Run Browser E2E and Screenshot Evidence](../tools/agent-run-browser-e2e-screenshot-evidence.md)
-and
-[Run Playwright Core with Windows Node and Chrome from WSL](../tools/agent-run-playwright-core-wsl.md).
+Reuse:
+- [Agent-Run Browser E2E and Screenshot Evidence](../tools/agent-run-browser-e2e-screenshot-evidence.md)
+- [Run Playwright Core with Windows Node and Chrome from WSL](../tools/agent-run-playwright-core-wsl.md)
 
 **Skip when:** API/integration proof fully covers the acceptance claim.
 
 ## 7. CI proof versus runtime proof
 
-Treat these as separate evidence layers:
+Treat these separately:
 
 ```text
 source revision
@@ -115,48 +102,41 @@ source revision
   -> cleanup/retained-state result
 ```
 
-A green CI run does not automatically prove deployment convergence, target
-identity, service health, offline behavior, UI acceptance, or cleanup.
-
-Persist durable execution IDs for long-running operations and reconcile the
-original execution before retrying.
+A green CI run does not automatically prove deployment, target identity, service
+health, offline behavior, UI acceptance, or cleanup. Persist durable execution
+IDs for long work and reconcile the original execution before retrying.
 
 ## 8. Cost and cleanup
 
 For demos, labs, build systems, retained compute/storage, large artifacts, or
 frequent CI, record:
-
-- what was created;
-- what remains;
-- the TTL/lifecycle/cleanup path;
+- what was created and retained;
+- TTL/lifecycle/cleanup path;
 - cleanup evidence;
-- measured usage/cost when it materially affects future platform selection.
+- measured usage/cost when it affects future platform selection.
 
-Keep estimates separate from billing evidence. Do not invent a price comparison
-from architecture alone.
+Keep estimates separate from billing evidence.
 
-## Selection rule
+## Decision check
 
-Ask only what changes the decision:
-
+Before adding tooling, ask:
 1. What drift or failure has actually occurred?
 2. Would a container remove that drift or hide the real target?
 3. Which existing runner already satisfies trust and connectivity?
 4. Can short-lived identity replace a stored cloud key?
-5. What is the smallest proof that reaches the acceptance boundary?
-6. Is browser interaction part of that boundary?
+5. What is the smallest proof that reaches acceptance?
+6. Is browser interaction part of acceptance?
 7. What is CI evidence versus runtime/provider evidence?
 8. What must be cleaned or cost-measured?
 
-If the current repository already answers these safely, add no new framework.
+If the repository already answers these safely, add no new framework.
 
 ## Promotion boundary
 
-- Project repositories remain authoritative for implementation and runtime truth.
-- Detailed procedures stay in their existing Agent OS playbooks.
-- This page selects and links; it does not duplicate them.
-- Do not propagate these patterns into `repo-starter` until repeated use proves
-  which rules are truly universal.
+- Project repos own implementation and runtime truth.
+- Detailed procedures stay in existing Agent OS playbooks.
+- This page selects and links; it does not duplicate.
+- Do not propagate to `repo-starter` until repeated use proves a rule universal.
 - Host-specific facts stay in dotfiles/local guidance.
 
 ## Citations
