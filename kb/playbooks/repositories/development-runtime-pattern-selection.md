@@ -1,7 +1,7 @@
 ---
 type: Practice
 title: Development and Runtime Pattern Selection
-description: Choose reproducible development, CI, identity, testing, browser E2E, runtime evidence, cost, and cleanup patterns without forcing one stack onto every repository.
+description: Select reproducibility, containers, CI runners, identity, validation, browser E2E, runtime evidence, cost, and cleanup without forcing one stack onto every repository.
 status: candidate
 scope: repository development and runtime workflow selection
 confidence: medium
@@ -12,182 +12,99 @@ tags: [development, runtime, containers, ci, oidc, testing, playwright, reproduc
 
 # Development and Runtime Pattern Selection
 
-Use this page as a **selection guide**, not as a mandatory stack.
+Use this page as a **selector**, not as a replacement for the detailed Agent OS
+playbooks.
 
-The recurring lesson is simple:
+Existing [Portfolio Economy Defaults](../../../AGENTS.md#portfolio-economy-defaults)
+remain the starting point. Use a different runner or validation shape only when
+project trust, connectivity, tooling, architecture, cost, or acceptance evidence
+justifies the exception.
 
-> Make the development and proof path reproducible enough for the task, then stop.
+## 1. Reproducibility
 
-Different repositories need different execution substrates. A browser POC, an AMI
-factory, an offline workflow, and a host-patching repository should not be forced
-into the same container, runner, test, or deployment model.
+**Use when:** another host, runner, or future agent must reproduce the working
+path.
 
-## 1. Reproduce the working path from Git
+Keep build/start/health/check commands, compatible tool versions, lockfiles,
+configuration shape, and cleanup/recovery instructions in versioned source.
 
-A meaningful deliverable should keep enough versioned material to rebuild or
-re-run the intended capability without depending on one developer host.
+A host inventory is discovery, not proof. When portability matters, add one
+clean-consumer or fresh-install proof that does not depend on the original
+developer cache.
 
-Prefer repository-owned:
+## 2. Containers
 
-- build/start/health/check commands;
-- supported language/runtime/tool versions;
-- lockfiles or equivalent dependency pins where supported;
-- configuration **shape** and safe examples;
-- container or preparation-image definitions when used;
-- cleanup/recovery instructions;
-- one clean-consumer or fresh-install proof when portability matters.
+**Use when:** containerization removes real dependency, runtime, or CI-tool drift.
 
-Do not commit credentials, browser state, databases, raw private evidence, or
-machine-specific secrets merely to make the repository "complete."
+Good fits include dependency-heavy local services, disposable integration
+environments, preparation images, and portable build/test toolchains.
 
-A host inventory is useful discovery. It is not reproducibility proof.
+**Skip or limit when:** the behavior depends on the real host OS, kernel, mount
+policy, systemd, SSM/host patching, privileged networking, or a restricted
+environment.
 
-## 2. Use containers when they remove real drift
+Pin important inputs, keep secrets out of image layers, and prove the consumer
+path rather than only proving that the image builds.
 
-Use a container, Compose service, or dedicated preparation image when it
-materially reduces dependency, package, runtime, or CI-runner drift.
+## 3. CI runner
 
-Good candidates include:
+Start with the existing Agent OS runner defaults, then select the execution
+substrate by trust, connectivity, required tools/architecture, workload shape,
+current availability, and measured or bounded cost.
 
-- dependency-heavy local services;
-- repeatable build/test toolchains;
-- disposable integration environments;
-- CI preparation images with exact tools;
-- portable/offline consumers where image identity matters.
+Keep CI thin: workflows should call repository-owned commands.
 
-Skip or limit containerization when the behavior being tested depends on the
-real host OS, kernel, mount policy, systemd, SSM/host patching, privileged
-networking, or a restricted office runtime that must not install another
-container engine.
-
-When containers are used:
-
-- pin application dependencies;
-- prefer immutable image digests for trusted/release paths;
-- record architecture when it matters;
-- keep secrets out of image layers and build arguments;
-- prove the real consumer path, not only that the image builds.
-
-Containers are an isolation tool, not proof that host assumptions disappeared.
-
-## 3. Choose the runner by trust, connectivity, tools, and cost
-
-Keep workflow definition separate from the execution substrate.
-
-Possible substrates include:
-
-- standard GitHub-hosted runners;
-- an existing approved GitLab Runner;
-- CodeBuild-hosted GitHub Actions runners;
-- CodeBuild/CodePipeline or another AWS-owned execution service.
-
-Choose based on:
-
-1. network reachability;
-2. organization/security policy;
-3. required tools and architecture;
-4. workload duration and artifact behavior;
-5. current runner availability;
-6. measured or bounded cost.
-
-Keep CI orchestration thin. CI should call repository-owned commands instead of
-reimplementing application logic inside a large workflow file.
-
-For AWS control, reuse
+For detailed AWS/GitHub control use
 [GitHub OIDC and AWS-Owned Control](../integrations/github-oidc-aws-control.md).
-For internal connected preparation, reuse
+For internal connected preparation use
 [GitLab Runner Connected Preparation](../integrations/gitlab-runner-connected-preparation.md).
 
-Do not infer that "public" always means GitHub-hosted or "private" always means
-CodeBuild. Those are useful defaults only when the actual trust/connectivity
-constraints agree.
+## 4. OIDC and secrets
 
-## 4. Prefer short-lived identity; keep secrets separate
+Prefer short-lived workload identity where the platform supports it.
 
-For supported CI-to-cloud access, prefer OIDC/workload identity with narrowly
-bounded roles over copied long-lived cloud keys.
+Keep repository/workflow permission, runner identity, cloud workload identity,
+application secrets, and human authentication separate.
 
-Keep these concerns separate:
+Version configuration **shape** in Git; supply secret values through the approved
+runtime/CI/local secret mechanism. Authentication success is not mutation
+authority.
 
-- repository/workflow permission;
-- runner identity;
-- cloud workload identity;
-- application/API secrets;
-- human browser/session authentication.
+Detailed trust and execution sequencing belongs in the linked OIDC/runner
+playbooks, not here.
 
-Version configuration schemas and required variable names. Supply secret values
-through the approved CI/runtime/local secret mechanism.
+## 5. Validation layers
 
-Do not:
+The Agent OS testing-economy rule still applies: **zero new tests by default is
+not zero validation**.
 
-- commit raw credentials or tokens;
-- bake secrets into container layers;
-- expose temporary credentials in evidence;
-- treat successful authentication as authority for every mutation.
-
-Identity proof should read back the actual target identity before privileged work.
-
-## 5. Use testing economy, but cover the real failure boundary
-
-The existing Agent OS testing-economy rule still applies: default to **zero new
-tests** and add tests only when they cover a real uncovered regression,
-contract, security boundary, failure mode, or high-signal isolated logic.
-
-That does **not** mean zero validation.
-
-Select the smallest sufficient proof layer:
+Choose the smallest proof that reaches the real failure boundary:
 
 - static/lint/schema checks for structure;
-- focused unit tests for isolated risky logic;
-- contract tests for interfaces and deny paths;
-- integration tests for component interaction;
+- focused tests for isolated logic, contracts, deny paths, or regressions;
+- integration proof for component interaction;
 - one end-to-end golden path when the user/runtime journey is the claim;
 - provider/runtime readback when external state matters.
 
-Do not measure quality by test count. A small suite plus one strong integration
-journey is often better than many low-signal tests.
+Do not optimize for test count.
 
-## 6. Use Playwright when the browser journey is part of the claim
+## 6. Browser E2E
 
-For meaningful interactive UI behavior, prefer the repository's browser
-framework or Playwright to prove the actual journey.
+**Use when:** the accepted behavior is an interactive browser journey.
 
-The useful proof chain is:
+Prove real user action, backend/API or persisted state, rendered DOM, browser
+errors, and cleanup. A screenshot alone is not enough.
 
-```text
-real user action
-  -> expected API / persisted state
-  -> rendered DOM
-  -> browser/network error checks
-  -> screenshot or review artifact
-  -> exact cleanup
-```
+Reuse
+[Agent-Run Browser E2E and Screenshot Evidence](../tools/agent-run-browser-e2e-screenshot-evidence.md)
+and
+[Run Playwright Core with Windows Node and Chrome from WSL](../tools/agent-run-playwright-core-wsl.md).
 
-A screenshot alone proves rendering, not policy, backend execution, persistence,
-or cleanup.
+**Skip when:** API/integration proof fully covers the acceptance claim.
 
-Reuse:
+## 7. CI proof versus runtime proof
 
-- [Agent-Run Browser E2E and Screenshot Evidence](../tools/agent-run-browser-e2e-screenshot-evidence.md)
-- [Run Playwright Core with Windows Node and Chrome from WSL](../tools/agent-run-playwright-core-wsl.md)
-
-Skip browser E2E when the change has no user-facing browser contract or when a
-smaller API/integration proof fully covers the acceptance claim.
-
-## 7. Keep CI proof and runtime proof separate
-
-A green CI run proves only the checks configured for that exact revision.
-
-It does not automatically prove:
-
-- the intended cloud account/Region/resource was used;
-- deployment converged;
-- the service is healthy;
-- an offline consumer has no undeclared dependency;
-- the UI renders the accepted result;
-- cleanup succeeded.
-
-For stateful or external systems, keep separate evidence for:
+Treat these as separate evidence layers:
 
 ```text
 source revision
@@ -198,60 +115,49 @@ source revision
   -> cleanup/retained-state result
 ```
 
-Persist execution IDs or equivalent durable handles for long-running operations.
-Resume by reading the original execution state instead of blindly starting a
-replacement.
+A green CI run does not automatically prove deployment convergence, target
+identity, service health, offline behavior, UI acceptance, or cleanup.
 
-## 8. Treat cost and cleanup as engineering evidence
+Persist durable execution IDs for long-running operations and reconcile the
+original execution before retrying.
 
-For demos, labs, build systems, retained EC2/storage, large artifacts, or
-frequent CI:
+## 8. Cost and cleanup
 
-- identify resources intended to remain after the run;
-- define TTL/lifecycle/cleanup when practical;
-- provide an exact bounded cleanup path for resources the repository owns;
-- record duration/usage/cost evidence when it is material to future platform
-  selection;
-- distinguish measured billing evidence from estimates.
+For demos, labs, build systems, retained compute/storage, large artifacts, or
+frequent CI, record:
 
-Do not invent a price comparison from architecture alone.
+- what was created;
+- what remains;
+- the TTL/lifecycle/cleanup path;
+- cleanup evidence;
+- measured usage/cost when it materially affects future platform selection.
 
-A useful closeout answers:
+Keep estimates separate from billing evidence. Do not invent a price comparison
+from architecture alone.
 
-```text
-What was created?
-What is retained?
-What was cleaned?
-What still costs money?
-What evidence proves cleanup?
-```
+## Selection rule
 
-## Selection checklist
+Ask only what changes the decision:
 
-Before adding infrastructure or tooling, ask:
-
-1. What host/runtime drift has actually caused pain?
-2. Does a container remove that drift, or hide the real target behavior?
-3. What runner already satisfies trust and connectivity?
+1. What drift or failure has actually occurred?
+2. Would a container remove that drift or hide the real target?
+3. Which existing runner already satisfies trust and connectivity?
 4. Can short-lived identity replace a stored cloud key?
-5. What is the smallest validation that proves the changed behavior?
-6. Is a real browser journey part of acceptance?
-7. What evidence is CI-only versus provider/runtime truth?
-8. What must be cleaned or cost-measured when the work ends?
+5. What is the smallest proof that reaches the acceptance boundary?
+6. Is browser interaction part of that boundary?
+7. What is CI evidence versus runtime/provider evidence?
+8. What must be cleaned or cost-measured?
 
-If the current repository already answers these questions safely, do not add a
-new framework.
+If the current repository already answers these safely, add no new framework.
 
 ## Promotion boundary
 
-This is a candidate synthesis of recurring cross-project learning.
-
-- Project repositories remain authoritative for their implementation and runtime.
-- Existing Agent OS playbooks remain authoritative for their detailed procedures.
-- This page should link and select; it should not duplicate them.
-- Do **not** propagate this page into `repo-starter` until repeated use shows
-  which, if any, rules are universal enough to become starter defaults.
-- Host-specific adapters and machine facts belong in dotfiles/local guidance.
+- Project repositories remain authoritative for implementation and runtime truth.
+- Detailed procedures stay in their existing Agent OS playbooks.
+- This page selects and links; it does not duplicate them.
+- Do not propagate these patterns into `repo-starter` until repeated use proves
+  which rules are truly universal.
+- Host-specific facts stay in dotfiles/local guidance.
 
 ## Citations
 
