@@ -90,3 +90,9 @@ KISS: **Learn locally. Generalize once. Store canonically. Distribute minimally.
 
 - Testing: default to **zero new tests**. Use the smallest existing validation that can prove the change. Add or modify tests only for a real uncovered regression, contract, security boundary, failure mode, or high-signal isolated logic. Once required checks pass and the changed behavior is proven, **stop**.
 - Runners: public repositories may use standard GitHub-hosted runners such as `ubuntu-latest`. Private repositories should avoid GitHub-hosted runners by default and reuse an existing approved CodeBuild/CodePipeline or CodeBuild-hosted Actions runner; do not create new CI infrastructure merely to replace a free public runner.
+- Worktrees: when a PR/Issue closes, review related local worktrees and remove completed, clean, unused **secondary** worktrees only after their work is merged/preserved and no active Codex session, rollback, or uncommitted/untracked work depends on them. Prefer native `git worktree remove` (never `rm -rf` or `--force` by default); leave active, dirty, uncertain, or unmerged work untouched. Batch already-safe cleanup if useful, but do not accumulate abandoned checkouts. Codex 0.162.0 adds managed **create/list** tools behind its worktrees feature; this does **not** imply automatic deletion.
+
+## Citations
+
+- [Codex 0.162.0 managed worktree create/list](https://github.com/openai/codex/releases/tag/rust-v0.162.0)
+- [Git native worktree remove and prune](https://git-scm.com/docs/git-worktree)
