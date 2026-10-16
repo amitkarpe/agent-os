@@ -330,8 +330,15 @@ Human interactive keys are separate and never an automated fallback.
 
 ## Queue failure: stop and repair
 
-For verified persistent Codex sessions, native queue has no transport fallback.
-Without a valid receipt, if queue is unavailable, fails, or leaves admission uncertain:
+Verified persistent Codex sessions have no alternate delivery transport.
+For **ordinary FAST conversation**, reconcile the same attempted send and
+verified session/queue receipt. If delivery is still unknown, report UNKNOWN
+and stop; do not invent a goal ID, result file or marker, or resend blindly.
+If the first message is proved not admitted, one bounded corrected send is
+allowed when still useful and authorized. Do not reset queues, replace the
+worker or use tmux/composer to work around an uncertain send.
+
+For **explicitly tracked goals**, if a send fails or admission is uncertain:
 
 1. Record `BLOCKED_TRANSPORT`, the goal ID/revision, target, and safe error summary.
 2. Reconcile possible admission or execution of the original message. No receipt
@@ -394,6 +401,13 @@ intent evidence, not deletion authority. EC2, EBS, EIP, NAT, load balancers,
 and databases need explicit cost/state review and owner approval before deletion.
 
 ## Minimum adoption checklist
+
+**FAST ordinary conversation:** verify the existing session and scope; send
+one concise native queue message; read one useful reply when available;
+reconcile an unknown admission without replay. Do not create a tracked goal,
+result, marker, or mandatory `Reply-To` solely to talk.
+
+**Additional tracked-goal requirements** (retain for existing consumers):
 
 - [ ] Persistent sessions have unique recorded UUIDs and names.
 - [ ] The installed CLI exposes `codex queue`, and its current help was
