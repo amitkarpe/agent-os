@@ -190,7 +190,8 @@ adding a controller, packet framework, or per-message tracking system:
    edit/commit/push/required-CI/PR/review/merge actions, acceptance proof and
    separate external stop gates. Do not make a preflight-only handoff when
    normal implementation is already authorized. A later owner instruction
-   overrides an earlier explicit restriction only when its scope is clear.
+   overrides an earlier restriction only when it explicitly identifies
+   what is superseded.
 2. **X or Manager continues approved work.** Implement, fix, run focused
    checks, push with authorized normal CI, review exact PR HEAD, merge when
    permitted and advance to the next milestone without another routine
