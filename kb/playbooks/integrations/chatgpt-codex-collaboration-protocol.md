@@ -149,30 +149,34 @@ registry or a change to machine transport schemas.
 
 <a id="bridge-first-g---fx-transport"></a>
 
-## Direct G -> X transport
+## FAST G -> X and optional G -> Manager -> X
 
-For delegated single-repository work, G normally routes directly to its matching
-X. Factory is an explicit coordination choice, including when the owner requests
-it for one repo. Multiple references or independent tasks do not automatically
-require Factory; select it for genuinely coordinated multi-repository execution.
+For an approved single-repository goal, G normally contacts the **verified
+existing X** directly. For ordinary coordination, use the selected connected
+app's `message_send` / `message_read` when available: one short question or
+Issue/PR delta and one useful reply. A busy X may reply later. A queue receipt
+is admission only; an older read is not proof that the latest message completed.
+No routine mission ID, goal/result file, `.done` marker, fresh worker, or
+repeated `go` is required merely to communicate.
 
-Prefer the healthy approved bridge path; Amit should not be the normal message
-bus. Send the owning pointer and bounded objective, then report repository,
-mission receipt, state and a real blocker. Successful dispatch needs neither a
-second copy/paste handoff nor generic follow-up action menus.
+Choose **G -> M -> X** only when an existing Factory/Manager controller adds
+coordination value. G sends the goal once to that verified M. M controls its
+existing native `codex queue` worker routing, sequencing, one-writer checks
+and acceptance; G must not also dispatch a competing mutating task to X.
+Read-only direct advisory questions to a controlled X remain allowed.
 
-When transport is unavailable, degraded or intentionally not used, give one
-self-contained fenced Markdown handoff beginning `HANDOFF: CODEX`: owning
-pointer, objective, boundaries and `HANDOFF: CHATGPT` return contract. Do not
-claim notification without a delivery receipt.
+An explicitly selected **tracked Direct/Bridge mission** retains its own
+request/mission IDs, delivery/recovery contract, durable evidence and provider
+gates. FAST is a communication default, not a substitute for tracked
+execution or a new universal connector capability. Match the actual connected
+adapter and registered workspace; never assume Bridge2, Factory, Home or a
+Direct mission interface are interchangeable.
 
-Bridge2 owns routing, identity, mission state and transport safety. X may use
-approved AWS CLI/MCP, SSM, Git/GitHub/GitLab CLI and local tools for reads or
-mutations inside the owning goal's authority and safety gates. Capability
-metadata alone neither grants nor revokes task authority. Avoid ambiguous
-shorthand such as `aws=false`; reconcile its documented meaning and any
-conflict before mutation. Never reinterpret an explicit task restriction or
-bypass an enforced security control to obtain permission.
+If the authorized transport is unavailable, report the exact blocker. A
+manual `HANDOFF: CODEX` packet is a fallback for the user to relay, not proof
+of delivery. X may use approved tools only inside the owning Issue/SPEC scope.
+Capability metadata, agent messages and queue receipts grant no new cloud,
+PROD, IAM, security, merge or destructive authority.
 
 ## Current-repository gate
 
@@ -229,17 +233,19 @@ Stop when required proof passes; do not add duplicate validators or a test frame
 ## Native Codex controller-worker delivery
 
 The [native protocol](../delegation/codex-native-controller-worker-protocol.md)
-owns persistent Codex-to-Codex delivery, verified UUIDs, approved goals and
-`Reply-To`; it is separate from G-to-X bridge transport. A receipt is admission,
-not execution or acceptance. Never resend through queue, tmux, composer or
-supervisor after valid admission merely because a worker looks idle.
+owns persistent Codex-to-Codex queue delivery and verified identity. An
+ordinary FAST conversation uses one message and useful reply, not a mandatory
+goal/result file, `Reply-To` or completion marker. A receipt is admission,
+not execution or acceptance. Do not resend after valid admission.
 
-For failed/uncertain sends, record `BLOCKED_TRANSPORT` and follow the canonical
+For **ordinary FAST chat** with uncertain delivery, reconcile the same
+existing session/receipt and report UNKNOWN if not resolved. Do not invent
+tracked IDs or create a second worker. For **explicitly tracked execution**,
+retain the goal, `Reply-To`, `BLOCKED_TRANSPORT`, and canonical
 [stop-and-repair rule](../delegation/codex-native-controller-worker-protocol.md#queue-failure-stop-and-repair).
-Reconcile original execution before any permitted single redispatch; unresolved
-uncertainty stays blocked. Write/validate the durable result before notifying
-its pointer. Notification failure does not erase a result; a `.done` marker is
-not controller acceptance.
+Reconcile possible prior execution before a permitted bounded redispatch.
+Write the durable result before notifying its pointer. Notification failure
+does not erase a result; a `.done` marker is not controller acceptance.
 
 ## Persistent workers and subagents
 
