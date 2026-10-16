@@ -178,6 +178,32 @@ of delivery. X may use approved tools only inside the owning Issue/SPEC scope.
 Capability metadata, agent messages and queue receipts grant no new cloud,
 PROD, IAM, security, merge or destructive authority.
 
+## Roadmap Autopilot: three delegation rules
+
+For substantial G -> X or G -> existing Manager -> X work, use the
+[Roadmap Autopilot Skill](https://github.com/amitkarpe/skills/tree/main/skills/roadmap-autopilot)
+when available. Apply these three rules without adding a controller, packet
+framework, or per-message tracking system:
+
+1. **G gives one executable goal.** Use the approved Issue for up to five
+   meaningful milestones. Resolve foreseeable dependencies, routine permission
+   questions and required CI effects before delegation. State permitted
+   edit/commit/push/required-CI/PR/review/merge actions, acceptance proof and
+   separate external stop gates. Do not make a preflight-only handoff when
+   normal implementation is already authorized. A later owner instruction
+   overrides an earlier explicit restriction only when its scope is clear.
+2. **X or Manager continues approved work.** Implement, fix, run focused
+   checks, push with authorized normal CI, review exact PR HEAD, merge when
+   permitted and advance to the next milestone without another routine
+   `go`. If one work lane blocks, continue independent authorized work.
+   Repository merge does not prove external runtime acceptance.
+3. **Reconcile before retry.** Keep the verified existing worker/session and
+   owning Issue. Queue admission is not execution; an old reply is not a new
+   result; online runners do not prove free capacity. Inspect current execution,
+   provider evidence and PR HEAD before resending. Never replay uncertain
+   writes. Keep live security testing, cloud/IAM, PROD, secrets, costs and
+   destructive actions under their separate recorded approvals.
+
 ## Current-repository gate
 
 Verify repository/worktree, branch/HEAD, dirty state, remote, visibility and
