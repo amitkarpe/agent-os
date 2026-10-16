@@ -181,9 +181,8 @@ PROD, IAM, security, merge or destructive authority.
 ## Roadmap Autopilot: three delegation rules
 
 For substantial G -> X or G -> existing Manager -> X work, use the
-[Roadmap Autopilot Skill](https://github.com/amitkarpe/skills/tree/main/skills/roadmap-autopilot)
-when available. Apply these three rules without adding a controller, packet
-framework, or per-message tracking system:
+Roadmap Autopilot Skill when available. Apply these three rules without
+adding a controller, packet framework, or per-message tracking system:
 
 1. **G gives one executable goal.** Use the approved Issue for up to five
    meaningful milestones. Resolve foreseeable dependencies, routine permission
@@ -315,3 +314,7 @@ acceptance. Do not repeat this checklist on every status request.
 - [Controller-Worker Goal Execution Framework](../delegation/controller-worker-goal-execution-framework.md)
 - [Completion Notification without Polling](../delegation/completion-notification-without-polling.md)
 - [Knowledge Lifecycle and Publication](../../policies/knowledge-lifecycle-and-publication.md)
+
+## Citations
+
+- [Roadmap Autopilot ChatGPT Skill](https://github.com/amitkarpe/skills/tree/main/skills/roadmap-autopilot)
