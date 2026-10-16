@@ -15,13 +15,20 @@ tags: [codex, controller, worker, queue, agents, delegation, completion]
 
 ## Decision
 
-Use native `codex queue` as the only controller-to-worker and worker-to-worker
-message transport between verified persistent Codex sessions. Use the Agent
-Command Center for human visibility and lifecycle operations. Keep durable
-goals, results, and done markers authoritative for scope and terminal truth.
+For **ordinary conversation between verified persistent Codex sessions**, use
+FAST: send one concise native `codex queue` message to the existing worker,
+receive one useful reply, and check real evidence before claiming execution.
+No routine mission ID, new goal/result file, `.done` marker, or acknowledgement
+cycle is required. Queue admission is not execution or acceptance.
 
-When no valid receipt is available after an unavailable, failed, or uncertain
-queue attempt, record `BLOCKED_TRANSPORT` and follow
+For **explicitly tracked worker execution**, native `codex queue` remains the
+controller-to-worker and worker-to-worker transport. Use the Agent Command
+Center for human visibility and lifecycle operations. The durable goal/result
+and marker lifecycle below applies to tracked goals and their existing
+consumers, not ordinary FAST chat. Preserve required audit and provider proof.
+
+For tracked goals, when no valid receipt is available after an unavailable,
+failed, or uncertain queue attempt, record `BLOCKED_TRANSPORT` and follow
 [Queue failure: stop and repair](#queue-failure-stop-and-repair) before any
 redispatch. Do not substitute tmux,
 composer, supervisor, terminal, key, or file-mention delivery. Controllers or
@@ -63,7 +70,7 @@ stop-and-repair procedure.
 
 | Layer | Purpose | It does not prove |
 | --- | --- | --- |
-| Durable goal and result | Scope, authority, evidence, and terminal truth | Message delivery |
+| Tracked goal and result | Scope, authority, evidence, and terminal truth for tracked execution | Message delivery |
 | `codex queue` | Transport admission to a named Codex thread | Recipient acknowledgement, execution, completion, or acceptance |
 | Agent Command Center | Search, open, start, rename, stop, and observe managed tasks | Message acceptance, authority, or completion |
 | Optional `codex_tui` tools | Inspect an exposed thread for diagnosis | A supported tool contract, delivery, authority, or completion |
@@ -123,7 +130,10 @@ Resolve them from the owning environment's registry at delivery time.
 
 ## Controller to worker
 
-Before sending a message:
+**Tracked goals only.** Ordinary FAST chat sends the bounded delta to the
+verified existing X without creating goal, result, or marker files.
+
+Before sending a tracked goal:
 
 1. Confirm the installed CLI exposes `codex queue` and review its current
    command help.
@@ -170,7 +180,9 @@ or production workers.
 
 ## Worker to controller
 
-The worker completes the durable artifact before notifying the controller:
+**Tracked goals only.** Ordinary FAST responses return one useful outcome
+without a mandatory file or marker. For tracked goals, the worker completes
+the durable artifact before notifying the controller:
 
 1. Finish the approved work or reach a truthful terminal stop.
 2. Write and validate one durable terminal result.
