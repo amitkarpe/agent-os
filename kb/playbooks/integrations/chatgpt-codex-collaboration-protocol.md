@@ -233,17 +233,19 @@ Stop when required proof passes; do not add duplicate validators or a test frame
 ## Native Codex controller-worker delivery
 
 The [native protocol](../delegation/codex-native-controller-worker-protocol.md)
-owns persistent Codex-to-Codex delivery, verified UUIDs, approved goals and
-`Reply-To`; it is separate from G-to-X bridge transport. A receipt is admission,
-not execution or acceptance. Never resend through queue, tmux, composer or
-supervisor after valid admission merely because a worker looks idle.
+owns persistent Codex-to-Codex queue delivery and verified identity. An
+ordinary FAST conversation uses one message and useful reply, not a mandatory
+goal/result file, `Reply-To` or completion marker. A receipt is admission,
+not execution or acceptance. Do not resend after valid admission.
 
-For failed/uncertain sends, record `BLOCKED_TRANSPORT` and follow the canonical
+For **ordinary FAST chat** with uncertain delivery, reconcile the same
+existing session/receipt and report UNKNOWN if not resolved. Do not invent
+tracked IDs or create a second worker. For **explicitly tracked execution**,
+retain the goal, `Reply-To`, `BLOCKED_TRANSPORT`, and canonical
 [stop-and-repair rule](../delegation/codex-native-controller-worker-protocol.md#queue-failure-stop-and-repair).
-Reconcile original execution before any permitted single redispatch; unresolved
-uncertainty stays blocked. Write/validate the durable result before notifying
-its pointer. Notification failure does not erase a result; a `.done` marker is
-not controller acceptance.
+Reconcile possible prior execution before a permitted bounded redispatch.
+Write the durable result before notifying its pointer. Notification failure
+does not erase a result; a `.done` marker is not controller acceptance.
 
 ## Persistent workers and subagents
 
