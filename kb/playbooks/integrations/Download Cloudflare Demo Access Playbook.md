@@ -42,7 +42,7 @@ In Cloudflare Zero Trust → Access → Applications, configure a self-hosted ap
 
 A shared password requires a custom **server-side** gate with a Worker secret, constant-time verification, rate limiting, HTTPS-only HttpOnly session cookie, expiration and revocation. A shared string is easier to redistribute than an identity-based credential; avoid this implementation for ordinary public synthetic demos.
 
-## GitHub Actions configuration (names only)
+## GitHub Actions configuration
 
 | Optional key | Store in | Meaning |
 |---|---|---|
@@ -52,7 +52,48 @@ A shared password requires a custom **server-side** gate with a Worker secret, c
 | CLOUDFLARE_CUSTOM_DOMAIN | GitHub Actions Variable | Explicit approved hostname |
 | CLOUDFLARE_API_TOKEN | GitHub Actions encrypted Secret, only if genuinely needed | Least-privilege credential for target Worker deployment |
 
-**Only placeholders/key names belong in Agent OS.** Do not push local environment files or copy existing keys into a public GitHub repository. Prefer a supported connected identity or managed/short-lived credential. If CI truly requires a token, configure only the minimal scoped secret in the relevant **application repository**, never the public KB repository, through an approved secret-write workflow. GitHub Variables are not secrets; encrypted GitHub Actions Secrets are write-only to agents without permission. Do not assume any of the five example names are already configured.
+**Only placeholders/key names belong in Agent OS.** Exact approved account/zone/Worker/hostname configuration belongs in the application repository. Reconcile that repository's current workflows and settings metadata first. If no deployment workflow consumes a token, leave it absent; an interactive connected OAuth release does not require copying its credential into CI.
+
+### Set approved non-sensitive variables
+
+Replace every placeholder with independently verified project facts. A domain variable does not create a domain binding or authorize DNS, Access or unrelated Worker changes. Preserve unrelated repository settings.
+
+```bash
+set +x
+cf_repo=OWNER/REPOSITORY
+cf_account_id=APPROVED_ACCOUNT_ID
+cf_zone_id=APPROVED_ZONE_ID
+cf_worker_name=APPROVED_WORKER_NAME
+cf_custom_domain=APPROVED_HOSTNAME
+gh variable list --repo "$cf_repo" --json name,updatedAt
+gh secret list --repo "$cf_repo" --json name,updatedAt
+gh variable set CLOUDFLARE_ACCOUNT_ID --repo "$cf_repo" --body "$cf_account_id"
+gh variable set CLOUDFLARE_ZONE_ID --repo "$cf_repo" --body "$cf_zone_id"
+gh variable set CLOUDFLARE_WORKER_NAME --repo "$cf_repo" --body "$cf_worker_name"
+gh variable set CLOUDFLARE_CUSTOM_DOMAIN --repo "$cf_repo" --body "$cf_custom_domain"
+gh variable list --repo "$cf_repo" --json name,updatedAt
+gh secret list --repo "$cf_repo" --json name,updatedAt
+```
+
+Report requested keys as `SET`, `ALREADY_SET` or `BLOCKED`, and an optional unused token as `NOT_REQUIRED`. Metadata proves names/timestamps, not stored values or a working deployment. Retain the approved non-sensitive write payload; do not infer correct values from a name alone or retrieve values just to produce a readback report.
+
+### Add a credential only for a real deployment workflow
+
+- Verify provenance, account, expiry and effective scope without exposing the credential. A successful account read does not prove write permission. Prefer a supported connected identity or managed credential; never export connector/Codex OAuth storage into GitHub or reuse a credential known to have been disclosed.
+- Limit authority to the supported target Worker resource/role. Changing Routes or Custom Domains also needs permission on the affected zone; deploying content to an already-bound Worker need not change either. Do not grant unrelated DNS, Access or account administration.
+- Prefer an approved protected deployment environment. Repository secrets have no per-workflow ACL; an environment also permits another authorized workflow to name it. Audit who can edit workflows/environment controls and restrict secret references to the intended deployment job. Stop if the required isolation cannot be enforced. Keep credentials out of pull-request checks and other untrusted code paths.
+- Never put a token in Variables, `--body`, an inline environment assignment, logs, screenshots or Git. Never bulk-import an environment file or print it through a redaction filter: comments and unrelated keys may contain secrets. If a local source is necessary, use an allowlisted trusted parser with no value output and an in-memory stdin transfer; do not source arbitrary file content.
+
+For an already-approved environment, the CLI can prompt for the secret without placing its value in shell history, then list metadata only:
+
+```bash
+set +x
+cf_environment=APPROVED_DEPLOYMENT_ENVIRONMENT
+gh secret set CLOUDFLARE_API_TOKEN --repo "$cf_repo" --env "$cf_environment"
+gh secret list --repo "$cf_repo" --env "$cf_environment" --json name,updatedAt
+```
+
+Only the reviewed deployment job should reference `secrets.CLOUDFLARE_API_TOKEN`. Non-sensitive configuration uses `vars.CLOUDFLARE_ACCOUNT_ID`, `vars.CLOUDFLARE_ZONE_ID`, `vars.CLOUDFLARE_WORKER_NAME` and `vars.CLOUDFLARE_CUSTOM_DOMAIN`. GitHub's secret metadata API does not return stored secret values. Do not create a token, workflow or deployment merely to make the settings checklist look complete.
 
 ## Acceptance
 
@@ -76,3 +117,8 @@ This Markdown is the canonical general reference. Link it from project-specific 
 - [Workers Cloudflare Access](https://developers.cloudflare.com/workers/configuration/cloudflare-access/)
 - [Cloudflare Access policies](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/)
 - [GitHub Actions secrets and variables](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions)
+- https://cli.github.com/manual/gh_variable_set
+- https://cli.github.com/manual/gh_variable_list
+- https://cli.github.com/manual/gh_secret_set
+- https://cli.github.com/manual/gh_secret_list
+- https://developers.cloudflare.com/workers/authorization/workers/
