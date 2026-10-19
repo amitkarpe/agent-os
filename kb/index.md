@@ -61,6 +61,8 @@ okf_version: "0.1"
 - [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
 - [Run Playwright Core with Windows Node and Chrome from WSL](playbooks/tools/agent-run-playwright-core-wsl.md) - Launch installed Windows Chrome for interactive E2E, with CDP attachment as a fallback.
 
+- **Publish a Cloudflare synthetic demo with public, invite-only, or shared-secret access:** [Download Cloudflare Demo Access Playbook](playbooks/integrations/Download%20Cloudflare%20Demo%20Access%20Playbook.md).
+
 ## Provider and Integration Playbooks
 
 - [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) - Select a bounded research route without exposing authentication material.
