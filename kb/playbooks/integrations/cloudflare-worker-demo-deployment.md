@@ -1,6 +1,6 @@
 ---
 type: Practice
-title: Download Cloudflare Demo Access Playbook
+title: Cloudflare Worker Demo Deployment
 description: Reusable Cloudflare Workers demo publication, custom domains, public access, email allowlists, and GitHub configuration.
 status: reviewed
 scope: synthetic Cloudflare Workers demos
@@ -10,7 +10,7 @@ review_after: 2027-04-19
 tags: [cloudflare, workers, access, github-actions, dns, deployment]
 ---
 
-# Download Cloudflare Demo Access Playbook
+# Cloudflare Worker Demo Deployment
 
 **Purpose:** publish reviewed, synthetic-only demos using a dedicated Cloudflare Worker and branded custom domain. This is reusable guidance, not account authorization. The owning repository Issue/SPEC and live provider evidence decide what is permitted.
 
@@ -33,6 +33,33 @@ tags: [cloudflare, workers, access, github-actions, dns, deployment]
 5. PUBLIC means no login challenge at **all reachable hostnames**, including an active workers.dev URL. Do not alter unrelated Access applications or broad Zero Trust settings.
 6. Test from an unauthenticated browser session: correct HTTPS URL, no email OTP, correct version, working MOCK journey and exported evidence with REAL_WRITES=0.
 7. Retain a short sanitized release receipt. A successful domain API response does not by itself prove TLS, DNS propagation or anonymous-browser acceptance.
+
+## Deployment lessons checked across five repositories
+
+The following source contracts and retained public evidence were reviewed on
+2026-10-19. The pinned sources and existing run/acceptance records are listed in
+Citations. This review did not rerun deployments, browser journeys or cloud tests;
+the five repositories do not all claim the same level of live deployment proof.
+
+| Repository | Checked evidence | Reusable lesson |
+| --- | --- | --- |
+| `kcloud1/cloud-app-factory` | A successful manual Actions run completed only its `plan` job. The no-write release contract explicitly reports `APPROVAL_REQUIRED` / `PLAN_ONLY`. | A green plan or gate report is not a deployment. Bind reusable workflow identity to a reviewed full commit; credentials in the factory repository do not automatically become caller credentials. |
+| `kcloud1/factory-pilot` | Its protected-main push run completed `check`, `publish / build` and `publish / deploy` successfully at the same source SHA; the caller pins the factory publisher by full SHA. | Use one deployment writer. Build without provider credentials, pass only that run's immutable artifact to the deployment job, and retain source/release metadata for independent parity checks. |
+| `kcloud1/cloud-ops-demo` | The accepted Level 4 receipt supersedes earlier direct-upload history: native `push_event`, exact merged SHA, provider build/deployment/version, traffic and two live UI checks are correlated. | Distinguish manual snapshots from automatic Git releases. A provider label of `wrangler` alone does not identify the trigger, and a successful deployment does not establish the credential's full scope. |
+| `kcloud1/codex-cloud-hello-site` | The source separates static Pages behavior from the Worker's `/api/hello` route and explicitly leaves new live API behavior unverified. Its asset allowlist contains only the three frontend files. | A working static page is not backend proof. Check the API route separately; confirm the entry point, asset root and route ordering, and exclude repository/configuration files from hosted assets. |
+| `kcloud1/aws-factory-pilot` | Its Cloudflare onboarding guide and optional starter are opt-in preparation, not this repository's deployment receipt. The guide distinguishes repository access, provider GitHub App grants and native Builds configuration. | Confirm the exact repository grant, existing Worker, production branch, root and deploy command. Decide native Builds versus Actions once; do not add a competing pipeline to bypass missing access or setup. |
+
+For Git-triggered acceptance, correlate the full **merged** commit, actual event,
+terminal build/run, deployed version and traffic. A manual retry or deploy hook is
+different evidence. A custom hostname needs its own HTTPS/content observation;
+workers.dev success or a domain binding alone does not establish that result.
+Reuse existing accepted proof and perform only the app-relevant checks needed by
+the owning release; do not rerun a reference project to validate this playbook.
+
+Choose production `workers_dev` and `preview_urls` independently: turning off
+preview URLs does not disable the production workers.dev hostname. For a
+custom-domain-only release, verify both are off; for an approved public alias,
+verify that alias separately. Neither choice grants new audience authority.
 
 ## Restrict access later: 5–10 reviewer emails
 
@@ -122,3 +149,15 @@ This Markdown is the canonical general reference. Link it from project-specific 
 - https://cli.github.com/manual/gh_secret_set
 - https://cli.github.com/manual/gh_secret_list
 - https://developers.cloudflare.com/workers/authorization/workers/
+
+### Pinned repository contracts and existing deployment evidence
+
+- https://github.com/kcloud1/cloud-app-factory/blob/fbbea5e289e552d357143ee27d2bbe00d76cedc1/docs/RELEASE_GATE.md
+- https://github.com/kcloud1/cloud-app-factory/actions/runs/38068725435
+- https://github.com/kcloud1/factory-pilot/blob/3eabe4d0e1eccdc88f57ca34d4204c309124bb11/.github/workflows/pilot.yml
+- https://github.com/kcloud1/factory-pilot/actions/runs/38093719264
+- https://github.com/kcloud1/cloud-ops-demo/issues/5#issuecomment-6094650672
+- https://github.com/kcloud1/cloud-ops-demo/blob/d0e61e0037b7841cb27a40758c0bd3f93c2e9095/wrangler.jsonc
+- https://github.com/kcloud1/codex-cloud-hello-site/blob/9b637d9a456db297b0a2f3767a3746146bc5d50e/README.md
+- https://github.com/kcloud1/codex-cloud-hello-site/blob/9b637d9a456db297b0a2f3767a3746146bc5d50e/.assetsignore
+- https://github.com/kcloud1/aws-factory-pilot/blob/bf203e70474f39056b9cb1ff5755288af35ed39c/docs/CLOUDFLARE_WORKERS_ONBOARDING.md
