@@ -15,7 +15,8 @@ evidence that may need retesting.
 
 The flat `agents/` directory is being piloted for **active, portable agent
 instructions**: [Testing and Validation](agents/TESTING.md),
-[Git Workflow](agents/GIT.md), and [Goals and Delegation](agents/GOALS.md) are
+[Git Workflow](agents/GIT.md), [Goals and Delegation](agents/GOALS.md),
+[Shared Agent Core](agents/CORE.md), and [Tool Routing](agents/TOOLS.md) are
 its first consolidated policies. Existing
 `kb/` guidance remains valid until its consumers and links are migrated;
 do not preload either directory.
