@@ -13,10 +13,11 @@ Start with the [knowledge index](kb/index.md). Treat policies and principles as
 stable guidance, playbooks as repeatable procedures, and observations as dated
 evidence that may need retesting.
 
-The flat [agents/](agents/TESTING.md) directory is being piloted for **active,
-portable agent instructions**. [Testing and Validation](agents/TESTING.md) is
-its first migrated policy. Existing `kb/` guidance remains valid until its
-consumers and links are migrated; do not preload either directory.
+The flat `agents/` directory is being piloted for **active, portable agent
+instructions**: [Testing and Validation](agents/TESTING.md) and
+[Git Workflow](agents/GIT.md) are its first consolidated policies. Existing
+`kb/` guidance remains valid until its consumers and links are migrated;
+do not preload either directory.
 
 Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
 to load only the concepts relevant to the current task.
