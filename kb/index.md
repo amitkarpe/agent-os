@@ -31,6 +31,8 @@ okf_version: "0.1"
 - [Testing and Validation](../agents/TESTING.md) - Smallest sufficient proof and conditional test additions; first portable active guidance moved toward `agents/`.
 - [Git Workflow](../agents/GIT.md) - Bounded Issues, coherent PRs, compact durable records and verified closeout; flat reusable policy.
 - [Goals and Delegation](../agents/GOALS.md) - Continue one approved goal with bounded delegation, evidence and stop gates; provider/runtime details remain local.
+- [Shared Agent Core](../agents/CORE.md) - Keep authority, context, safety and reusable guidance separate from project and provider runtime truth.
+- [Tool Routing](../agents/TOOLS.md) - Select exact, proportionate tools for discovery, parsing, validation and evidence.
 - [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement, including minimal reusable-learning closeout.
 - [Connector Safety Gate](policies/connector-safety-gate.md) - Fail closed on repeated connector safety blocks without widening scope, target, permissions, or safeguards.
 - [Context Loading Policy](policies/context-loading-policy.md) - Load context on change, not on every turn: event-driven cold-start and warm-continuation reads with explicit reload triggers.
