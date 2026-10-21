@@ -1,17 +1,17 @@
 ---
 type: Playbook
-title: ChatGPT and Codex Collaboration Protocol
-description: Intent-led, evidence-gated delivery through bounded goals, direct worker routing and durable GitHub review.
+title: G and Coding-Agent Collaboration Protocol
+description: One approved Goal, direct or managed agent routing, eligible self-merge and durable evidence without repeated GO.
 status: reviewed
-scope: Public-safe ChatGPT review and Codex repository workflows
+scope: Public-safe G-to-coding-agent collaboration; direct and selected Manager/Factory routes
 confidence: medium
 timestamp: 2026-09-15T10:30:00+08:00
 last_verified: 2026-09-02
 review_after: 2027-03-15
-tags: [chatgpt, codex, github, review, delegation, milestones]
+tags: [chatgpt, coding-agents, github, review, delegation, milestones]
 ---
 
-# ChatGPT and Codex Collaboration Protocol
+# G and Coding-Agent Collaboration Protocol
 
 **Keep the intent. Reduce the duplication.** Use intent-led, evidence-gated
 delivery for software and operations. Repository instructions, operating
@@ -22,8 +22,9 @@ required.
 ## Decision flow
 
 ```text
-owner intent -> G discovery/research -> bounded Issue plan -> applicable approval
--> implementation (G or X) -> exact evidence -> G acceptance
+owner intent -> G discovery/research -> approved GitHub Goal with milestones
+-> one verified X (or selected Manager/Factory -> X) -> implementation and evidence
+-> eligible reviews/merge -> next approved milestone -> final acceptance when required
 ```
 
 G may directly complete authorized, bounded GitHub-only work when delegation
@@ -38,9 +39,9 @@ A recommendation, agent-authored plan or tool receipt is not authorization.
 | Role | Responsibility |
 | --- | --- |
 | Owner | Gives intent, urgency and boundaries; retains material approval authority. |
-| G / ChatGPT controller | Owns research sufficiency, priority, plan, scope, safety and final acceptance. |
-| X / Codex worker | Supplies environment facts, challenges mismatches, implements the approved goal and returns evidence. |
-| Codex controller / Factory, when selected | Coordinates bounded work without gaining additional authority. |
+| G / ChatGPT controller | Defines the approved Goal, selects one route and reviews when specifically required; not a routine PR checkpoint. |
+| X / existing coding agent | Owns in-scope implementation, diagnosis, proportionate checks, required review, eligible merge and continued milestones. |
+| Factory / Manager, when selected | Owns sequencing, its existing worker(s) and acceptance without gaining additional authority. |
 | Issue/PR | Records the current goal, decisions and handoff; does not replace runtime proof. |
 
 Confirm GitHub writes and worker delivery before reporting success. If a
@@ -100,8 +101,11 @@ audit, never a second authority copy. Feature specifications describe behavior,
 not permission. A closed Issue must not be the only home of enduring intent.
 
 Agent OS owns reusable policy; project contracts retain authority; dotfiles
-retains host profiles/adapters. See [Context Loading Economy](context-loading-economy.md)
-for environment selection, preservation and conditional loading.
+retains host profiles/adapters. A repository `AGENTS.md` or a Markdown link
+**does not automatically load this external playbook**. For relevant G/X
+collaboration, actually retrieve/read it (or use already verified warm context).
+Do not fetch it for unrelated tasks or every turn. See
+[Context Loading Economy](context-loading-economy.md) for conditional loading.
 
 ## GitHub-only ChatGPT exchange
 
@@ -159,10 +163,12 @@ is admission only; an older read is not proof that the latest message completed.
 No routine mission ID, goal/result file, `.done` marker, fresh worker, or
 repeated `go` is required merely to communicate.
 
-Choose **G -> M -> X** only when an existing Factory/Manager controller adds
-coordination value. G sends the goal once to that verified M. M controls its
-existing native `codex queue` worker routing, sequencing, one-writer checks
-and acceptance; G must not also dispatch a competing mutating task to X.
+Choose **G -> M -> X** only when the owning Goal selected a verified
+Factory/Manager or coordination actually requires it. G sends the Goal once
+to M; M uses its **own approved native worker transport** (for example Codex
+queue where installed), sequencing, one-writer checks and acceptance. G must
+not also dispatch a competing mutating task to X. Factory is not a mandatory
+reviewer for direct-X Goals.
 Read-only direct advisory questions to a controlled X remain allowed.
 
 An explicitly selected **tracked Direct/Bridge mission** retains its own
@@ -178,11 +184,11 @@ of delivery. X may use approved tools only inside the owning Issue/SPEC scope.
 Capability metadata, agent messages and queue receipts grant no new cloud,
 PROD, IAM, security, merge or destructive authority.
 
-## Roadmap Autopilot: three delegation rules
+## Standing Goal: three delegation rules (no skill required)
 
-For substantial G -> X or G -> existing Manager -> X work, use the
-Roadmap Autopilot Skill when available. Apply these three rules without
-adding a controller, packet framework, or per-message tracking system:
+For approved G -> X or G -> selected Manager/Factory -> X work, apply these
+rules **without** a skill, extra controller, packet framework, or per-message
+tracking system:
 
 1. **G gives one executable goal.** Use the approved Issue for up to five
    meaningful milestones. Resolve foreseeable dependencies, routine permission
@@ -192,11 +198,15 @@ adding a controller, packet framework, or per-message tracking system:
    normal implementation is already authorized. A later owner instruction
    overrides an earlier restriction only when it explicitly identifies
    what is superseded.
-2. **X or Manager continues approved work.** Implement, fix, run focused
-   checks, push with authorized normal CI, review exact PR HEAD, merge when
-   permitted and advance to the next milestone without another routine
-   `go`. If one work lane blocks, continue independent authorized work.
-   Repository merge does not prove external runtime acceptance.
+2. **X or selected Manager continues approved work.** Use installed native
+   Goal/loop support when available; otherwise continue the authorized Issue
+   in the existing session. Implement, fix, run focused checks, push with
+   authorized CI, obtain actually required independent exact-head review,
+   self-merge when eligible and advance to the next approved milestone **without**
+   another G/owner `go`. A same-identity subagent does not satisfy a separate
+   GitHub reviewer-account gate. If one lane blocks, continue independent
+   authorized work. Source merge does not prove external runtime acceptance;
+   an exited local CLI does not wake itself.
 3. **Reconcile before retry.** Keep the verified existing worker/session and
    owning Issue. Queue admission is not execution; an old reply is not a new
    result; online runners do not prove free capacity. Inspect current execution,
@@ -275,8 +285,10 @@ does not erase a result; a `.done` marker is not controller acceptance.
 
 ## Persistent workers and subagents
 
-Use persistent workers for repository lanes and short-lived helpers for one
-independent research/review question with compact evidence and stop conditions.
+Use the exact existing worker for each repository lane and short-lived
+subagents for bounded independent research/review with evidence and stop
+conditions. Native Goal/loop support depends on the installed agent; a prompt
+alone does not provide a 24-hour runner or automatic process restart.
 Do not duplicate their work, delegate tightly coupled critical-path waiting or
 create same-file concurrent edits. Close completed helpers. Routing/dashboard
 state creates no authority.
@@ -316,6 +328,3 @@ acceptance. Do not repeat this checklist on every status request.
 - [Completion Notification without Polling](../delegation/completion-notification-without-polling.md)
 - [Knowledge Lifecycle and Publication](../../policies/knowledge-lifecycle-and-publication.md)
 
-## Citations
-
-- [Roadmap Autopilot ChatGPT Skill](https://github.com/amitkarpe/skills/tree/main/skills/roadmap-autopilot)
