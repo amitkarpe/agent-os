@@ -1,5 +1,5 @@
 ---
-type: Practice
+type: Policy
 title: Agent Tool Routing
 description: Select exact, proportionate tools for discovery, parsing, validation, and evidence.
 status: reviewed
@@ -20,7 +20,7 @@ installed command when needed and stop if the required capability is absent.
 
 | Need | Route | Boundary |
 | --- | --- | --- |
-| Search tracked text | `rg` | Use an anchored or literal pattern when exact scope matters. |
+| Search tracked text | `git grep` | Use `rg` only after constraining its input to an authoritative tracked-file list. |
 | Find paths | `fd` or a narrow `find` | Do not use content search to answer a filename question. |
 | Repository truth | `git` | Check identity, branch, HEAD, dirty state and diff before edits. |
 | Structured data | A format-aware parser | Validate the parsed result; do not infer structure from text matches. |
