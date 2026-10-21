@@ -31,6 +31,14 @@ domain requires it. Canonical detail lives in the indexed **Context Loading
 Policy** (`kb/policies/context-loading-policy.md`) - load on change, not on
 every turn; do not duplicate that policy across repositories.
 
+For a task that actually coordinates G with a coding agent (direct G -> X
+or an already selected Factory/Manager -> X), explicitly open the
+[G and Coding-Agent Collaboration Protocol](kb/playbooks/integrations/chatgpt-codex-collaboration-protocol.md)
+**once** when needed. A link or this entrypoint alone does not mean that
+external guidance has already been read. Skip for unrelated work and reuse
+verified warm context; the owning Issue, local SPEC and approvals override
+reusable guidance.
+
 ## Ownership
 
 Agent OS is the canonical home for sanitized, reusable, cross-project operating
