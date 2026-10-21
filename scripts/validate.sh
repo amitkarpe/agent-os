@@ -209,6 +209,16 @@ validate_repo() {
     validate_yaml_block "$file" yes
   done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
 
+  # Flat portable agent guidance must retain the same public-safe metadata.
+  if [[ -d "$root/agents" ]]; then
+    if find "$root/agents" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
+      error "$root/agents: nested guidance files are not allowed"
+    fi
+    while IFS= read -r -d '' file; do
+      validate_yaml_block "$file" yes
+    done < <(find "$root/agents" -maxdepth 1 -type f -name '*.md' -print0)
+  fi
+
   validate_links "$root"
   scan_public_safety "$root"
 
