@@ -28,6 +28,7 @@ okf_version: "0.1"
 
 ## Policies
 
+- [Testing and Validation](../agents/TESTING.md) - Smallest sufficient proof and conditional test additions; first portable active guidance moved toward `agents/`.
 - [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement, including minimal reusable-learning closeout.
 - [Connector Safety Gate](policies/connector-safety-gate.md) - Fail closed on repeated connector safety blocks without widening scope, target, permissions, or safeguards.
 - [Context Loading Policy](policies/context-loading-policy.md) - Load context on change, not on every turn: event-driven cold-start and warm-continuation reads with explicit reload triggers.
