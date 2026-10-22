@@ -71,7 +71,7 @@ contradicts it. Routine known work remains lightweight; research must resolve
 the critical path, not replace it with activity.
 
 For a substantial or risky Goal, make this a bounded **Phase 1: read-only
-discovery and executable Plan** before seeking execution authority. Verify the
+discovery and executable Plan** before stateful execution. Verify the
 repository/worktree/HEAD, existing writer, effective tool and approval surface,
 provider or build side effects, exact proposed mutations, resource and cost
 bounds, rollback, and observable acceptance. Record the Plan and unresolved
@@ -88,9 +88,10 @@ inline preflight without a formal two-phase handoff.
   authorized under the repository contract.
 
 An owner-approved bounded Goal defaults to `COMPLETE` for in-scope repository
-delivery unless it explicitly limits work to `REVIEW` or `EDIT`. This default
-does not override branch protection, independent review, security, IAM, cloud,
-cost or other separate approval gates.
+delivery unless it explicitly limits work to `REVIEW` or `EDIT`. Its named
+resource, cost and mutation envelope is approved without another routine `go`.
+Technical IAM, branch and platform controls, required independent review and
+out-of-Goal actions remain separate gates.
 
 `go` continues the selected mode, never silently upgrades it. Explicit
 no-merge/no-mutation limits remain binding. Governing-authority changes need
@@ -213,12 +214,12 @@ tracking system:
    normal implementation is already authorized. A later owner instruction
    overrides an earlier restriction only when it explicitly identifies
    what is superseded.
-2. **X or selected Manager continues approved work.** After the scoped owner
-   GO, Phase 2 executes authorized milestones end to end. Use installed native
+2. **X or selected Manager continues approved work.** Under the approved scoped
+   Goal, Phase 2 executes authorized milestones end to end. Use installed native
    Goal/loop support when available; otherwise continue the authorized Issue
-   in the existing session. Implement, fix, run focused checks, push with
-   authorized CI, obtain actually required independent exact-head review,
-   self-merge when eligible and advance to the next approved milestone **without**
+   in the existing session. Edit, commit, push, run required CI, create or revise
+   the PR, obtain actually required independent exact-head review, merge when
+   eligible and continue approved milestones **without** routine handback or
    another G/owner `go`. A same-identity subagent does not satisfy a separate
    GitHub reviewer-account gate. If one lane blocks, continue independent
    authorized work. Source merge does not prove external runtime acceptance;
