@@ -209,7 +209,14 @@ validate_repo() {
     validate_yaml_block "$file" yes
   done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
 
-  # Flat portable agent guidance must retain the same public-safe metadata.
+  # Root Markdown topics are canonical; repository entrypoints are not topics.
+  while IFS= read -r -d '' file; do
+    validate_yaml_block "$file" yes
+  done < <(find "$root" -maxdepth 1 -type f -name '*.md' \
+    ! -name 'AGENTS.md' ! -name 'README.md' ! -name 'CONTRIBUTING.md' \
+    ! -name 'index.md' -print0)
+
+  # Legacy paths remain link-only pointers until their consumers migrate.
   if [[ -d "$root/agents" ]]; then
     if find "$root/agents" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
       error "$root/agents: nested guidance files are not allowed"

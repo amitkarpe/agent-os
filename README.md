@@ -13,14 +13,12 @@ Start with the [knowledge index](kb/index.md). Treat policies and principles as
 stable guidance, playbooks as repeatable procedures, and observations as dated
 evidence that may need retesting.
 
-The flat `agents/` directory is being piloted for **active, portable agent
-instructions**: [Testing and Validation](agents/TESTING.md),
-[Git Workflow](agents/GIT.md), [Goals and Delegation](agents/GOALS.md),
-[Shared Agent Core](agents/CORE.md), [Tool Routing](agents/TOOLS.md), and
-[Terraform State and Drift Decisions](agents/TERRAFORM.md) are
-its first consolidated policies. Existing
-`kb/` guidance remains valid until its consumers and links are migrated;
-do not preload either directory.
+The repository root holds **active, portable agent instructions**:
+[Testing and Validation](TESTING.md), [Git Workflow](GIT.md),
+[Goals and Delegation](GOALS.md), [Shared Agent Core](CORE.md),
+[Tool Routing](TOOLS.md), and [Terraform State and Drift Decisions](TERRAFORM.md).
+The `agents/` paths are temporary compatibility pointers for existing readers.
+Unique `kb/` guidance remains at its current paths; do not preload the corpus.
 
 Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
 to load only the concepts relevant to the current task.
