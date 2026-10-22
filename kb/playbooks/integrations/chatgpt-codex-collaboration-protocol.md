@@ -70,12 +70,27 @@ local feasibility and stops or corrects the plan within scope when reality
 contradicts it. Routine known work remains lightweight; research must resolve
 the critical path, not replace it with activity.
 
+For a substantial or risky Goal, make this a bounded **Phase 1: read-only
+discovery and executable Plan** before seeking execution authority. Verify the
+repository/worktree/HEAD, existing writer, effective tool and approval surface,
+provider or build side effects, exact proposed mutations, resource and cost
+bounds, rollback, and observable acceptance. Record the Plan and unresolved
+gates in the existing owning Issue, not a second authority artifact. The Plan
+explains **how**; the owner-approved Goal defines **what**, permitted mutations
+and resources, and acceptance. Small, known, reversible work can use a brief
+inline preflight without a formal two-phase handoff.
+
 ## Authority modes
 
 - `REVIEW`: analyze and create/update the owning Issue; no implementation.
 - `EDIT`: implement approved Issue/PR scope; leave the PR unmerged.
 - `COMPLETE`: finish and merge eligible bounded work only when explicitly
   authorized under the repository contract.
+
+An owner-approved bounded Goal defaults to `COMPLETE` for in-scope repository
+delivery unless it explicitly limits work to `REVIEW` or `EDIT`. This default
+does not override branch protection, independent review, security, IAM, cloud,
+cost or other separate approval gates.
 
 `go` continues the selected mode, never silently upgrades it. Explicit
 no-merge/no-mutation limits remain binding. Governing-authority changes need
@@ -198,7 +213,8 @@ tracking system:
    normal implementation is already authorized. A later owner instruction
    overrides an earlier restriction only when it explicitly identifies
    what is superseded.
-2. **X or selected Manager continues approved work.** Use installed native
+2. **X or selected Manager continues approved work.** After the scoped owner
+   GO, Phase 2 executes authorized milestones end to end. Use installed native
    Goal/loop support when available; otherwise continue the authorized Issue
    in the existing session. Implement, fix, run focused checks, push with
    authorized CI, obtain actually required independent exact-head review,
