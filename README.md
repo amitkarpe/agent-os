@@ -17,7 +17,6 @@ The repository root holds **active, portable agent instructions**:
 [Testing and Validation](TESTING.md), [Git Workflow](GIT.md),
 [Goals and Delegation](GOALS.md), [Shared Agent Core](CORE.md),
 [Tool Routing](TOOLS.md), and [Terraform State and Drift Decisions](TERRAFORM.md).
-The `agents/` paths are temporary compatibility pointers for existing readers.
 Unique `kb/` guidance remains at its current paths; do not preload the corpus.
 
 Agents should use the [task-scoped usage guide](kb/playbooks/knowledge/using-agent-os-task-scoped.md)
