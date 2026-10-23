@@ -71,6 +71,7 @@ okf_version: "0.1"
 
 ## Provider and Integration Playbooks
 
+- [Choose and Bound an AWS Agent Experiment](playbooks/integrations/bounded-aws-agent-experiment.md) - Select configuration or code ownership and prove one safe tool interaction without a service catalog or deployment mandate.
 - [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) - Select a bounded research route without exposing authentication material.
 - [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md) - Source, timestamp, telemetry, and cost gates for research output.
 - [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
