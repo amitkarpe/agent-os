@@ -2,83 +2,16 @@
 okf_version: "0.1"
 ---
 
-# Agent OS Knowledge
+# Transitional KB index
 
-## Start by task
+This tree is being retired under [Issue #62](https://github.com/amitkarpe/agents/issues/62).
+**Use the [root topic index](../README.md)** and its shallow canonical pages.
+The remaining specialist KB guides have not yet been migrated; new reusable
+knowledge should not be authored under `kb/`.
 
-- **Learn, apply, and contribute safely:** [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from the KB, apply one to three matching concepts, and suggest sanitized candidates without overriding project authority.
-- **Run a controller or recover a session:** [Agent Operating Principles](principles/amit-agent-operating-principles.md), [Persistent Codex Goals](playbooks/codex/persistent-goals.md), and [Named Session Reuse](playbooks/codex/named-session-reuse.md).
-- **Curate local skill exposure:** [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md).
-- **Delegate work or supervise completion:** [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md), [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md), [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md), [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md), and [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md).
-- **Load context on change, not every turn (cold-start vs warm continuation):** [Context Loading Policy](policies/context-loading-policy.md).
-- **Continue an existing PR without redundant context reloads:** [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md).
-- **Manage temporary agent evidence:** [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md).
-- **Use ChatGPT Projects, files, and Skills safely:** [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md).
-- **Choose event-triggered vs scheduled ChatGPT automation:** [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md).
-- **Discover repositories or prove a local web app:** [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md), [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md), and [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
-- **Start or retrofit an agent-managed repository:** [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md).
-- **Choose development/runtime patterns:** [Development and Runtime Pattern Selection](playbooks/repositories/development-runtime-pattern-selection.md) - Select containers, CI runners, identity, validation, browser E2E, runtime evidence, cost, and cleanup proportionally.
-- **Handle a connector/platform safety block:** [Connector Safety Gate](policies/connector-safety-gate.md).\n- **Control AWS durably from GitHub:** [GitHub OIDC and AWS-Owned Control](playbooks/integrations/github-oidc-aws-control.md) - Separate runner, OIDC identity, short controller, and AWS-owned long execution.
-- **Research through X or Grok:** [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) and [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md).
-- **Prepare or promote public knowledge:** [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) and the [contribution guide](../CONTRIBUTING.md).
-
-## Principles
-
-- [Agent Operating Principles](principles/amit-agent-operating-principles.md) - Practical principles for concise, evidence-backed agentic work.
-
-## Policies
-
-- [Testing and Validation](../TESTING.md) - Smallest sufficient proof and conditional test additions; canonical root policy.
-- [Git Workflow](../GIT.md) - Bounded Issues, coherent PRs, compact durable records and verified closeout.
-- [Goals and Delegation](../GOALS.md) - Continue one approved goal with bounded delegation, evidence and stop gates; provider/runtime details remain local.
-- [Shared Agent Core](../CORE.md) - Keep authority, context, safety and reusable guidance separate from project and provider runtime truth.
-- [Tool Routing](../TOOLS.md) - Select exact, proportionate tools for discovery, parsing, validation and evidence.
-- [Terraform State and Drift Decisions](../TERRAFORM.md) - Verify the exact target and decide ownership before changing infrastructure state.
-- [Knowledge Lifecycle and Publication](policies/knowledge-lifecycle-and-publication.md) - A public-safety gate from candidate capture through retirement, including minimal reusable-learning closeout.
-- [Connector Safety Gate](policies/connector-safety-gate.md) - Fail closed on repeated connector safety blocks without widening scope, target, permissions, or safeguards.
-- [Context Loading Policy](policies/context-loading-policy.md) - Load context on change, not on every turn: event-driven cold-start and warm-continuation reads with explicit reload triggers.
-
-## Codex Playbooks
-
-- [Persistent Codex Goals](playbooks/codex/persistent-goals.md) - How runtime goals support long tasks without replacing repository truth.
-- [Named Session Reuse](playbooks/codex/named-session-reuse.md) - Conservative recovery of known sessions by durable identity.
-- [Repository-First Local Agent Control](playbooks/delegation/repository-first-local-agent-control.md) - Discover and attach to local workers by repository identity, with a durable task-runner fallback.
-- [Curated Skill Exposure Without Source Deletion](playbooks/codex/curated-skill-exposure.md) - Keep reusable source while enabling only a small, reversible task-fit catalog.
-
-## Delegation Playbooks
-
-- [Controller-Worker Goal Execution Framework](playbooks/delegation/controller-worker-goal-execution-framework.md) - Delegate one complete goal under explicit approval, gates, evidence, and stop conditions.
-- [Codex Native Controller-Worker Protocol](playbooks/delegation/codex-native-controller-worker-protocol.md) - Use durable goals and results with native queue transport while keeping admission, execution, completion, and acceptance separate.
-- [Effective Subagent Delegation](playbooks/delegation/effective-subagent-delegation.md) - Balanced delegation with one writer and explicit evidence.
-- [Completion Notification without Polling](playbooks/delegation/completion-notification-without-polling.md) - Durable results followed by one bounded notification.
-- [Supervisor Wake Principles](playbooks/delegation/supervisor-wake-principles.md) - Fail-closed, event-driven wake behavior.
-
-## Knowledge Use Playbooks
-
-- [Using Agent OS with Task-Scoped Context](playbooks/knowledge/using-agent-os-task-scoped.md) - Learn from Agent OS, apply the smallest relevant knowledge set, and contribute sanitized candidates.
-- [Temporary Agent Evidence Lifecycle](playbooks/knowledge/temporary-agent-evidence-lifecycle.md) - Bound temporary evidence to one goal, one result, selected proof, and explicit cleanup authority.
-
-## Repository Discovery and Tools
-
-- [KISS Repository Starter Adoption](playbooks/repositories/repo-starter-adoption.md) - Create or retrofit a repository with the current role-specific root truth files while keeping `CONTEXT.md` current-only.
-- [Development and Runtime Pattern Selection](playbooks/repositories/development-runtime-pattern-selection.md) - Choose reproducibility, containers, runner substrate, OIDC/secrets, validation layers, browser E2E, runtime evidence, cost, and cleanup without forcing one stack onto every repository.
-- [Git-Aware Repository Search](playbooks/tools/git-aware-repository-search.md) - Separate tracked inventory, working-tree discovery, content search, and direct source verification.
-- [Practical Agent Tool Recipes](playbooks/tools/practical-agent-tool-recipes.md) - Compact recipes and failure modes for common repository tools.
-- [Agent-Run Browser E2E and Screenshot Evidence](playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md) - Automate local startup, live-state assertions, positive and negative browser proof, screenshots, and cleanup.
-- [Run Playwright Core with Windows Node and Chrome from WSL](playbooks/tools/agent-run-playwright-core-wsl.md) - Launch installed Windows Chrome for interactive E2E, with CDP attachment as a fallback.
-
-- **Publish a Cloudflare synthetic demo with public, invite-only, or shared-secret access:** [Cloudflare Worker Demo Deployment](playbooks/integrations/cloudflare-worker-demo-deployment.md).
-
-## Provider and Integration Playbooks
-
-- [Choose and Bound an AWS Agent Experiment](playbooks/integrations/bounded-aws-agent-experiment.md) - Select configuration or code ownership and prove one safe tool interaction without a service catalog or deployment mandate.
-- [Grok Route Selection](playbooks/providers/hermes-grok-route-selection.md) - Select a bounded research route without exposing authentication material.
-- [Validating X and Grok Research Results](playbooks/integrations/x-grok-research-validation.md) - Source, timestamp, telemetry, and cost gates for research output.
-- [ChatGPT and Codex Collaboration Protocol](playbooks/integrations/chatgpt-codex-collaboration-protocol.md) - GitHub-only ChatGPT review exchange, native queue transport, milestone sizing, and evidence gates.
-- [Context Loading Economy for Agent Handoffs](playbooks/integrations/context-loading-economy.md) - Treat PRs/comments as continuation pointers and reload broader context only on explicit recovery triggers.
-- [ChatGPT Project Context and File Surfaces](playbooks/integrations/chatgpt-project-context-and-files.md) - Keep Project instructions, Project files, Library, attachments, runtime copies, and Skills conceptually separate.
-- [ChatGPT Event-Triggered vs Scheduled Tasks](playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md) - Use webhook-driven Work tasks for supported external events and schedules for time-driven work.\n- [GitHub OIDC and AWS-Owned Control](playbooks/integrations/github-oidc-aws-control.md) - Keep repository access, runner substrate, OIDC identity, and AWS-owned execution separate; persist execution IDs for restart-safe control.
-
-## Model Observations
-
-- [Spark versus Luna Evaluation](observations/models/spark-vs-luna-2026-07.md) - A dated single-sample comparison of latency and resource use.
+- [Context](../CONTEXT.md)
+- [Knowledge](../KNOWLEDGE.md)
+- [Connector Safety](../SAFETY.md)
+- [Codex Sessions](../codex/SESSIONS.md)
+- [AWS AgentCore](../aws/AGENTCORE.md)
+- [CLI Recipes](../tools/RECIPES.md)

@@ -3,8 +3,8 @@
 ## Purpose
 
 This repository publishes portable operating knowledge for people and software
-agents. Markdown is canonical, and the `kb/` tree follows Open Knowledge Format
-(OKF) 0.1.
+agents. Markdown is canonical, and legacy `kb/` files follow Open Knowledge Format (OKF) 0.1 during the
+bounded migration to shallow, topic-first Agent OS knowledge.
 
 ## Contribution Rules
 
@@ -28,7 +28,7 @@ Reload wider context only when the session lacks usable repository context, a
 governing file materially changed, identity/objective is ambiguous, current
 context is stale/incomplete/contradictory/unsafe, or a new authority/safety
 domain requires it. Canonical detail lives in the indexed **Context Loading
-Policy** (`kb/policies/context-loading-policy.md`) - load on change, not on
+Policy** (`CONTEXT.md`) - load on change, not on
 every turn; do not duplicate that policy across repositories.
 
 For a task that actually coordinates G with a coding agent (direct G -> X
