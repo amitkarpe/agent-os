@@ -55,6 +55,17 @@ manifest and summary before any delete, move, or archive action.
 A destructive cleanup is a separate authority decision. It must not follow
 implicitly from age, filename, tool output, or a previous recommendation.
 
+Before an authorized removal, verify the exact path, ownership and retention
+holds; preserve required commits, backups and accepted evidence. Stop for
+active, locked, dirty, untracked or unknown material, or a symlink escaping the
+approved boundary. Controller acceptance or worker completion alone does not
+authorize deletion.
+
+Record the disposition outside the removed path in the existing work record:
+`deleted_after_acceptance` with verified absence, `retained_with_reason` with
+owner and review date, or `blocked_cleanup`. Execution acceptance and cleanup
+completion are separate outcomes.
+
 ## Privacy
 
 Do not copy credentials, authentication state, private infrastructure, customer
