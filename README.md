@@ -33,27 +33,27 @@ to preserve the hierarchy.
 
 - [Agent operating principles](kb/principles/amit-agent-operating-principles.md)
 - [Controller-worker goal framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md)
-- [Native Codex controller/worker protocol](kb/playbooks/delegation/codex-native-controller-worker-protocol.md)
+- [Native Codex controller/worker protocol](codex/DELEGATION.md)
 - [Effective subagent delegation](kb/playbooks/delegation/effective-subagent-delegation.md)
 - [Repository-first local agent control](kb/playbooks/delegation/repository-first-local-agent-control.md)
 - [Completion notifications](kb/playbooks/delegation/completion-notification-without-polling.md)
 - [Supervisor wake boundaries](kb/playbooks/delegation/supervisor-wake-principles.md)
-- [Curated Codex skills](kb/playbooks/codex/curated-skill-exposure.md)
+- [Curated Codex skills](codex/SKILLS.md)
 
 **ChatGPT and external provider interactions**
 
-- [G/Codex collaboration](kb/playbooks/integrations/chatgpt-codex-collaboration-protocol.md)
-- [ChatGPT Projects and file surfaces](kb/playbooks/integrations/chatgpt-project-context-and-files.md)
-- [Event-triggered vs scheduled tasks](kb/playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md)
+- [G/Codex collaboration](chatgpt/COLLABORATION.md)
+- [ChatGPT Projects and file surfaces](chatgpt/PROJECTS.md)
+- [Event-triggered vs scheduled tasks](chatgpt/AUTOMATIONS.md)
 - [Grok route selection](kb/playbooks/providers/hermes-grok-route-selection.md)
 - [Validate X/Grok research](kb/playbooks/integrations/x-grok-research-validation.md)
 - [Dated model comparison - historical](kb/observations/models/spark-vs-luna-2026-07.md)
 
 **Infrastructure, integrations and repositories**
 
-- [AWS GitHub/OIDC durable control](kb/playbooks/integrations/github-oidc-aws-control.md)
-- [GitLab runner preparation](kb/playbooks/integrations/gitlab-runner-connected-preparation.md)
-- [Cloudflare Worker demo deployment](kb/playbooks/integrations/cloudflare-worker-demo-deployment.md)
+- [AWS GitHub/OIDC durable control](aws/OIDC.md)
+- [GitLab runner preparation](GITLAB.md)
+- [Cloudflare Worker demo deployment](CLOUDFLARE.md)
 - [Repo-starter adoption](kb/playbooks/repositories/repo-starter-adoption.md)
 - [Development/runtime pattern selection](kb/playbooks/repositories/development-runtime-pattern-selection.md)
 
