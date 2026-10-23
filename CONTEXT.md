@@ -36,4 +36,4 @@ Before retiring older files, inventory active consumers, preserve unique content
 - [Core authority](CORE.md)
 - [Goals and delegation](GOALS.md)
 - [Connector safety](SAFETY.md)
-- [ChatGPT/Codex collaboration](kb/playbooks/integrations/chatgpt-codex-collaboration-protocol.md)
+- [ChatGPT/Codex collaboration](chatgpt/COLLABORATION.md)

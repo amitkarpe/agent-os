@@ -55,7 +55,7 @@ receipt is not acceptance.
 
 Use the existing provider-native transport and adapter. Transport creates no
 authority and does not prove execution. For persistent Codex sessions, use the
-[native controller-worker protocol](kb/playbooks/delegation/codex-native-controller-worker-protocol.md).
+[native controller-worker protocol](codex/DELEGATION.md).
 Keep provider setup, host paths, versions and authentication in the provider's
 local adapter, not in this public guide.
 
