@@ -37,7 +37,7 @@ On a cold start, read the owning repository rules, current Issue/PR or goal,
 and current HEAD. On warm continuation, use the smallest changed delta and
 reload broader context only when authority, identity, a governing file or a
 safety boundary is unclear or changed. The
-[Context Loading Policy](kb/policies/context-loading-policy.md) defines the
+[Context Loading Policy](CONTEXT.md) defines the
 reload triggers.
 
 Preserve unrelated work. Verify the target repository, branch, dirty state and

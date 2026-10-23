@@ -216,6 +216,18 @@ validate_repo() {
     ! -name 'AGENTS.md' ! -name 'README.md' ! -name 'CONTRIBUTING.md' \
     ! -name 'index.md' -print0)
 
+  # Canonical shallow topics are validated without reintroducing a hierarchy.
+  local topic
+  for topic in aws codex kiro opencode chatgpt tools; do
+    [[ -d "$root/$topic" ]] || continue
+    if find "$root/$topic" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
+      error "$root/$topic: nested topic documents are not allowed"
+    fi
+    while IFS= read -r -d '' file; do
+      validate_yaml_block "$file" yes
+    done < <(find "$root/$topic" -maxdepth 1 -type f -name '*.md' -print0)
+  done
+
   # Canonical topics live at the root; retired compatibility paths stay absent.
   if [[ -e "$root/agents" || -L "$root/agents" ]]; then
     error "$root/agents: retired compatibility path must not exist"
