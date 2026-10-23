@@ -42,8 +42,10 @@ not freeze service status, SDK versions, models, Regions, pricing or defaults.
 3. Prove the tool boundary locally with the smallest existing check. Keep this
    distinct from model invocation: a locally running SDK may still contact a
    remote provider and incur cost.
-4. For an authorized model or cloud invocation, bound the tool allowlist,
-   invocations, loop/time limits and cost in the owning goal. Use the existing
+4. For authorized inference, bound the tool allowlist, invocations, loop/time
+   limits and cost in the owning goal. Retain available request/trace identity
+   and the outcome; reconcile an uncertain result before repeating the request.
+   For deployments, mutations or long-running cloud operations, use the existing
    [AWS control gates](github-oidc-aws-control.md) for exact target identity,
    durable execution state, uncertain-retry handling and live readback.
 5. Inspect the actual tool request, validated arguments, result and final
