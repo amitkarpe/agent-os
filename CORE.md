@@ -52,3 +52,23 @@ sequence. Use the smallest meaningful validation for the changed risk, then
 stop when the required proof passes. Apply the flat [Testing and Validation
 policy](TESTING.md), [Git Workflow](GIT.md), and [Goals and Delegation](GOALS.md)
 for their respective decisions; do not create a second policy copy.
+
+## Operating principles and critical path
+
+Keep the **intent; remove duplication**. Use owner intent -> relevant discovery
+-> one approved Goal -> bounded implementation -> observable proof -> controller
+acceptance. This is an operating model, not another framework. Identify the
+earliest failed acceptance dependency and address it or its mandatory safety
+prerequisite before optional improvements. Activity and queue receipts are not
+results.
+
+End trusted changes in versioned automation, reproducible configuration or a
+reviewable runbook rather than a chat-only recollection. Resolve the approved
+source, pin its exact identity, and distinguish **desired**, **approved**,
+**built** and **observed** state. Do not silently substitute an unapproved
+newer artifact. Keep human material authority while permitting autonomous
+execution within the approved envelope.
+
+Communicate result, evidence, genuine blocker and one next action. Use an
+explicit timezone when it matters; do not claim background work without an
+actual mechanism.

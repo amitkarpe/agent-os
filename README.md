@@ -21,8 +21,13 @@ homes own actual host configuration and private data.
 | Terraform state and drift | [TERRAFORM.md](TERRAFORM.md) |
 | Codex sessions and native Goals | [codex/SESSIONS.md](codex/SESSIONS.md) |
 | AWS AgentCore selection and proof | [aws/AGENTCORE.md](aws/AGENTCORE.md) |
+| Repository foundation and runtime | [REPOSITORIES.md](REPOSITORIES.md) |
+| Browser E2E and screenshots | [tools/BROWSER.md](tools/BROWSER.md) |
+| Windows/WSL Playwright route | [tools/PLAYWRIGHT.md](tools/PLAYWRIGHT.md) |
+| X/Grok research validation | [tools/RESEARCH.md](tools/RESEARCH.md) |
+| Repository-first Codex worker attachment | [codex/CONTROL.md](codex/CONTROL.md) |
 
-## Remaining specialist sources — indexed until retirement
+## Additional specialist topics — new canonical paths
 
 Distinct technical documents below remain available **temporarily** while G
 rewrites and merges their unique content in the next batches. This is an
@@ -31,13 +36,13 @@ to preserve the hierarchy.
 
 **Goals, delegation and Codex**
 
-- [Agent operating principles](kb/principles/amit-agent-operating-principles.md)
-- [Controller-worker goal framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md)
+- [Agent operating principles](CORE.md)
+- [Controller-worker goal framework](GOALS.md)
 - [Native Codex controller/worker protocol](codex/DELEGATION.md)
-- [Effective subagent delegation](kb/playbooks/delegation/effective-subagent-delegation.md)
-- [Repository-first local agent control](kb/playbooks/delegation/repository-first-local-agent-control.md)
-- [Completion notifications](kb/playbooks/delegation/completion-notification-without-polling.md)
-- [Supervisor wake boundaries](kb/playbooks/delegation/supervisor-wake-principles.md)
+- [Effective subagent delegation](GOALS.md)
+- [Repository-first local agent control](codex/CONTROL.md)
+- [Completion notifications](GOALS.md)
+- [Supervisor wake boundaries](GOALS.md)
 - [Curated Codex skills](codex/SKILLS.md)
 
 **ChatGPT and external provider interactions**
@@ -45,8 +50,8 @@ to preserve the hierarchy.
 - [G/Codex collaboration](chatgpt/COLLABORATION.md)
 - [ChatGPT Projects and file surfaces](chatgpt/PROJECTS.md)
 - [Event-triggered vs scheduled tasks](chatgpt/AUTOMATIONS.md)
-- [Grok route selection](kb/playbooks/providers/hermes-grok-route-selection.md)
-- [Validate X/Grok research](kb/playbooks/integrations/x-grok-research-validation.md)
+- [Grok route selection](tools/RESEARCH.md)
+- [Validate X/Grok research](tools/RESEARCH.md)
 - [Dated model comparison - historical](kb/observations/models/spark-vs-luna-2026-07.md)
 
 **Infrastructure, integrations and repositories**
@@ -54,13 +59,13 @@ to preserve the hierarchy.
 - [AWS GitHub/OIDC durable control](aws/OIDC.md)
 - [GitLab runner preparation](GITLAB.md)
 - [Cloudflare Worker demo deployment](CLOUDFLARE.md)
-- [Repo-starter adoption](kb/playbooks/repositories/repo-starter-adoption.md)
-- [Development/runtime pattern selection](kb/playbooks/repositories/development-runtime-pattern-selection.md)
+- [Repo-starter adoption](REPOSITORIES.md)
+- [Development/runtime pattern selection](REPOSITORIES.md)
 
 **Browser and visual evidence**
 
-- [Browser E2E and screenshot evidence](kb/playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md)
-- [Playwright Core on WSL](kb/playbooks/tools/agent-run-playwright-core-wsl.md)
+- [Browser E2E and screenshot evidence](tools/BROWSER.md)
+- [Playwright Core on WSL](tools/PLAYWRIGHT.md)
 - [Transitional KB index](kb/index.md)
 
 The `kb/` hierarchy and `agents/*.md` pointers are **temporary**. Their
