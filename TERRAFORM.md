@@ -42,5 +42,5 @@ and use its reviewed state-change process. An exceptional manual cloud action
 requires explicit break-glass approval and a recorded action; reconcile the
 IaC source and state afterward, then verify the live result. For AWS-controlled
 mutations, follow the [GitHub OIDC and AWS-Owned Control
-playbook](kb/playbooks/integrations/github-oidc-aws-control.md); its bounded
+playbook](aws/OIDC.md); its bounded
 execution and uncertain-retry gates remain there.

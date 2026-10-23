@@ -34,9 +34,9 @@ read. Keep credentials, authentication state and private payloads out of
 commands, logs and tracked guidance.
 
 For reusable procedures, start with [Git-aware repository
-search](kb/playbooks/tools/git-aware-repository-search.md) and [practical
-agent tool recipes](kb/playbooks/tools/practical-agent-tool-recipes.md).
+search](tools/RECIPES.md) and [practical
+agent tool recipes](tools/RECIPES.md).
 For browser proof, use the [browser E2E and screenshot
-playbook](kb/playbooks/tools/agent-run-browser-e2e-screenshot-evidence.md).
+playbook](tools/BROWSER.md).
 Provider-specific tools and host bootstrap belong in their local adapters, not
 this public inventory.

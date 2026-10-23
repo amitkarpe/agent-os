@@ -454,6 +454,6 @@ result, marker, or mandatory `Reply-To` solely to talk.
 - [Codex 0.151.0 release](https://github.com/openai/codex/releases/tag/rust-v0.151.0)
 - [Codex 0.152.0 release](https://github.com/openai/codex/releases/tag/rust-v0.152.0)
 - [Codex 0.153.0 release](https://github.com/openai/codex/releases/tag/rust-v0.153.0)
-- [Controller-Worker Goal Execution Framework](../kb/playbooks/delegation/controller-worker-goal-execution-framework.md)
-- [Completion Notification without Polling](../kb/playbooks/delegation/completion-notification-without-polling.md)
+- [Controller-Worker Goal Execution Framework](../GOALS.md)
+- [Completion Notification without Polling](../GOALS.md)
 - [Named Agent Session Reuse](SESSIONS.md)

@@ -29,7 +29,7 @@ Office [Issue #62 native pilot](https://github.com/amitkarpe/agents/issues/62#is
 ## Related
 
 - [One approved goal](../GOALS.md)
-- [Native controller/worker protocol](../kb/playbooks/delegation/codex-native-controller-worker-protocol.md)
+- [Native controller/worker protocol](DELEGATION.md)
 - [Context](../CONTEXT.md)
 
 ## Citations

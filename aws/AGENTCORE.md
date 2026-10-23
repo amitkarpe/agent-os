@@ -29,7 +29,7 @@ Harness runs a configuration-defined managed loop; AgentCore Runtime hosts appli
 2. Use synthetic input and one deterministic no-op/read-only tool. Validate accepted arguments and authorization **outside the model**, denying other requests.
 3. Prove this boundary locally with the smallest existing check; do not create a test framework. SDK execution may still call a paid remote provider.
 4. For **approved** inference, bound tool allowlist, number of calls, loop duration and spending. Keep request/trace identity, validated arguments, tool output and final response. Reconcile an uncertain result before repeating it.
-5. For deployments, mutations or long-running AWS operations, apply the separate [durable AWS control](../kb/playbooks/integrations/github-oidc-aws-control.md) gates and verify actual target state. Those OIDC/durable-execution controls are **not mandatory for a short authorized read-only invocation**.
+5. For deployments, mutations or long-running AWS operations, apply the separate [durable AWS control](OIDC.md) gates and verify actual target state. Those OIDC/durable-execution controls are **not mandatory for a short authorized read-only invocation**.
 6. Distinguish local simulation, configured resources, model-call result and actual live deployment proof.
 
 Gateway, Browser, Memory and other components are optional, not a starter checklist. Detailed vendor research and local provider configuration remain in their existing legitimate dotfiles/project owners; this selection guide is not an API reference or deployment mandate.

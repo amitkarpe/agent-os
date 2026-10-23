@@ -182,7 +182,9 @@ scan_public_safety() {
     if [[ "$status" == 'verified' ]] && ! grep -q '^## Citations$' "$file"; then
       warn "$file: verified concept has no Citations section"
     fi
-  done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
+  done < <(find "$root" -maxdepth 2 -type f -name '*.md' \
+    ! -name 'AGENTS.md' ! -name 'README.md' ! -name 'CONTRIBUTING.md' \
+    ! -name 'index.md' -print0)
 }
 
 validate_repo() {
@@ -191,23 +193,10 @@ validate_repo() {
   errors=0
   warnings=0
 
-  [[ -d "$root/kb" ]] || {
-    error "$root: missing kb directory"
-    return 1
-  }
-  [[ -f "$root/kb/index.md" ]] || {
-    error "$root: missing kb/index.md"
-    return 1
-  }
-
-  validate_yaml_block "$root/kb/index.md" no
-  if ! sed -n '2,/^---$/p' "$root/kb/index.md" | grep -Eq '^okf_version:[[:space:]]*"0\.1"[[:space:]]*$'; then
-    error "$root/kb/index.md: missing okf_version: \"0.1\""
+  # The former knowledge taxonomy was retired; fail even on dangling links.
+  if [[ -e "$root/kb" || -L "$root/kb" ]]; then
+    error "$root/kb: retired taxonomy path must not exist"
   fi
-
-  while IFS= read -r -d '' file; do
-    validate_yaml_block "$file" yes
-  done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
 
   # Root Markdown topics are canonical; repository entrypoints are not topics.
   while IFS= read -r -d '' file; do
@@ -246,9 +235,8 @@ validate_repo() {
 
 write_fixture() {
   local root="$1" body="$2"
-  mkdir -p "$root/kb"
-  printf '%s\n' '---' 'okf_version: "0.1"' '---' '' '# Index' '' '- [Concept](concept.md)' >"$root/kb/index.md"
-  printf '%s\n' "$body" >"$root/kb/concept.md"
+  mkdir -p "$root"
+  printf '%s\n' "$body" >"$root/CONTEXT.md"
 }
 
 expect_failure() {

@@ -8,13 +8,13 @@
 4. Remove private identifiers, paths, authentication details, and unsupported
    claims.
 5. Add official or primary citations for technical claims.
-6. Link the concept from `kb/index.md`.
+6. Link the concept from the topic index in `README.md`.
 7. Run `scripts/validate.sh --self-test` and `scripts/validate.sh`.
 8. Review the complete diff as permanently public material before promotion.
 
 ## Metadata
 
-Every concept Markdown file under `kb/`, except reserved `index.md` files,
+Every canonical topic file at the root or in one shallow subject directory,
 requires YAML frontmatter with a non-empty `type`. Prefer only metadata that
 helps readers assess scope, lifecycle, confidence, and freshness.
 

@@ -86,7 +86,7 @@ payloads in Issue bodies or logs. GitHub and GitLab may have different author,
 signing, merge, mirror and branch rules: verify the exact target.
 
 For multi-agent Goal routing use the
-[G and Coding-Agent Collaboration Protocol](kb/playbooks/integrations/chatgpt-codex-collaboration-protocol.md).
+[G and Coding-Agent Collaboration Protocol](chatgpt/COLLABORATION.md).
 For validation depth use [Testing and Validation](TESTING.md).
 Host-specific GitLab identity, aliases and source-of-truth registers belong
 in local setup or the owning private repository, **not** this public guide.

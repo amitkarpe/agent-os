@@ -75,10 +75,8 @@ deletion authority.
 Use [Temporary Agent Evidence Lifecycle](KNOWLEDGE.md)
 for retention, preservation and exact-path cleanup checks.
 
-For deeper sequencing, gates and evidence use the
-[Controller-Worker Goal Execution Framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md),
-[Effective Subagent Delegation](kb/playbooks/delegation/effective-subagent-delegation.md),
-and [Context Loading Policy](CONTEXT.md).
+For provider-specific transport use [Codex Delegation](codex/DELEGATION.md),
+and for handoff reload rules use [Context](CONTEXT.md).
 
 ## Fast or Deep planning — still one approved Goal
 
