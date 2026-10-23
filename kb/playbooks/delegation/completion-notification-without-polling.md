@@ -1,46 +1,14 @@
 ---
-type: Practice
-title: Completion Notification without Polling
-description: Preserve a durable terminal result before sending one bounded completion notice.
-status: reviewed
-scope: asynchronous worker completion
+type: Reference
+title: Migrated Completion Notification without Polling
+status: deprecated
 confidence: high
-timestamp: 2026-07-15T00:00:00+08:00
-review_after: 2027-01-15
-tags: [notification, delegation, evidence]
+review_after: 2027-04-23
 ---
 
-# Completion Notification without Polling
+# Moved: GOALS.md
 
-## Contract
-
-The durable result is the source of truth. A notification is only a pointer to
-that result and must not carry the only copy of the outcome.
-
-On completion:
-
-1. Write and validate the terminal result artifact.
-2. Verify once that the intended recipient is available and safe to notify.
-3. Send one short, unambiguous result pointer.
-4. Check acceptance once when the transport requires it.
-5. Do not poll, repeatedly wake, or paste the full result.
-
-## Failure Behavior
-
-Notification failure must not erase or invalidate a valid result. Record the
-notification as deferred and leave the durable artifact available for later
-consumption. Do not restart or recreate the recipient merely to deliver a
-completion notice.
-
-Make delivery idempotent with a result identity or deduplication record. A
-retry may resend the same pointer only when policy allows it and the system can
-prove that the prior attempt was not accepted.
-
-## Authority Boundary
-
-Delivery proves neither review nor approval. The recipient still decides
-whether to accept, reject, or re-scope the result.
-
-## Citations
-
-- [OpenAI Codex prompting: steering and queuing](https://developers.openai.com/codex/prompting/#steering-and-queuing)
+The unique applicable guidance was reviewed and moved or merged into
+[GOALS.md](../../../GOALS.md). The old page remains only as a **temporary**
+incoming-link pointer while Issue #62 completes consumer migration; it is not
+a second policy. Previous full text and dated context remain in Git history.

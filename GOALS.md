@@ -79,3 +79,39 @@ For deeper sequencing, gates and evidence use the
 [Controller-Worker Goal Execution Framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md),
 [Effective Subagent Delegation](kb/playbooks/delegation/effective-subagent-delegation.md),
 and [Context Loading Policy](CONTEXT.md).
+
+## Fast or Deep planning — still one approved Goal
+
+**Fast** is the default: record Outcome, Scope, Approved actions, Success proof
+and Stop gates; let one existing worker plan and execute the whole outcome.
+Milestones are progress markers, **not** routine authorization stops.
+
+Use a **Deep** plan when actual production, destructive, IAM/network/state
+mutation, multiple writers/repositories or recovery risks require explicit
+phases (normally no more than four), deterministic gates, rollback, exact
+environment/account/resource identity and evidence. The plan defines **how**;
+the owner-approved Goal defines **what** and **how far**. Do not create Deep
+ceremony for straightforward work or demand a new GO for every authorized wave.
+
+## Independent helpers and acceptance
+
+Use subagents for independently answerable, parallel read-heavy work or
+meaningful independent review; provide one exact question, allowed sources,
+write boundaries, evidence, stop gates and acceptance owner. A single repository
+normally has one persistent writer; separate reviewers stay read-only. Human
+session names do not prove identity, provider model or execution effort.
+
+## Completion notifications and optional wake logic
+
+The durable **terminal Result** is the source of truth. Verify it, then issue
+one small deduplicated pointer if the recipient is available and safe. Check
+delivery at most once where required; failure to notify does not erase the
+result. Reconcile uncertain dispatch instead of replaying or recreating a
+worker. A sent message is not reviewer acceptance.
+
+An existing explicitly authorized supervisor may notify only on a new
+actionable result for an approved Goal and a known idle/stable recipient;
+suppress duplicate blocker wakes. It **cannot** authorize work, change policy
+or expand scope. Do not build a watcher, poll loop or unattended daemon simply
+to support this Goal; deployed wake systems require their own safe-mode
+validation and operational ownership.
