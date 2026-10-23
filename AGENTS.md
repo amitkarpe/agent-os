@@ -16,7 +16,8 @@ bounded migration to shallow, topic-first Agent OS knowledge.
 - Use relative Markdown links for repository content.
 - Use only `candidate`, `reviewed`, `verified`, or `deprecated` for lifecycle
   status.
-- Run `scripts/validate.sh` before committing.
+- Run `scripts/validate.sh` before committing; it validates canonical root and
+shallow topic documents as well as the transitional `kb/` tree.
 
 ## Context Loading
 

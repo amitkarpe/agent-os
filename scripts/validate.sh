@@ -216,6 +216,19 @@ validate_repo() {
     ! -name 'AGENTS.md' ! -name 'README.md' ! -name 'CONTRIBUTING.md' \
     ! -name 'index.md' -print0)
 
+  # Shallow topic folders are first-class canonical knowledge, not unvalidated
+  # exceptions to the old kb/ hierarchy. No nested category taxonomies.
+  local topic
+  for topic in aws codex kiro opencode chatgpt tools; do
+    [[ -d "$root/$topic" ]] || continue
+    if find "$root/$topic" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
+      error "$root/$topic: nested topic documents are not allowed"
+    fi
+    while IFS= read -r -d '' file; do
+      validate_yaml_block "$file" yes
+    done < <(find "$root/$topic" -maxdepth 1 -type f -name '*.md' -print0)
+  done
+
   # Legacy paths remain link-only pointers until their consumers migrate.
   if [[ -d "$root/agents" ]]; then
     if find "$root/agents" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
