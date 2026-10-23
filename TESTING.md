@@ -46,6 +46,20 @@ Once required checks pass and the changed behavior is proven, **stop**.
 Repeat or broaden testing only for a new change, failed check or unresolved
 risk. A passing unit test alone never proves that an external system changed.
 
+## Security evidence versus promotion
+
+Keep result validity, runtime success and promotion acceptance separate. A scan
+that completes without evaluating controls cannot prove security acceptance;
+an unavailable or unusable optional scan does not itself prove runtime failure.
+The owning specification decides required scanners, thresholds and closure
+authority. A pending optional result never waives a mandatory gate.
+
+Preserve the evaluated scope, coverage and complete result before reducing it
+to actionable findings. A filtered failure subset is not the total scan scope.
+Finding counts alone do not authorize promotion, rejection, resource deletion
+or termination; apply the project's acceptance and cleanup decisions. Preserve
+required evidence before cleanup, and bound any diagnostic retention.
+
 ## Test cleanup
 
 Remove or consolidate tests only after demonstrating that their behavior is
@@ -58,5 +72,6 @@ in the owning repository or local setup, not here.
 
 ## Citations
 
+- [Public source learning: security evidence and promotion gates](https://github.com/amitkarpe/dotfiles/blob/815f31b7995dcfe023f10c041cc5416b412b4ed5/config/.config/agent/AWS_INSPECTOR_CIS.md#evidence-gate-versus-promotion-gate)
 - [ShellCheck guidance](https://www.shellcheck.net/wiki/SC2086)
 - [ShellCheck array/quoting guidance](https://www.shellcheck.net/wiki/SC2048)
