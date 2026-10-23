@@ -182,7 +182,10 @@ scan_public_safety() {
     if [[ "$status" == 'verified' ]] && ! grep -q '^## Citations$' "$file"; then
       warn "$file: verified concept has no Citations section"
     fi
-  done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
+  done < <(find "$root" -maxdepth 2 -type f -name '*.md' \
+    ! -path "$root/docs/*" ! -path "$root/README.md" \
+    ! -path "$root/AGENTS.md" ! -path "$root/CONTRIBUTING.md" \
+    ! -path "$root/index.md" -print0)
 }
 
 validate_repo() {
@@ -191,23 +194,10 @@ validate_repo() {
   errors=0
   warnings=0
 
-  [[ -d "$root/kb" ]] || {
-    error "$root: missing kb directory"
-    return 1
-  }
-  [[ -f "$root/kb/index.md" ]] || {
-    error "$root: missing kb/index.md"
-    return 1
-  }
-
-  validate_yaml_block "$root/kb/index.md" no
-  if ! sed -n '2,/^---$/p' "$root/kb/index.md" | grep -Eq '^okf_version:[[:space:]]*"0\.1"[[:space:]]*$'; then
-    error "$root/kb/index.md: missing okf_version: \"0.1\""
+  # Legacy taxonomy and pointer directories must not be installed.
+  if [[ -e "$root/kb" || -L "$root/kb" ]]; then
+    error "$root/kb: retired taxonomy must not exist"
   fi
-
-  while IFS= read -r -d '' file; do
-    validate_yaml_block "$file" yes
-  done < <(find "$root/kb" -type f -name '*.md' ! -name 'index.md' ! -name 'log.md' -print0)
 
   # Root Markdown topics are canonical; repository entrypoints are not topics.
   while IFS= read -r -d '' file; do
@@ -246,9 +236,8 @@ validate_repo() {
 
 write_fixture() {
   local root="$1" body="$2"
-  mkdir -p "$root/kb"
-  printf '%s\n' '---' 'okf_version: "0.1"' '---' '' '# Index' '' '- [Concept](concept.md)' >"$root/kb/index.md"
-  printf '%s\n' "$body" >"$root/kb/concept.md"
+  mkdir -p "$root"
+  printf '%s\n' "$body" >"$root/CONTEXT.md"
 }
 
 expect_failure() {
@@ -269,6 +258,83 @@ self_test() {
   write_fixture "$pass" $'---\ntype: Practice\ntitle: Valid fixture\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid fixture'
   "$SELF" "$pass" >/dev/null
   printf 'SELF-TEST PASS: valid repository accepted\n'
+
+  case_dir="$temp/retired-kb"
+  write_fixture "$case_dir" 
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid concept'
+  mkdir "$case_dir/agents"
+  expect_failure retired-agents-compatibility "$case_dir"
+
+  case_dir="$temp/warning"
+  write_fixture "$case_dir" $'---\ntype: Practice\ntitle: Warning fixture\nstatus: verified\nconfidence: high\nlast_verified: 2000-01-01\nreview_after: 2000-01-01\n---\n\n# Warning fixture'
+  "$SELF" "$case_dir" >/dev/null 2>&1
+  printf 'SELF-TEST PASS: warnings remain non-fatal\n'
+
+  case_dir="$temp/malformed"
+  write_fixture "$case_dir" $'---\ntype Practice\n---\n\n# Bad YAML'
+  expect_failure malformed-frontmatter "$case_dir"
+
+  case_dir="$temp/missing-type"
+  write_fixture "$case_dir" $'---\ntitle: Missing type\n---\n\n# Missing type'
+  expect_failure missing-type "$case_dir"
+
+  case_dir="$temp/broken-link"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Broken\n\n[Missing](missing.md)'
+  expect_failure broken-link "$case_dir"
+
+  case_dir="$temp/missing-status"
+  write_fixture "$case_dir" $'---\ntype: Practice\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Missing status'
+  expect_failure missing-status "$case_dir"
+
+  case_dir="$temp/missing-review-after"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\n---\n\n# Missing review date'
+  expect_failure missing-review-after "$case_dir"
+
+  case_dir="$temp/verified-without-last-verified"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: verified\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Missing verification date'
+  expect_failure verified-without-last-verified "$case_dir"
+
+  case_dir="$temp/secret"
+  secret_value='AKIA'
+  secret_value+='ABCDEFGHIJKLMNOP'
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Secret' '' "$secret_value")"
+  expect_failure credential-pattern "$case_dir"
+
+  case_dir="$temp/private-path"
+  private_path='/home'
+  private_path+='/dev/example'
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Path' '' "$private_path")"
+  expect_failure private-path "$case_dir"
+
+  case_dir="$temp/private-ip"
+  private_ip='192.168'
+  private_ip+='.10.20'
+  write_fixture "$case_dir" "$(printf '%s\n' '---' 'type: Practice' 'status: reviewed' 'confidence: high' 'review_after: 2999-01-01' '---' '' '# Address' '' "$private_ip")"
+  expect_failure private-ip "$case_dir"
+
+  printf 'SELF-TEST PASS: all validator checks behaved as expected\n'
+  trap - RETURN
+  rm -rf -- "$temp"
+}
+
+main() {
+  case "${1:-}" in
+    --self-test)
+      self_test
+      ;;
+    -h | --help)
+      printf 'Usage: %s [--self-test] [repository-root]\n' "${0##*/}"
+      ;;
+    *)
+      validate_repo "${1:-$(cd -- "$(dirname -- "$SELF")/.." && pwd)}"
+      ;;
+  esac
+}
+
+main "$@"
+---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid'
+  mkdir "$case_dir/kb"
+  expect_failure retired-kb-taxonomy "$case_dir"
 
   case_dir="$temp/retired-agents"
   write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid concept'

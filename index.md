@@ -4,8 +4,8 @@ title: Agent OS
 
 # Agent OS
 
-Concise, public operating knowledge for agentic work.
+Public, topic-organized operating knowledge for agents.
 
-[Open the knowledge base](kb/)
+[Open the knowledge index](README.md)
 
-Markdown remains canonical. The source index is [`kb/index.md`](kb/index.md).
+Read the matching topic under the project's own approval and rules.

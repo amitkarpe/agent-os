@@ -82,7 +82,7 @@ results as observations. The reusable rule comes from the documented trigger,
 frequency, permission, and approval model—not from assuming every emitted event
 was observed by the same configured task.
 
-This complements [Completion Notification without Polling](../kb/playbooks/delegation/completion-notification-without-polling.md): durable state is the result; a wake or notification is a transport mechanism.
+This complements [Completion Notification without Polling](../GOALS.md): durable state is the result; a wake or notification is a transport mechanism.
 
 ## Citations
 

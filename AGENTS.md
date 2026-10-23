@@ -3,8 +3,8 @@
 ## Purpose
 
 This repository publishes portable operating knowledge for people and software
-agents. Markdown is canonical, and legacy `kb/` files follow Open Knowledge Format (OKF) 0.1 during the
-bounded migration to shallow, topic-first Agent OS knowledge.
+agents. Markdown is canonical. Active topics live at the root or in one shallow
+subject folder. The old KB taxonomy and duplicate pointer tree are retired.
 
 ## Contribution Rules
 

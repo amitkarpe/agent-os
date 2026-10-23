@@ -254,7 +254,7 @@ a milestone alone does not require a fresh session or full reread.
 
 ## Request packet contract
 
-Reuse the [Fast/Deep Goal contract](../kb/playbooks/delegation/controller-worker-goal-execution-framework.md).
+Reuse the [Fast/Deep Goal contract](../GOALS.md).
 The Issue supplies outcome, scope, allowed actions, ordered plan, success and
 stop gates. Add research, environment identity and rollback where risk requires
 them. Do not create a mandatory new specification file beside a sufficient Issue.
@@ -265,7 +265,7 @@ and appropriately private evidence pointers; publication remains deliberate.
 
 ## Next-step selection gate
 
-Apply [Critical Path First](../kb/principles/amit-agent-operating-principles.md#follow-the-critical-path).
+Apply [Critical Path First](../CORE.md#operating-principles-and-critical-path).
 Finish the approved goal before optional work. Surface the earliest failed
 dependency and required authority/proof instead of filling a wait with unrelated
 validators, tests or framework improvements.
@@ -345,10 +345,10 @@ acceptance. Do not repeat this checklist on every status request.
 
 ## Related playbooks
 
-- [Agent Operating Principles](../kb/principles/amit-agent-operating-principles.md)
+- [Agent Operating Principles](../CORE.md)
 - [Context Loading Economy](../CONTEXT.md)
 - [Codex Native Controller-Worker Protocol](../codex/DELEGATION.md)
-- [Controller-Worker Goal Execution Framework](../kb/playbooks/delegation/controller-worker-goal-execution-framework.md)
-- [Completion Notification without Polling](../kb/playbooks/delegation/completion-notification-without-polling.md)
+- [Controller-Worker Goal Execution Framework](../GOALS.md)
+- [Completion Notification without Polling](../GOALS.md)
 - [Knowledge Lifecycle and Publication](../KNOWLEDGE.md)
 
