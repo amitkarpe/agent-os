@@ -2,7 +2,7 @@
 type: Policy
 title: Bounded AWS Agent Experiment
 description: Select managed or code-owned model loops and verify a bounded tool boundary.
-status: candidate
+status: reviewed
 confidence: high
 scope: Reusable public-safe agent guidance
 review_after: 2027-04-23
