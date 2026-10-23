@@ -47,7 +47,7 @@ to preserve the hierarchy.
 - [Event-triggered vs scheduled tasks](kb/playbooks/integrations/chatgpt-event-vs-scheduled-tasks.md)
 - [Grok route selection](kb/playbooks/providers/hermes-grok-route-selection.md)
 - [Validate X/Grok research](kb/playbooks/integrations/x-grok-research-validation.md)
-- [Dated model comparison (historical)](kb/observations/models/spark-vs-luna-2026-07.md)
+- [Dated model comparison - historical](kb/observations/models/spark-vs-luna-2026-07.md)
 
 **Infrastructure, integrations and repositories**
 
