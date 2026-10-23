@@ -77,6 +77,15 @@ For Terraform-controlled changes prefer:
 
 `import/read live state -> plan -> machine gate -> review gate when required -> apply exact reviewed plan -> provider/Terraform readback`
 
+### Image-build requests
+
+For Packer or AMI/Image Builder work, also verify the source image identity,
+target account and Region, intended build network, expected output artifacts,
+and cleanup/retention boundaries. Treat temporary build resources as stateful
+and cost-bearing until verified removed or explicitly retained. Capture the
+resulting image identity and validation evidence; process exit alone does not
+prove a successful build or resource cleanup.
+
 ## Interactive tools versus durable control
 
 AWS MCP, CLI, SSO, AgentCore Harness, or another interactive operator surface may be appropriate for:

@@ -72,6 +72,8 @@ Issue/PR or result record before sending one completion notification. Reconcile
 the final repository or external state when the goal changed it. Cleanup is a
 separate authorized action: age, TTL, a marker or a queue notice does not grant
 deletion authority.
+Use [Temporary Agent Evidence Lifecycle](kb/playbooks/knowledge/temporary-agent-evidence-lifecycle.md)
+for retention, preservation and exact-path cleanup checks.
 
 For deeper sequencing, gates and evidence use the
 [Controller-Worker Goal Execution Framework](kb/playbooks/delegation/controller-worker-goal-execution-framework.md),
