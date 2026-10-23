@@ -216,8 +216,7 @@ validate_repo() {
     ! -name 'AGENTS.md' ! -name 'README.md' ! -name 'CONTRIBUTING.md' \
     ! -name 'index.md' -print0)
 
-  # Shallow topic folders are first-class canonical knowledge, not unvalidated
-  # exceptions to the old kb/ hierarchy. No nested category taxonomies.
+  # Canonical shallow topics are validated without reintroducing a hierarchy.
   local topic
   for topic in aws codex kiro opencode chatgpt tools; do
     [[ -d "$root/$topic" ]] || continue
@@ -229,14 +228,9 @@ validate_repo() {
     done < <(find "$root/$topic" -maxdepth 1 -type f -name '*.md' -print0)
   done
 
-  # Legacy paths remain link-only pointers until their consumers migrate.
-  if [[ -d "$root/agents" ]]; then
-    if find "$root/agents" -mindepth 2 -type f -name '*.md' -print -quit | grep -q .; then
-      error "$root/agents: nested guidance files are not allowed"
-    fi
-    while IFS= read -r -d '' file; do
-      validate_yaml_block "$file" yes
-    done < <(find "$root/agents" -maxdepth 1 -type f -name '*.md' -print0)
+  # Canonical topics live at the root; retired compatibility paths stay absent.
+  if [[ -e "$root/agents" || -L "$root/agents" ]]; then
+    error "$root/agents: retired compatibility path must not exist"
   fi
 
   validate_links "$root"
@@ -275,6 +269,11 @@ self_test() {
   write_fixture "$pass" $'---\ntype: Practice\ntitle: Valid fixture\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid fixture'
   "$SELF" "$pass" >/dev/null
   printf 'SELF-TEST PASS: valid repository accepted\n'
+
+  case_dir="$temp/retired-agents"
+  write_fixture "$case_dir" $'---\ntype: Practice\nstatus: reviewed\nconfidence: high\nreview_after: 2999-01-01\n---\n\n# Valid concept'
+  mkdir "$case_dir/agents"
+  expect_failure retired-agents-compatibility "$case_dir"
 
   case_dir="$temp/warning"
   write_fixture "$case_dir" $'---\ntype: Practice\ntitle: Warning fixture\nstatus: verified\nconfidence: high\nlast_verified: 2000-01-01\nreview_after: 2000-01-01\n---\n\n# Warning fixture'
