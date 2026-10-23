@@ -71,9 +71,10 @@ Repository responsibilities stay separate:
   mandatory defaults new or retrofitted repositories should start with. It
   should distill or reference Agent OS guidance rather than become a second
   knowledge base.
-- `dotfiles/agent/.agent` owns local/runtime/tool adapters, host-specific facts,
-  provider preferences, and machine-wide operating defaults. It may reference
-  Agent OS but should not duplicate reusable public policies.
+- `dotfiles` owns local/runtime/tool adapters, host-specific facts, provider
+  preferences, and machine-wide operating defaults in its owning host or native
+  provider configuration. It may reference Agent OS but should not duplicate
+  reusable public policies or depend on the legacy shared-policy tree.
 - Project repositories remain authoritative for their own `AGENTS.md`, `SPEC`,
   current context, approvals, implementation, evidence, and runtime truth. They
   are the primary source of new learning candidates.
