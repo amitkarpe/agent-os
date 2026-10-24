@@ -36,7 +36,7 @@ Gateway, Browser, Memory and other components are optional, not a starter checkl
 
 ## Related
 
-- [Shared Core](../CORE.md)
+- [Shared instructions](../AGENTS.md)
 - [Proportional testing](../TESTING.md)
 - [Evidence lifecycle](../KNOWLEDGE.md)
 
